@@ -3,7 +3,7 @@
 """
 AutoDSC: Automated Data Stream Clustering Framework
 
-Authors: Nilesh Verma
+Authors: Anonymous
 Date: June 2024
 """
 
