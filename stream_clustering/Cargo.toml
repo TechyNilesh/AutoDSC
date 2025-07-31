@@ -1,0 +1,18 @@
+[package]
+name = "stream_clustering"
+version = "0.1.0"
+description = "Fast Stream Clustering implementation in Rust"
+authors = ["Anonymous <anonymous@anonymous.com>"]
+license = "MIT"
+edition = "2021"
+
+[lib]
+name = "stream_clustering"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.19.0", features = ["extension-module"] }
+numpy = "0.19"
+ndarray = "0.15"
+rand = "0.8"
+rand_distr = "0.4"
