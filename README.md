@@ -1,6 +1,8 @@
-# AutoDSC: Automated Data Stream Clustering Framework
+# AutoDSC: An Automated Data Stream Clustering Framework
 
-AutoDSC is a fast and scalable AutoML framework for real-time stream clustering that automatically selects and optimizes clustering algorithms for data streams with concept drift detection.
+This repository contains the implementation of **AutoDSC** (**Auto**mated **D**ata **S**tream **C**lustering), a novel AutoML framework that automatically optimizes algorithm selection and hyperparameter tuning for real-time stream clustering.
+
+Data stream clustering faces unique challenges in dynamic environments where data distributions evolve continuously and computational resources are limited. AutoDSC addresses these challenges by employing **Population-Guided Stochastic Search Optimization (PGSSO)**, leveraging elite configurations to guide efficient parameter exploration while dynamically adjusting exploration rates based on performance feedback. The framework incorporates **drift-aware adaptation** using DAWIDD for proactive response to distributional changes and **multi-objective evaluation** with clustering validation indices for robust performance assessment.
 
 ## Project Structure
 
@@ -9,7 +11,8 @@ AutoDSC/
 ├── algorithms/                    # Clustering algorithm implementations
 │   ├── AutoDSC/
 │   │   ├── AutoDSC.py            # Main AutoDSC framework
-│   │   └── DAWIDD.py             # Drift detection algorithm
+│   │   ├── DAWIDD.py             # Drift detection algorithm
+│   │   └── svm_test.py           # SVM-based independence test for drift detection
 │   ├── ConfStream/
 │   │   └── ConfStream.py
 │   ├── OnlineAutoClust/
@@ -100,7 +103,6 @@ Both versions provide the same clustering algorithms and functionality. To switc
 #### River Library Version (Standard):
 ```python
 from river.cluster import CluStream, DenStream, STREAMKMeans
-# Note: Some algorithms may have slightly different names in River
 ```
 
 #### Rust Implementation Version (Fast):
@@ -160,85 +162,128 @@ python experiments/run_scripts.py --mode random
 
 ### Running Individual Experiments
 
-You can also run individual algorithm scripts:
-
 ```bash
 # Run AutoDSC on insects dataset
 python experiments/scripts/run_autodsc.py --dataset insects
 
 # Run CluStream on adult dataset
 python experiments/scripts/run_clustream.py --dataset adult
+
+# Run with custom parameters
+python experiments/scripts/run_autodsc.py --dataset insects --window_size 500 --population_size 15
 ```
 
-### Advanced Usage
-
-#### Sensitivity Analysis
+### Sensitivity Analysis
 
 ```bash
 # Run sensitivity analysis for a specific parameter
 python experiments/run_sensitivity_analysis.py --mode parameter --param gamma --dataset insects
 
+# Run multi-parameter sensitivity analysis
+python experiments/run_sensitivity_analysis.py --mode dataset --dataset insects
+
 # Run full sensitivity analysis
 python experiments/run_sensitivity_analysis.py --mode full --dataset insects
+
+# Run random parameter search
+python experiments/run_sensitivity_analysis.py --mode random --dataset insects --configs 10
 ```
 
-#### Ablation Study
+### Ablation Study
 
 ```bash
 # Run ablation study for a specific component
 python experiments/run_ablation_study.py --dataset insects --ablation drift_detection
 
-# Run full ablation comparison (baseline + all ablations)
+# Run all ablations
+python experiments/run_ablation_study.py --dataset insects --ablation all
+
+# Run full comparison (baseline + all ablations)
 python experiments/run_ablation_study.py --dataset insects --ablation full_comparison
+
+# Run on all datasets
+python experiments/run_ablation_study.py --ablation drift_detection --all_datasets
 ```
 
-Available ablation options:
-- `drift_detection` - Disable drift detection (DAWIDD)
-- `elite_guidance` - Disable elite guidance (PGSSO)
-- `adaptive_exploration_rate` - Disable adaptive exploration rate
-- `diversity_maintenance` - Disable diversity maintenance
-- `all` - Run all ablations
-- `full_comparison` - Run baseline + all ablations
+**Available ablation options:**
+| Ablation | Description |
+|----------|-------------|
+| `drift_detection` | Disable DAWIDD drift detection |
+| `elite_guidance` | Disable PGSSO elite guidance (random sampling only) |
+| `adaptive_exploration_rate` | Disable adaptive exploration rate (fixed rate) |
+| `diversity_maintenance` | Disable diversity maintenance in population |
+| `all` | Run all ablations |
+| `full_comparison` | Run baseline + all ablations |
 
-#### Custom Parameters
+## AutoDSC Components
+
+### Core Algorithm (`algorithms/AutoDSC/`)
+
+1. **AutoDSC.py** - Main framework with:
+   - Population-Guided Stochastic Search Optimizer (PGSSO)
+   - Adaptive exploration rate
+   - Multi-objective scoring (Silhouette, Calinski-Harabasz, Davies-Bouldin)
+   - Diversity maintenance
+
+2. **DAWIDD.py** - Dynamic Adapting Window Independence Drift Detector:
+   - Detects concept drift in data streams
+   - Uses statistical independence testing
+   - Triggers model reset on drift detection
+
+3. **svm_test.py** - SVM-based independence test:
+   - Tests if data is time-dependent
+   - Used by DAWIDD for drift detection
+
+## Rust Implementation
+
+For maximum performance, compile and use the Rust implementation:
 
 ```bash
-# Custom progress interval and output directory
-python experiments/run_scripts.py --mode dataset --name adult --progress_interval 500 --output_dir my_results
+# Install Rust (if not installed)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Compile
+cd stream_clustering
+pip install maturin
+maturin develop --release
+cd ..
+
+# Verify
+python -c "import stream_clustering; print('Rust implementation loaded!')"
 ```
-
-## Rust Implementation Performance
-
-For maximum performance, especially on large datasets, compile and use the Rust implementation:
-
-1. **Prerequisites:**
-   - Install Rust: `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
-   - Install maturin: `pip install maturin`
-
-2. **Compilation:**
-   ```bash
-   cd stream_clustering
-   maturin develop --release
-   ```
-
-3. **Verification:**
-   ```python
-   import stream_clustering
-   print("Rust implementation loaded successfully!")
-   ```
 
 ## Output and Results
 
-- Results are saved in the `benchmark_results/` directory (or custom directory specified)
-- Performance metrics include Rand Index, runtime, and memory usage
-- Charts and visualizations are stored in `results/charts/`
-- Result tables (CSV) are stored in `results/tables/`
+- Benchmark results: `benchmark_results/` (or custom directory)
+- Charts: `results/charts/`
+  - `ablation/` - Ablation study visualizations
+  - `comparison/` - Baseline comparison charts
+  - `sensitivity/` - Sensitivity analysis plots
+- Tables: `results/tables/` - CSV result files
 
 ## Key Features
 
-- **Automated Algorithm Selection:** Automatically selects the best clustering algorithm for your data stream
-- **Concept Drift Detection:** Built-in DAWIDD drift detector for handling evolving data streams
-- **Population-Guided Search:** PGSSO optimizer for efficient hyperparameter optimization
-- **Fast Rust Implementation:** Optional high-performance Rust backend for large-scale experiments
-- **Comprehensive Evaluation:** Built-in evaluation metrics and visualization tools
-- **Multiple Baseline Algorithms:** Includes implementations of state-of-the-art stream clustering algorithms
+- **Automated Algorithm Selection** - Automatically selects the best clustering algorithm
+- **Concept Drift Detection** - Built-in DAWIDD detector for evolving data streams
+- **Population-Guided Search** - PGSSO optimizer for hyperparameter optimization
+- **Adaptive Exploration** - Dynamic exploration/exploitation balance
+- **Fast Rust Backend** - High-performance implementation for large-scale experiments
+- **Comprehensive Evaluation** - Built-in metrics and visualization tools
+
+## Citation
+
+If you use this code in your research, please cite our paper:
+
+```bibtex
+@inproceedings{anonymous2026autodsc,
+  title={AutoDSC: An Automated Data Stream Clustering Framework},
+  author={Anonymous},
+  booktitle={Proceedings of the Thirty-Fifth International Joint Conference on Artificial Intelligence (IJCAI-ECAI 2026)},
+  year={2026},
+  note={Under review}
+}
+```
+
+## License
+
+This project is released for academic and research purposes. Please refer to the LICENSE file for details.
