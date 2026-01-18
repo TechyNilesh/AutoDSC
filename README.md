@@ -6,27 +6,45 @@ AutoDSC is a fast and scalable AutoML framework for real-time stream clustering 
 
 ```
 AutoDSC/
-├── AutoDSC.py                  # Main AutoDSC framework implementation
-├── ConfStream.py              # ConfStream clustering algorithm
-├── DAWIDD.py                  # Drift detection algorithm
-├── OnlineAutoClust.py         # Online AutoClust implementation
-├── RandomSearchStream.py      # Random search baseline
-├── run_scripts.py             # Main experiment runner
-├── run_sensitivity_analysis.py # Sensitivity analysis experiments
-├── requirements.txt           # Python dependencies
-├── scripts/                   # Individual algorithm runners
-│   ├── run_autodsc.py
-│   ├── run_clustream.py
-│   ├── run_confstream.py
-│   ├── run_dbstream.py
-│   ├── run_denstream.py
-│   ├── run_kmeans.py
-│   ├── run_onlineautoclust.py
-│   ├── run_randomsearch.py
-│   ├── run_streamkmeans.py
-│   └── utils/
-│       └── purityscore.py
-├── stream_clustering/         # Fast Rust implementation
+├── algorithms/                    # Clustering algorithm implementations
+│   ├── AutoDSC/
+│   │   ├── AutoDSC.py            # Main AutoDSC framework
+│   │   └── DAWIDD.py             # Drift detection algorithm
+│   ├── ConfStream/
+│   │   └── ConfStream.py
+│   ├── OnlineAutoClust/
+│   │   └── OnlineAutoClust.py
+│   └── RandomSearchStream/
+│       └── RandomSearchStream.py
+├── datasets/                      # Benchmark datasets
+│   ├── adult.csv
+│   ├── electricity.csv
+│   ├── forest_cover.csv
+│   ├── insects.csv
+│   └── ...
+├── experiments/                   # Experiment runners
+│   ├── run_ablation_study.py     # Ablation study experiments
+│   ├── run_scripts.py            # Main experiment runner
+│   ├── run_sensitivity_analysis.py
+│   └── scripts/                  # Individual algorithm runners
+│       ├── run_autodsc.py
+│       ├── run_clustream.py
+│       ├── run_confstream.py
+│       ├── run_dbstream.py
+│       ├── run_denstream.py
+│       ├── run_kmeans.py
+│       ├── run_onlineautoclust.py
+│       ├── run_randomsearch.py
+│       ├── run_streamkmeans.py
+│       └── utils/
+│           └── purityscore.py
+├── results/                       # Experiment results
+│   ├── charts/
+│   │   ├── ablation/             # Ablation study charts
+│   │   ├── comparison/           # Baseline comparison charts
+│   │   └── sensitivity/          # Sensitivity analysis charts
+│   └── tables/                   # Result tables (CSV)
+├── stream_clustering/             # Fast Rust implementation
 │   ├── Cargo.toml
 │   ├── pyproject.toml
 │   └── src/
@@ -37,15 +55,7 @@ AutoDSC/
 │       ├── kmeans.rs
 │       ├── streamkmeans.rs
 │       └── ...
-├── stream_datasets/           # Benchmark datasets
-│   ├── adult.csv
-│   ├── electricity.csv
-│   ├── forest_cover.csv
-│   ├── insects.csv
-│   └── ...
-├── CHARTS/                    # Generated visualization charts
-├── ABILATION_CHARTS/          # Ablation study results
-└── SENSITIVITY_CHARTS/        # Sensitivity analysis results
+└── requirements.txt               # Python dependencies
 ```
 
 ## Installation & Setup
@@ -104,20 +114,20 @@ The Rust version requires compilation but offers significantly better performanc
 
 #### Using the Main Runner Script
 
-The `run_scripts.py` provides multiple execution modes:
+The `experiments/run_scripts.py` provides multiple execution modes:
 
 ```bash
 # Run all models on a specific dataset
-python run_scripts.py --mode dataset --name adult
+python experiments/run_scripts.py --mode dataset --name adult
 
 # Run a specific model on all datasets
-python run_scripts.py --mode model --name clustream
+python experiments/run_scripts.py --mode model --name clustream
 
 # Run all models on all datasets
-python run_scripts.py --mode all
+python experiments/run_scripts.py --mode all
 
 # Run comprehensive evaluation with multiple runs
-python run_scripts.py --mode random
+python experiments/run_scripts.py --mode random
 ```
 
 #### Available Datasets
@@ -135,7 +145,6 @@ python run_scripts.py --mode random
 | `sea_high_abrupt_drift` | 500,000 | 3 | 2 | SEA with abrupt drift |
 | `sea_high_mixed_drift` | 500,000 | 3 | 2 | SEA with mixed drift |
 | `synth_RandomRBFDrift` | 100,000 | 4 | 4 | Random RBF drift |
-| `synthetic_blobs_100k_samples_5features_8clusters` | 100,000 | 5 | 8 | Synthetic blobs dataset |
 | `vehicle_sensIT` | 98,528 | 100 | 3 | Vehicle sensor dataset |
 
 #### Available Algorithms
@@ -155,26 +164,47 @@ You can also run individual algorithm scripts:
 
 ```bash
 # Run AutoDSC on insects dataset
-python scripts/run_autodsc.py --dataset insects
+python experiments/scripts/run_autodsc.py --dataset insects
 
 # Run CluStream on adult dataset
-python scripts/run_clustream.py --dataset adult
+python experiments/scripts/run_clustream.py --dataset adult
 ```
 
 ### Advanced Usage
+
+#### Sensitivity Analysis
+
+```bash
+# Run sensitivity analysis for a specific parameter
+python experiments/run_sensitivity_analysis.py --mode parameter --param gamma --dataset insects
+
+# Run full sensitivity analysis
+python experiments/run_sensitivity_analysis.py --mode full --dataset insects
+```
+
+#### Ablation Study
+
+```bash
+# Run ablation study for a specific component
+python experiments/run_ablation_study.py --dataset insects --ablation drift_detection
+
+# Run full ablation comparison (baseline + all ablations)
+python experiments/run_ablation_study.py --dataset insects --ablation full_comparison
+```
+
+Available ablation options:
+- `drift_detection` - Disable drift detection (DAWIDD)
+- `elite_guidance` - Disable elite guidance (PGSSO)
+- `adaptive_exploration_rate` - Disable adaptive exploration rate
+- `diversity_maintenance` - Disable diversity maintenance
+- `all` - Run all ablations
+- `full_comparison` - Run baseline + all ablations
 
 #### Custom Parameters
 
 ```bash
 # Custom progress interval and output directory
-python run_scripts.py --mode dataset --name adult --progress_interval 500 --output_dir my_results
-```
-
-#### Sensitivity Analysis
-
-```bash
-# Run sensitivity analysis for AutoDSC parameters
-python run_sensitivity_analysis.py
+python experiments/run_scripts.py --mode dataset --name adult --progress_interval 500 --output_dir my_results
 ```
 
 ## Rust Implementation Performance
@@ -201,7 +231,8 @@ For maximum performance, especially on large datasets, compile and use the Rust 
 
 - Results are saved in the `benchmark_results/` directory (or custom directory specified)
 - Performance metrics include Rand Index, runtime, and memory usage
-- Charts and visualizations are generated in `CHARTS/`, `ABILATION_CHARTS/`, and `SENSITIVITY_CHARTS/`
+- Charts and visualizations are stored in `results/charts/`
+- Result tables (CSV) are stored in `results/tables/`
 
 ## Key Features
 
