@@ -46,7 +46,7 @@ models = [
 # List of run counts for each model
 run_counts = range(1, 11)  # 10 runs for each model
 
-def run_script(dataset_name, model_name, run_count=None, random_seed=False, progress_interval=1000, output_dir="benchmark_results"):
+def run_script(dataset_name, model_name, run_count=None, random_seed=False, progress_interval=1000, output_dir="results/benchmark"):
     """
     Function to execute a given script for a specified dataset name, model name, and run count.
     """
@@ -107,7 +107,7 @@ def run_script(dataset_name, model_name, run_count=None, random_seed=False, prog
         print(f"Dataset {dataset_name}: Error\n{process.stderr.read()}")
 
 
-def run_all_datasets_for_model(model, progress_interval=1000, output_dir="benchmark_results"):
+def run_all_datasets_for_model(model, progress_interval=1000, output_dir="results/benchmark"):
     print(f"*** Running all datasets for {model.upper()} model ***")
     with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, int(os.cpu_count() * 0.8))) as executor:
         futures = []
@@ -116,7 +116,7 @@ def run_all_datasets_for_model(model, progress_interval=1000, output_dir="benchm
                                            None, False, progress_interval, output_dir))
         executor.shutdown(wait=True)
 
-def run_all_models_for_dataset(dataset, progress_interval=1000, output_dir="benchmark_results"):
+def run_all_models_for_dataset(dataset, progress_interval=1000, output_dir="results/benchmark"):
     print(f"*** Running all models for {dataset.upper()} dataset ***")
     with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, int(os.cpu_count() * 0.8))) as executor:
         futures = []
@@ -125,7 +125,7 @@ def run_all_models_for_dataset(dataset, progress_interval=1000, output_dir="benc
                                           None, False, progress_interval, output_dir))
         executor.shutdown(wait=True)
 
-def run_all_models_and_datasets(progress_interval=1000, output_dir="benchmark_results"):
+def run_all_models_and_datasets(progress_interval=1000, output_dir="results/benchmark"):
     print("*** Running all models and datasets concurrently ***")
     with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, int(os.cpu_count() * 0.8))) as executor:
         tasks = [(dataset, model) for dataset in dataset_name_list for model in models]
@@ -135,7 +135,7 @@ def run_all_models_and_datasets(progress_interval=1000, output_dir="benchmark_re
                                           None, False, progress_interval, output_dir))
         executor.shutdown(wait=True)
 
-def run_all_with_random(progress_interval=1000, output_dir="benchmark_results"):
+def run_all_with_random(progress_interval=1000, output_dir="results/benchmark"):
     print("*** Running all models and datasets with multiple 10 runs concurrently ***")
     with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, int(os.cpu_count() * 0.8))) as executor:
         tasks = [(dataset, model, run)
@@ -153,7 +153,7 @@ if __name__ == '__main__':
     parser.add_argument('--name', help="Name of the dataset or model to run in specific mode")
     parser.add_argument('--progress_interval', type=int, default=1000, 
                         help="Interval for progress updates")
-    parser.add_argument('--output_dir', type=str, default="benchmark_results", 
+    parser.add_argument('--output_dir', type=str, default="results/benchmark", 
                         help="Directory to save results")
 
     args = parser.parse_args()

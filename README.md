@@ -215,25 +215,6 @@ python experiments/run_ablation_study.py --ablation drift_detection --all_datase
 | `all` | Run all ablations |
 | `full_comparison` | Run baseline + all ablations |
 
-## AutoDSC Components
-
-### Core Algorithm (`algorithms/AutoDSC/`)
-
-1. **AutoDSC.py** - Main framework with:
-   - Population-Guided Stochastic Search Optimizer (PGSSO)
-   - Adaptive exploration rate
-   - Multi-objective scoring (Silhouette, Calinski-Harabasz, Davies-Bouldin)
-   - Diversity maintenance
-
-2. **DAWIDD.py** - Dynamic Adapting Window Independence Drift Detector:
-   - Detects concept drift in data streams
-   - Uses statistical independence testing
-   - Triggers model reset on drift detection
-
-3. **svm_test.py** - SVM-based independence test:
-   - Tests if data is time-dependent
-   - Used by DAWIDD for drift detection
-
 ## Rust Implementation
 
 For maximum performance, compile and use the Rust implementation:
@@ -254,21 +235,12 @@ python -c "import stream_clustering; print('Rust implementation loaded!')"
 
 ## Output and Results
 
-- Benchmark results: `benchmark_results/` (or custom directory)
+- Benchmark results: `results/benchmark/`
 - Charts: `results/charts/`
   - `ablation/` - Ablation study visualizations
   - `comparison/` - Baseline comparison charts
   - `sensitivity/` - Sensitivity analysis plots
 - Tables: `results/tables/` - CSV result files
-
-## Key Features
-
-- **Automated Algorithm Selection** - Automatically selects the best clustering algorithm
-- **Concept Drift Detection** - Built-in DAWIDD detector for evolving data streams
-- **Population-Guided Search** - PGSSO optimizer for hyperparameter optimization
-- **Adaptive Exploration** - Dynamic exploration/exploitation balance
-- **Fast Rust Backend** - High-performance implementation for large-scale experiments
-- **Comprehensive Evaluation** - Built-in metrics and visualization tools
 
 ## Citation
 

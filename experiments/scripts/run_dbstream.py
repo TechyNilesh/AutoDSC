@@ -48,7 +48,7 @@ def load_streaming_dataset(dataset_name):
 
 
 def run_DBSTREAM(dataset_name, run_count=None, seed=42, progress_interval=1000, 
-                 output_dir="benchmark_results", verbose=True):
+                 output_dir="results/benchmark", verbose=True):
     """Run DBSTREAM algorithm on a dataset."""
     
     # Set random seed
@@ -251,7 +251,7 @@ if __name__ == "__main__":
     parser.add_argument('--run_count', type=int, default=None, help='Run count identifier')
     parser.add_argument('--seed', type=int, default=42, help='Random seed')
     parser.add_argument('--progress_interval', type=int, default=1000, help='Interval for progress updates')
-    parser.add_argument('--output_dir', type=str, default="benchmark_results", help='Output directory')
+    parser.add_argument('--output_dir', type=str, default="results/benchmark", help='Output directory')
     parser.add_argument('--quiet', action='store_true', help='Disable verbose output', default=False)
     
     args = parser.parse_args()

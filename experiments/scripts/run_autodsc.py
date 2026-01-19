@@ -62,7 +62,7 @@ def load_streaming_dataset(dataset_name):
 
 
 def run_AutoDSC(dataset_name, run_count=None, seed=42, progress_interval=1000,
-                        output_dir="benchmark_results", verbose=True,
+                        output_dir="results/benchmark", verbose=True,
                         window_size=1000, population_size=20,
                         gamma=0.1, diversity_threshold=0.1,
                         model_name="AutoDSC"):
@@ -304,7 +304,7 @@ if __name__ == "__main__":
                        help='Random seed')
     parser.add_argument('--progress_interval', type=int, default=1000,
                        help='Interval for progress updates')
-    parser.add_argument('--output_dir', type=str, default="benchmark_results",
+    parser.add_argument('--output_dir', type=str, default="results/benchmark",
                        help='Output directory')
     parser.add_argument('--quiet', action='store_true', default=False,
                        help='Disable verbose output')

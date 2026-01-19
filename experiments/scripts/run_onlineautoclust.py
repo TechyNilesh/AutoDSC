@@ -67,7 +67,7 @@ def load_streaming_dataset(dataset_name):
 
 
 def run_onlineautoclust(dataset_name, algorithm_type="ensemble", run_count=None, seed=42, 
-                       progress_interval=1000, output_dir="benchmark_results", verbose=True,
+                       progress_interval=1000, output_dir="results/benchmark", verbose=True,
                        window_size=1000, t_max=60, delta=0.1, top_n=5, ensemble_k=10):
     """Run OnlineAutoClust algorithm on a dataset."""
     
@@ -369,7 +369,7 @@ if __name__ == "__main__":
                        help='Random seed')
     parser.add_argument('--progress_interval', type=int, default=1000, 
                        help='Interval for progress updates')
-    parser.add_argument('--output_dir', type=str, default="benchmark_results", 
+    parser.add_argument('--output_dir', type=str, default="results/benchmark", 
                        help='Output directory')
     parser.add_argument('--quiet', action='store_true', default=False,
                        help='Disable verbose output')
