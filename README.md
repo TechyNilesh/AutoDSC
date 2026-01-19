@@ -283,7 +283,3 @@ If you use this code in your research, please cite our paper:
   note={Under review}
 }
 ```
-
-## License
-
-This project is released for academic and research purposes. Please refer to the LICENSE file for details.
