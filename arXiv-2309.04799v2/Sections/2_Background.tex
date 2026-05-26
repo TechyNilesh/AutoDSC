@@ -1,0 +1,105 @@
+\section{Background}
+\label{sec:background}
+
+\subsection{Data Stream Clustering Algorithms}
+\label{sec:foundational_concepts}
+\begin{definition}
+A \textbf{data stream} is represented as a sequence of tuples, denoted as \( S = (x_1, x_2, \ldots, x_t, \ldots) \), where \( x_t \) denotes the \( t \)-th data point arriving at time \( t \). Let \( x_t \) be a data point in the stream, and \( D(x_t, C_t) \) be the distance from \( x_t \) to its closest cluster in \( C_t \). If \( D(x_t, C_t) > \delta \), where \( \delta \) is a threshold, \( x_t \) can be considered an \textbf{outlier}. 
+\end{definition}
+
+Data stream clustering (\dsc) algorithms efficiently update \( C_t \) to \( C_{t+1} \) in response to changes in data distribution. Unlike traditional clustering algorithms such as \kmeans or \dbscan, which need to recalculate the entire clustering results from scratch upon receiving new data, \dsc algorithms incrementally update their results to ensure more efficient clustering under the data stream scenario. Additionally, \dsc algorithms need to dynamically and promptly handle the evolution of workload characteristics in data stream scenarios. Critical evolution aspects include \emph{cluster evolution}, which refers to the changes of current clusters, such as splitting, merging, disappearing, and emerging upon receiving new streaming data, \emph{outlier evolution}, which refers to the changes in the number of outliers in the data stream, and changes in data dimensionality.
+
+\subsection{Design Aspects of DSC Algorithms}
+\dsc algorithms typically consist of several key components to address the challenges posed by data streams. The pros and cons of each design choice are summarized in Table~\ref{tab:design_comparison}. 
+
+
+\begin{table*}[t]
+\caption{Design Options Considered in \algo}
+\label{tab:design_comparison}
+\centering
+\begin{tabular}{|p{2.1cm}|p{2.7cm}|p{5.6cm}|p{5.7cm}|}
+\hline
+\textbf{Aspect} & \textbf{Option} & \textbf{Pros} & \textbf{Cons} \\
+\hline
+\multirow{5}{*}{Data Structure} & \CFT & Supports a range of operations & - \\
+\cline{2-4}
+& \CoreT & Can handle dense data streams & Involves tree rebuild \\
+\cline{2-4}
+& \DPT & Can handle evolving data streams & - \\
+\cline{2-4}
+& \MCs & Reduces computation load & - \\
+\cline{2-4}
+& \Grids & Computationally efficient & Limited accuracy with changing data streams \\
+\cline{2-4}
+& \MS & Ideal for known number of clusters & Involves sketch reconstruction \\
+\hline
+\multirow{3}{*}{Window Model} & \landmark & Capable of detecting drifts & Sensitive to landmark spacing \\
+\cline{2-4}
+& \sliding & Responsive to trends & Accuracy loss with small windows \\
+\cline{2-4}
+& \damped & Smooth adaptation to data evolution & Sensitive to outlier effects \\
+\hline
+\multirow{4}{*}{Outlier Detection} & \nod & - & May reduce clustering quality \\
+\cline{2-4}
+& \od & Helps improve accuracy & - \\
+\cline{2-4}
+& \buffer & Prevents immediate incorporation of outliers & - \\
+\cline{2-4}
+& \timer & Robust to outliers & Algorithm complexity \\
+\cline{2-4}
+& \buffertimer & High accuracy & Requires buffer time \\
+\hline
+\multirow{3}{*}{\shortstack{Refinement \\ Strategy}} & \norefinement & Saves computational resources & Less accurate with evolving data \\
+\cline{2-4}
+& \oneshotRefinement & Balances efficiency and accuracy & - \\
+\cline{2-4}
+& \incrementalRefinement & Adapts to new data & Computation overhead \\
+\hline
+\end{tabular}
+\end{table*}
+
+\textit{a) Summarizing Data Structure} provides a compact representation of data points, capturing essential information while minimizing memory usage, as storing the entire data stream is impractical. We consider six different design options for summarizing data structures based on their unique advantages in various scenarios. The \emph{Clustering Feature Tree (\CFT)}~\cite{zhang1997birch} was chosen for its hierarchical clustering capability and efficiency in handling large datasets. The \emph{Coreset Tree (\CoreT)}~\cite{StreamKM++:12} was selected for its strong theoretical guarantees in providing accurate summaries for k-means clustering. The \emph{Dependency Tree (\DPT)}~\cite{EDMStream:17} was preferred for its ability to capture dependency structures among data points, which is particularly beneficial in high-dimensional data. The \emph{Micro Clusters (\MCs)}~\cite{Clustream:03} were utilized for their effective incremental clustering and noise tolerance. The \emph{Grids (\Grids)}~\cite{DStream:2007} were adopted for their straightforward and efficient grid-based clustering approach. Lastly, the \emph{Augmented Meyerson Sketch (\MS)}~\cite{SL-KMeans:20} was included for its capability to provide robust clustering summaries with low computational overhead.
+
+\textit{b) Window Model} handles the temporal aspect of data streams, focusing on recent data points and discarding outdated information to improve the algorithm's clustering capability. We implemented three window models to address different temporal requirements. The \emph{Landmark Window Model (\landmark)}~\cite{StreamKM++:12} is suitable for scenarios where data needs to be segmented based on significant events or time landmarks. The \emph{Sliding Window Model (\sliding)}~\cite{SL-KMeans:20} is effective in continuously updating the clustering model by retaining a fixed-size window of the most recent data. The \emph{Damped Window Model (\damped)}~\cite{DenStream:06, DBStream:16, DStream:2007} is ideal for gradually reducing the influence of older data, which is beneficial in environments with smooth and continuous data evolution.
+
+\textit{c) Outlier Detection Mechanism} identifies and handles noise and outliers in the data stream, preventing them from affecting clustering quality. Detecting outliers in data streams is challenging, particularly with evolving outliers. We examined five categories of outlier detection mechanisms. \emph{Basic Outlier Detection (\od)}~\cite{BIRCH:96} is simple and effective for initial noise filtering. \emph{Outlier Detection with Buffer (\buffer)}~\cite{Clustream:03} enhances basic detection by temporarily storing potential outliers for re-evaluation. \emph{Outlier Detection with Timer (\timer)}~\cite{DStream:2007, DBStream:16} adds a temporal aspect to outlier detection, useful in dynamically evolving data streams. \emph{Outlier Detection with Buffer and Timer (\buffertimer)}~\cite{DenStream:06, EDMStream:17} combines the strengths of buffering and temporal evaluation, ensuring robust outlier management.
+
+\textit{d) Refinement Strategy} updates and refines the clustering model as new data points arrive, adapting to changes in the data distribution. We evaluated three refinement strategies to ensure optimal performance. \emph{No Refinement (\norefinement)}~\cite{BIRCH:96, DStream:2007, EDMStream:17, SL-KMeans:20} is suitable for scenarios where the initial clustering is sufficient, and refinement is unnecessary. \emph{One-shot Refinement (\oneshotRefinement)}~\cite{Clustream:03, DenStream:06, StreamKM++:12, DBStream:16} is effective for scenarios requiring a single comprehensive update after initial clustering. \emph{Incremental Refinement (\incrementalRefinement)} periodically applies one-shot refinement during the online clustering process, ensuring continuous adaptation to data stream changes.
+
+% \emph{In summary}, each design choice is grounded in its ability to address specific challenges in data stream clustering, providing a balanced approach to accuracy, efficiency, and adaptability. By carefully selecting and justifying these design options, \algo ensures robust performance across a wide range of dynamic data stream scenarios.
+
+
+% \subsection{Design Aspects of DSC Algorithms}
+% \dsc algorithms typically consist of several key components to address the challenges posed by data streams:
+% 1) \textbf{Summarizing Data Structure} provides a compact representation of data points, capturing essential information while minimizing memory usage, as storing the entire data stream is impractical.
+% 2) \textbf{Window Model} handles the temporal aspect of data streams, focusing on recent data points and discarding outdated information, improving the algorithm's clustering capability.
+% 3) \textbf{Outlier Detection Mechanism} identifies and handles noise and outliers in the data stream, preventing them from affecting the clustering quality. Detecting outliers in data streams is a challenging task for \dsc algorithms, particularly when outlier evolution occurs.
+% 4) \textbf{Refinement Strategy} updates and refines the clustering model as new data points arrive, adapting to changes in the data distribution. This strategy is usually applied once before finalizing the clustering result, enhancing accuracy without significantly impacting efficiency.
+
+% For each design aspect, there are many options available. In our study, we select six different design options for summarizing data structures: Clustering Feature Tree~\cite{zhang1997birch} (\CFT), Coreset Tree~\cite{StreamKM++:12} (\CoreT), Dependency Tree~\cite{EDMStream:17} (\DPT), Micro Clusters~\cite{Clustream:03} (\MCs), Grids~\cite{DStream:2007} (\Grids), and Augmented Meyerson Sketch~\cite{SL-KMeans:20} (\MS). For window models, we use three different types: Landmark Window Model~\cite{StreamKM++:12} (\landmark), Sliding Window Model~\cite{SL-KMeans:20} (\sliding), and Damped Window Model~\cite{DenStream:06, DBStream:16, DStream:2007} (\damped). For outlier detection, the existing design options fall into five main categories: Basic Outlier Detection~\cite{BIRCH:96} (\od), Outlier Detection with Buffer~\cite{Clustream:03} (\buffer), Outlier Detection with Timer~\cite{DStream:2007, DBStream:16} (\timer), and Outlier Detection with Buffer and Timer~\cite{DenStream:06, EDMStream:17} (\buffertimer). For refinement strategies, we consider three types: No Refinement~\cite{BIRCH:96, DStream:2007, EDMStream:17, SL-KMeans:20} (\norefinement), One-shot Refinement~\cite{Clustream:03, DenStream:06, StreamKM++:12, DBStream:16} (\oneshotRefinement), and Incremental Refinement (\incrementalRefinement) that periodically runs one-shot refinement during the online clustering process.
+
+% Note that, none of them is always surpass others and hence motivate our design of \algo that dynamically switch among different options at runtime.
+
+\begin{comment}
+\subsection{Challenges and Objectives}
+\label{sec:data_stream_characteristics}
+Data streams introduce unique challenges for data mining algorithms due to their continuous, high-speed, and potentially infinite nature. As such, designing effective algorithms to cluster data streams requires a deep understanding of these challenges and clear objectives to guide the development.
+
+\subsubsection{Challenges} 
+Data stream clustering faces challenges encapsulated in the four V's: Volume, Velocity, Veracity, and Variability. Volume refers to the vast amounts of data streams can generate, often surpassing system limits, requiring efficient summarization techniques like sketching~\cite{Aggarwal:2013, Muthukrishnan:2005, Cormode:2012, SL-KMeans:20} to maintain concise yet informative data representations. Velocity highlights the need for real-time processing capabilities, with incremental processing techniques like the sliding window model~\cite{Gaber:2005, Muthukrishnan:2005, Datar:2002} adapting to new data without reprocessing existing data. Veracity involves dealing with noise and outliers that compromise clustering integrity, necessitating robust outlier detection methods such as distance-based, density-based, and angle-based approaches~\cite{Aggarwal:2013, Chandola:2009, lu2003algorithms, Breunig:2000, Kriegel:2008}. Variability addresses the continuous evolution of data streams, requiring real-time adjustments like merging, splitting, and deleting clusters. Techniques such as adaptive forgetting factors, change detection, and incremental updating manage this dynamism~\cite{Gama:2014, Gaber:2005, EDMStream:17, Klinkenberg:2004, Gama:2004, EDMStream:17}, including variations in workload dimensionality and outlier evolution.
+
+\subsubsection{Clustering Objectives}
+In addressing the unique challenges of data streams, \dsc algorithms must be guided by well-defined objectives to ensure their effectiveness. The primary objective is accuracy, which involves faithfully representing the underlying data distribution by capturing genuine similarities among data points. This can be measured through metrics like cohesion, separation, purity, and normalized mutual information~\cite{10.1145/1557019.1557115}. Efficiency is also crucial due to the substantial volume and velocity of data streams. Algorithms must process data in real-time, optimizing computational and memory resources, and incrementally update clustering results as new data points arrive, enhancing computational efficiency~\cite{EDMStream:17,SL-KMeans:20}. Adaptability is essential for handling variabilities in data streams, such as cluster evolution, outliers, and fluctuating data dimensions. Effective algorithms incorporate change detection, adaptive forgetting factors, and incremental updating to adjust dynamically to these changes~\cite{Gama:2004, Klinkenberg:2004, EDMStream:17}.
+\end{comment}
+
+% The challenges inherent to data stream clustering can be encapsulated in the four \textit{V's}:
+
+% \emph{Volume:} Data streams can generate volumes of data that may surpass the system's storage and processing limits. Efficient data summarization techniques are crucial for managing this challenge~\cite{Aggarwal:2013, Muthukrishnan:2005}. Specifically, methods like sketching~\cite{Cormode:2012} have been incorporated into \dsc algorithms to capture essential information while omitting less important details~\cite{SL-KMeans:20}. The objective is to maintain a concise yet informative representation of the data stream for efficient querying and analysis.
+
+% \emph{Velocity:} 
+% The rapid arrival rate of data in streams necessitates real-time processing capabilities in algorithms~\cite{Gaber:2005, Muthukrishnan:2005}. To address this, \dsc algorithms often employ efficient, incremental processing techniques that adapt to new data without the need for reprocessing existing data. The sliding window model serves as a notable example of such a technique, maintaining a fixed-size window over recent data points and incrementally updating clustering results as data evolves~\cite{Datar:2002}.
+
+% \emph{Veracity:} The presence of noise and outliers in data streams can compromise the integrity of clustering results~\cite{Aggarwal:2013, Chandola:2009}. To mitigate this, robust outlier detection mechanisms are indispensable. Various methods such as distance-based~\cite{lu2003algorithms}, density-based~\cite{Breunig:2000}, and angle-based~\cite{Kriegel:2008} approaches have been incorporated into \dsc algorithms to identify and manage such anomalous data points effectively.
+
+% \emph{Variability:} Data streams are subject to continuous evolution, affecting the distribution of clusters and necessitating real-time adjustments such as merging, emerging, splitting, deleting, and adjusting clusters~\cite{Gama:2014, Gaber:2005, EDMStream:17}. To manage this dynamism, techniques like adaptive forgetting factors~\cite{Klinkenberg:2004}, change detection~\cite{Gama:2004}, and incremental updating~\cite{EDMStream:17} are frequently employed. Beyond cluster evolution, data streams also exhibit variabilities in workload dimensionality, referring to fluctuations in the dimensions of incoming data points, and in outlier evolution, which involves the dynamic interchange of roles between outlier clusters and temporal clusters.
+

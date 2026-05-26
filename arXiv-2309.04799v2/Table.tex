@@ -1,0 +1,138 @@
+%%%% Define Table %%%%
+
+\newcommand{\notationTable}{{
+\begin{table}[t]
+\tiny
+\caption{Used Notations}
+\begin{tabular}{|l|l|}
+\hline
+Notations   & Description                             \\ \hline
+$DSC$       & Data Stream clustering  \\ \hline
+$t$         & Timestamp of input data       \\ \hline
+$w$         & Weight of input data       \\ \hline
+$x$         & An input data object                    \\ \hline
+$S$         & An input data stream                    \\ \hline
+$d$         & Dimension of input data point                    \\ \hline
+$c$         & Predicted cluster sets\\ \hline
+% $GT$        & Ground truth cluster sets\\ \hline
+% $F$         & False clustering point sets\\ \hline
+% $h$         & Window length (msec)                    \\ \hline
+$n$         & Length of current data stream                    \\ \hline
+% $v$         & Input arrival rate (data objects/msec)  \\ \hline
+$CF$        & Clustering Feature  \\ \hline
+$MC$        & Micro cluster  \\ \hline
+
+%$\lambda$             & Decay factor                            \\ \hline
+\end{tabular}%
+\label{tab:notation}
+\end{table}
+}}
+
+\newcommand{\algorithmTable}{{
+\begin{table*}[t]
+\tiny
+\centering
+\caption{A summary of representative \dsc algorithms and their design decisions. \textmd{The year attribute for each algorithm is when it was first published.}}
+\label{tab:summary}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|cc|c|c|c|}
+\hline
+\multirow{2}{*}{\textbf{Algorithm}}                                                                            & \multirow{2}{*}{\textbf{Year}} & \multicolumn{2}{c|}{\textbf{Summarizing Data Structure}}             & \multirow{2}{*}{\textbf{Window Model}} & \multirow{2}{*}{\textbf{Outlier Detection}} & \multirow{2}{*}{\textbf{Offline Refinement}} \\ \cline{3-4}
+                                                                                                      &                       & \multicolumn{1}{l|}{\emph{Name}}                    & \emph{Catalog}      &                               &                                    &                                     \\ \hline
+{\color{blue} \birch}~\cite{BIRCH:96}        & 1996                  & \multicolumn{1}{l|}\CFT          & Hierarchical      & \landmark                      & \od              & \incrementalRefinement                               \\ \hline
+{\color{blue} \clustream}~\cite{Clustream:03}& 2003                  & \multicolumn{1}{l|}\MCs          & Partitional       & \landmark                      & \timer               & \incrementalRefinement                      \\ \hline
+{\color{blue} \denstream}~\cite{cao2006density}& 2006                & \multicolumn{1}{l|}\MCs          & Partitional    & \damped                        & \buffertimer                & \oneshotRefinement                       \\ \hline
+{\color{blue} \dstream}~\cite{DStream:2007}  & 2007                  & \multicolumn{1}{l|}\Grids        & Partitional    & \damped                        & \timer               & \oneshotRefinement                                \\ \hline
+{\color{blue} \skm}~\cite{StreamKM++:12}     & 2012                  & \multicolumn{1}{l|}\CoreT        & Hierarchical & \landmark                      & \nod                               & \oneshotRefinement                      \\ \hline
+{\color{blue} \dbstream}~\cite{DBStream:16}  & 2016                  & \multicolumn{1}{l|}\MCs          & Partitional    & \damped                        & \timer               & \oneshotRefinement                      \\ \hline
+{\color{blue} \edmstream}~\cite{EDMStream:17}& 2017                  & \multicolumn{1}{l|}\DPT          & Hierarchical & \damped                        & \buffertimer                & \incrementalRefinement                                \\ \hline
+{\color{blue} \slkmeans}~\cite{SL-KMeans:20} & 2020                  & \multicolumn{1}{l|}\MS           & Partitional    & \sliding                       & \nod                               & \incrementalRefinement                                \\ \hline
+\end{tabular}%
+}
+\end{table*}
+}}
+ 
+\newcommand{\workloadTable}{{
+\begin{table}[t]
+\centering
+\tiny
+\caption{Characteristics differences of selected workloads. \textmd{Note that the outliers column refers to whether there are outliers in the final clustering results.}}
+\label{tab:Workload}
+\resizebox{0.5\textwidth}{!}{%
+\begin{tabular}{|c|p{0.5cm}|p{0.5cm}|p{0.5cm}|p{0.6cm}|p{0.6cm}|}
+\hline
+\textbf{Workload}                           & \textbf{Length}       & \textbf{Dim.}     & \textbf{Cluster Num.}     & \textbf{Outliers}             & \textbf{Evolving Freq.}\\ \hline
+{\color{blue}\fct}~\cite{Covertype}         & 581012                & 54                & 7                         & False                         & Low\\ \hline
+{\color{blue}\kdd}~\cite{KDD99}             & 4898431               & 41                & 23                        & True                          & Low\\ \hline
+{\color{blue}\insect}~\cite{Insect}         & 905145                & 33                & 24                        & False                         & Low\\ \hline
+{\color{blue}\sensor}~\cite{SensorData}     & 2219803               & 5                 & 55                        & False                         & High\\ \hline
+{\color{blue}\eds}~\cite{DenStream:06}      & 245270                & 2                 & 363                       & False                         & Varying\\\hline
+{\color{blue}\ods}~\cite{DenStream:06}      & 100000                & 2                 & 90                        & Varying                       & High\\ \hline
+% {\color{blue}\es}~\cite{DenStream:06}        & 345270                & 2                 & 453                       & Varying                       & Varying\\ \hline
+{\color{blue}\dimension}~\cite{MOA_Web}     & 500000                & 20$\sim$100           & 50                        & Low                           & Low\\ \hline
+\end{tabular}%
+}
+\end{table}
+}}
+
+
+\newcommand{\designTable}{{
+% Please add the following required packages to your document preamble:
+\begin{table*}[t]
+\tiny
+\centering
+\caption{Summary of Design Aspect Assembly Versions based on Different Design Choices}
+\label{tab:design}
+\resizebox{0.99\textwidth}{!}{%
+\begin{tabular}{|l|l|l|ll|l|}
+\hline
+\multirow{2}{*}{Version} & \multirow{2}{*}{Window Model} & \multirow{2}{*}{Outlier Detection} & \multicolumn{2}{c|}{Data Structure}                                                                                 & \multirow{2}{*}{Offline Clustering} \\ \cline{4-5}
+                           &                               &                                    & \multicolumn{1}{l|}{Primitive Data Structure} & \multicolumn{1}{l|}{Global Data Structure}   &                                     \\ \hline
+{\color{blue}V1}           & Landmark          & Buffer-based            & \multicolumn{1}{l|}{Micro cluster}         & \multicolumn{1}{l|}{Tree}          & Distance-based                    \\ \hline
+{\color{blue}V2}           & Landmark          & Buffer-based          & \multicolumn{1}{l|}{Micro cluster}         & \multicolumn{1}{l|}{Tree}          & Density-based                    \\ \hline
+{\color{blue}V3}           & Landmark          & Buffer-based           & \multicolumn{1}{l|}{Micro cluster}         & \multicolumn{1}{l|}{Tree}         & N.A                       \\ \hline
+{\color{blue}V4}           & Sliding           & Buffer-based            & \multicolumn{1}{l|}{Micro cluster}         & \multicolumn{1}{l|}{Tree}          & N.A                        \\ \hline
+{\color{blue}V5}           & Damped            & Buffer-based           & \multicolumn{1}{l|}{Micro cluster}         & \multicolumn{1}{l|}{Tree}          & N.A                    \\ \hline
+{\color{blue}V6}           & Landmark          & Distance-based                      & \multicolumn{1}{l|}{Micro Cluster}         & \multicolumn{1}{l|}{Tree}         & N.A.                                  \\ \hline
+{\color{blue}V7}           & Landmark          & Density-based             & \multicolumn{1}{l|}{Micro cluster}         & \multicolumn{1}{l|}{Tree}          & N.A                    \\ \hline
+{\color{blue}V8}           & Landmark          & Buffer-based            & \multicolumn{1}{l|}{Micro cluster}         & \multicolumn{1}{l|}{List}             & N.A.                  \\ \hline
+{\color{blue}V9}           & Landmark          & Buffer-based            & \multicolumn{1}{l|}{Grid}                  & \multicolumn{1}{l|}{List}             & N.A.                   \\ \hline
+\end{tabular}%
+}
+\end{table*}
+}}
+
+
+
+\newcommand{\decisionTable}{{
+\begin{table}[]
+\centering
+\caption{Summary of design aspects}
+\label{tab:decision}
+\resizebox{0.9\textwidth}{!}{%
+\begin{tabular}{|C{2cm}|C{2cm}|C{1.5cm}|C{1.5cm}|L{9cm}|}
+\hline
+Design Aspect                                                       & Design Choices        & Efficiency    & Accuracy      &\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \  Notes                      \\ \hline
+\multirow{6}{1.7cm}{Summarizing Data Structure}                     & \CFT                  & high          & high          & efficient data insertion and some additional operations for handling \cef   \\ \cline{2-5} 
+                                                                    & \CoreT                & low           & High          & need to rebuild the whole tree for updating lazily                              \\ \cline{2-5} 
+                                                                    & \DPT                  & high          & high          & contain additional density information for clustering                 \\ \cline{2-5} 
+                                                                    & \MCs                  & low           & high          & keep basic structure of \CFT and additional time information; needs to search for every clusters during data insertion             \\ \cline{2-5} 
+                                                                    & \Grids                & high          & low           & no need for frequent distance calculation but not so much accurate during data insertion    \\ \cline{2-5} 
+                                                                    & \MS                   & low           & High       & need to frequently rebuild the structure                         \\ \hline
+\multirow{3}{1.7cm}{Window Model}                                   & \landmark             & depends       & depends       & difficult to determine a suitable landmark configuration           \\ \cline{2-5}
+                                                                    & \sliding              & high          & low           & fixed window size results in fewer clusters for computation        \\ \cline{2-5}
+                                                                    & \damped               & low           & depends       & process all the data points with a decay function                               \\ \hline
+\multirow{2}{1.7cm}{Outlier Detection}                              & \nod                  & high          & low          & do not use any outlier detection mechanism \\ \cline{2-5}
+                                                                    & \od                   & high          & high         & detect outlier clusters through density and reduce the number of temporal clusters\\ \cline{2-5}
+                                                                    & \buffer               & low           & high         & well handle \cef among outliers and avoid cluster pollution but consumes much time to maintain the buffer \\ \cline{2-5}
+                                                                    & \timer                & high          & high         & prevent removing active clusters and be more focused on recent cluster information     \\ \cline{2-5}
+                                                                    & \buffertimer          & low           & high         & improve the algorithms' ability for clustering evolving stream but still be low efficient in maintaining buffer \\ \hline
+                                                                   
+\multirow{2}{1.7cm}{Offline Refinement}                              & xxx              & minor overhead           & minor impact          & any existing batch-based clustering algorithms may apply to refine results \\ \cline{2-5}
+                                                                    & \norefinement                & no impact          & no impact          & do not apply any further refinement     \\ \hline                                                                  
+% \multirow{2}{1.7cm}{Offline Refinement}                             & xxx           & \multirow{2}{*}{depends}       & \multirow{2}{*}{depends}       & \multirow{2}{*}{none study about the real impact can be found}                              \\ \cline{2-2}
+%                                                                     & \norefinement         &        &        &                               \\ \hline
+\end{tabular}
+}
+\end{table}
+}}

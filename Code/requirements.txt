@@ -1,0 +1,9 @@
+hyperopt==0.2.7
+numpy==2.3.1
+pandas==2.3.0
+permetrics==2.0.0
+psutil==7.0.0
+river==0.22.0
+scikit_learn==1.7.0
+scipy==1.16.0
+setuptools<81  # hyperopt needs pkg_resources, removed in setuptools>=81

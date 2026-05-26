@@ -1,1 +1,17 @@
-IJCAI_ECAI_2026_AutoDSC_Paper/
+# Build artifacts
+**/target/
+*.so
+*.dylib
+
+# Python
+__pycache__/
+*.pyc
+
+# OS / editor
+.DS_Store
+
+# Logs
+*.log
+
+# Archived (rejected) paper — kept local, not tracked
+archive/

@@ -1,0 +1,134 @@
+\section{Benne's Modular Design Components}
+\label{sec:design}
+In this section, we provide a detailed description of \algo's modular design and its components, which are organized into four key design aspects: summarizing data structure, window model, outlier detection mechanism, and refinement strategy. This modular design allows for better adaptability, configurability, and extensibility, catering to various requirements in different application domains.
+
+\subsection{Summarizing Data Structure}
+\label{sec:summarizing_data_structure}
+The summarizing data structure serves as a compact representation of the data points within the stream, facilitating efficient clustering while minimizing memory and computation overhead. In \algo, we provide several options for summarizing data structures, classified into two categories: the hierarchical category and the partitional category. 
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.5\textwidth]{Figures/Design Aspects/Summarizing Data Structure.pdf}
+\caption{Six Types of Summarizing Data Structure.}
+\label{fig:data_structure}
+\end{figure}
+
+\subsubsection{Hierarchical Summarizing Data Structure}
+\label{subsec:hierarchical}
+Hierarchical summarizing data structures group the incoming data points into a tree structure. As shown in Figure~\ref{fig:data_structure}(a), each temporal cluster is depicted as a \emph{node}, and the parent cluster comprises multiple sub-clusters within the tree. To insert a new data point, it starts by searching for a suitable temporal cluster from the root node to one of the leaf nodes. Such a tree structure makes the insertion fast as there is no need for checking every existing temporal cluster. In the following, we discuss three popular and representative hierarchical summarizing data structures: Clustering Feature Tree (\CFT), Coreset Tree (\CoreT), and Dependency Tree (\DPT).
+
+\textbf{Clustering Feature Tree (\CFT).}
+\label{subsec:cf-tree}
+\CFT~\cite{BIRCH:96} is one of the oldest but representative hierarchical summarizing data structures. Every tree node of \CFT is named \emph{clustering feature (CF)}, which consists of the position information of a temporal cluster. Although CF is quite simple, it is adequate to support many basic operations of stream clustering, such as distance calculation and cluster updating. Due to the additivity of the CF~\cite{BIRCH:96}, \CFT can be updated incrementally rather than starting from scratch again. Moreover, it also offers some advanced operations such as merging or splitting for handling \cef during stream clustering. \CFT captures the statistical properties of the data distribution, such as mean, variance, and density. This structure enables efficient computation of cluster distances and supports online updates as new data points are processed.
+
+\textbf{Coreset Tree (\CoreT).}
+\label{subsec:CT}
+\CoreT~\cite{StreamKM++:12} is a binary tree structure used for extracting a core subset from a large volume of stream data. Compared with CF in \CFT, the tree node of \CoreT named \emph{CoreNode} provides additional information about the density of the corresponding cluster. However, since \CoreT is unable to update incrementally like \CFT, it needs to rebuild the whole tree structure during the clustering procedure, which might influence the clustering efficiency of the whole algorithm. To overcome this shortage, \CoreT reduces the time of rebuilding via lazily performing the update. In exchange, it may not be able to provide real-time clustering information for accurate clustering, especially when \cef happens frequently.
+
+\textbf{Dependency Tree (\DPT).}
+\label{subsec:DPT}
+\DPT~\cite{EDMStream:17} is one of the most recent hierarchical summarizing data structures. It is specifically designed for handling \cef. The tree node of \DPT is called \emph{cluster cell} (CC), which is constructed based on cluster density. Each low-density cluster connects to its nearest denser cluster. Although CC contains similar information to CoreNode in \CoreT, it can partially adjust itself to adapt to evolving activities in the stream, achieving higher clustering efficiency.
+\DPT focuses on detecting and tracking evolving density modes in the data stream, which is essential for handling \cef. By maintaining an appropriate level of cluster granularity, \DPT can efficiently adapt to the dynamic nature of the data stream, providing accurate clustering results even when \cef occurs frequently.
+
+\subsubsection{Partitional Summarizing Data Structure}
+\label{subsec:partition}
+In contrast to hierarchical summarizing data structures, partitional summarizing data structures divide the incoming data points into flat clusters, as shown in Figure~\ref{fig:data_structure}(b). These clusters are non-overlapping and do not have a parent-child relationship. To insert a new data point, the partitional structures typically search for the nearest temporal cluster from the entire set of existing temporal clusters. This approach is less efficient than hierarchical structures as it requires checking all existing clusters. In the following, we discuss three typical partitional summarizing data structures, different from each other by the implementation of objects.
+ 
+\textbf{Micro Clusters (\MCs).} 
+\label{subsec:MCs}
+\MCs~\cite{Clustream:03} represent a group of closely related data points as a single entity, reducing the need for maintaining individual data points in memory. A micro-cluster is defined by a set of aggregate features, such as the centroid, radius, and weight, which are updated as new data points arrive. \MCs~\cite{Clustream:03} is one of the oldest partitional summarizing data structures. It contains the same positional information as CF in \CFT. To keep track of the clusters' activities in real-time, it has two additional elements used for summarizing the timestamps for the clusters' updates. Therefore, it is more comprehensive and robust for stream clustering with high accuracy, especially under \cef.
+
+\textbf{Grids (\Grids).}
+\label{subsec:Grids}
+\Grids~\cite{DStream:2007} performs its clustering simply based on checking whether the data lies in a specific grid of $d$-dimensional space and grouping the dense grids into temporal clusters. Compared to other data structures, \Grids is more computationally efficient because it does not require frequent distance calculations between new data and the grid. Additionally, it periodically removes sparse grids, which further boosts its clustering efficiency. However, since every grid has a fixed position in the space and the information about the relationship among grids is only updated lazily, \Grids may not work well when some evolving activities occur frequently among the grid and thus leads to lower clustering accuracy. \Grids partition the data space into a fixed number of cells, and each cell maintains the count of data points it contains. This approach allows for a coarse-grained representation of the data distribution, enabling efficient distance computations and outlier detection.
+
+\textbf{Augmented Meyerson Sketch (\MS).}
+\label{subsec:meyerson_sketch}
+\MS~\cite{SL-KMeans:20} is the extension of traditional Meyerson Sketch~\cite{MeyersonSketch:01} which can better summarize the clustering information using a limited number of data points. \MS mainly consists of a set of temporally weighted centres, and the weight is mainly influenced by both the time and density information of the corresponding cluster. Similar to \CoreT, \MS may need to delete and reconstruct the created sketch to adapt to the evolving data stream. This brings a huge efficiency cost and temporal information loss. Another drawback of \MS is that it needs a predefined number of clusters ($K$) that is hard to determine for clustering of real-world evolving data streams.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.5\textwidth]{Figures/Design Aspects/Window Model.pdf}
+\caption{Three Types of Window Model.}
+\label{fig:window_model}
+\end{figure}
+\subsection{Window Model}
+\label{sec:window_model}
+The window model defines the scope of the data stream being considered for clustering at any given time. In \algo, we support various window models, categorized into three main types as illustrated in Figure~\ref{fig:window_model}. The choice of window model affects the adaptability of the algorithm to evolving data distributions and concept drifts. Note that, for each kind of window model, there are further two types of window implementations: count-based and time-based. We base on the count-based window when implementing \dsc algorithms in our benchmark as it is more frequently used~\cite{Stream_Clustering_Survey01}.
+
+\subsubsection{Landmark Window}
+\label{subsec:landmark}
+The \landmark~\cite{metwally2005duplicate} divides the data stream into fixed-size windows starting from a predefined landmark point. This model allows the detection of concept drifts and periodic patterns in the data by comparing the clustering results across different windows. As shown in Figure~\ref{fig:window_model}(a), the data between two landmarks is collected into a window for clustering. When reaching the current landmark, the temporal clustering result is stored and the current summarizing data structure is cleared. Then, the algorithm continues performing clustering based on the new 'blank' structure until reaching the next landmark. A key challenge in the landmark window model is configuring the spacing between landmarks, as this affects the clustering accuracy and efficiency.
+
+\subsubsection{Sliding Window}
+\label{subsec:sliding}
+The \sliding~\cite{zhou2008tracking,SL-KMeans:20} considers a fixed-size window of the most recent data points for clustering. As new data points arrive, the oldest data points are discarded, ensuring that the algorithm focuses on the most recent trends in the data. Implemented as a queue following a First-In-First-Out processing strategy, the sliding window model, as depicted in Figure~\ref{fig:window_model}(b), maintains a predefined fixed window size. The trade-off with this approach is that, while it may reduce computation time and resources, it can also lead to decreased clustering accuracy, particularly when the window size is small.
+
+\subsubsection{Damped Window}
+\label{subsec:damped}
+As shown in Figure~\ref{fig:window_model}(c), the \damped~\cite{cao2006density,DStream:2007} assigns an exponentially decaying weight to data points based on their age. This approach emphasizes more recent data points while still considering older data points, allowing for a smoother adaptation to evolving data distributions. Unlike the landmark and sliding window models, the damped window model does not treat all data objects in the window as having equal importance. Instead, it associates objects with weights that decay over time using a function $f(\alpha, \lambda)$. Additionally, the damped window model does not discard objects as time goes on, which may lead to increased accuracy but also efficiency issues. Since the $\alpha$ and $\lambda$ parameters are predefined, the decay function is kept the same to determine the priority, and the damped window model may be more susceptible to certain stream characteristics, such as \oef.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Figures/Design Aspects/Outlier Detection.pdf}
+    \caption{Four Types of Outlier Detection Mechanisms.}    \label{fig:outlier_detection_mechanisms}
+\end{figure}
+\subsection{Outlier Detection Mechanism}
+\label{sec:outlier_detection}
+Outlier detection mechanisms identify data points that do not conform to the underlying data distribution, which is crucial for ensuring the quality of clustering results. The outlier detection mechanism is an optional design aspect with two optional independent optimizations: the use of a buffer and a timer. In \algo, we provide five different choices for this design aspect, including not using any outlier detection mechanism (\nod).
+
+\subsubsection{Basic Outlier Detection (\od)}
+\label{subsec:detection}
+The basic outlier detection mechanism (\od) periodically selects temporal clusters with low density and transforms them into outlier clusters, removing them from memory~\cite{Clustream:03,DStream:2007}, as depicted in Figure~\ref{fig:outlier_detection_mechanisms}(a). This approach can improve clustering accuracy without significantly impacting efficiency, as it reduces the number of temporal clusters, saving time for data insertion and cluster updating.
+
+Outlier detection mechanisms can be further classified into distance-based~\cite{Clustream:03}, density-based~\cite{EDMStream:17}, and grid-based~\cite{DStream:2007} methods. Users can select the most suitable mechanism based on their specific application requirements and the nature of the data stream. 1) \emph{Distance-based outlier detection} identifies data points distant from their nearest neighbours or cluster centroids. This method is effective for detecting isolated data points and small groups of dissimilar data points in the data stream; 2) \emph{Density-based Outlier Detection} considers data points as outliers if their local density is significantly lower than that of their neighbours. This approach is suitable for detecting outliers in data streams with varying densities and complex cluster structures; 3) \emph{Grid-based Outlier Detection} uses grid-based structures to identify data points in low-density cells as outliers. This method is computationally efficient, as it relies on the grid structure for both clustering and outlier detection.
+
+\subcompact
+\subsubsection{Detection with Buffer (\buffer)}
+\label{subsec:buffer}
+In certain scenarios, outliers may eventually form dense clusters with other outliers, especially under the influence of \oef. To track such outliers and accommodate their potential future clustering, a buffer can be employed to store the summary of these outlier clusters for later detection (\buffer), as shown in Figure~\ref{fig:outlier_detection_mechanisms}(b)~\cite{DenStream:06,EDMStream:17}.
+
+The buffer-based approach offers several advantages. First, it enables the clustering algorithm to better handle evolving data distributions by continuously monitoring the outlier clusters and updating their status as necessary. This allows the algorithm to be more adaptive to changes in data characteristics, improving the overall clustering performance. Second, using a buffer prevents the pollution of temporal clusters by incoming outliers. Instead of directly inserting potential outliers into the temporal clusters, they are first inserted into the outlier buffer. This ensures that the temporal clusters remain representative of the underlying data distribution and are not negatively affected by the presence of outliers.
+
+However, maintaining the outlier buffer comes at the cost of additional computational time and resources. The buffer requires frequent updates to ensure that its contents remain relevant to the current data distribution. Moreover, the buffer may need to be periodically checked to identify and remove outdated outlier clusters or those that have become part of dense clusters.
+
+\subcompact
+\subsubsection{Detection with Timer (\timer)}
+\label{subsec:timer}
+In addition to using density information for periodic identification of outlier clusters, \dsc algorithms can employ a timer mechanism to evaluate the activity of temporal clusters before transforming them into outlier clusters. This approach, denoted as \timer, is illustrated in Figure~\ref{fig:outlier_detection_mechanisms}(c). The timer mechanism helps to avoid accidentally removing temporal clusters that might soon become dense and improves the overall robustness of the outlier detection process. 
+
+The timer-based approach offers several advantages, such as:
+\textit{Adaptability to dynamic data streams}: By evaluating the activity of temporal clusters based on their recent history, the timer mechanism allows the algorithm to better adapt to changing data distributions and ensure that only truly irrelevant clusters are removed.
+\textit{Efficiency}: Focusing on recent cluster changes enables the \dsc algorithm to operate more efficiently, as it avoids spending computational resources on clusters that may soon become relevant again.
+\textit{Improved clustering accuracy}: By preventing the premature removal of clusters that could potentially become dense, the timer mechanism improves the overall accuracy of the clustering results.
+
+While the timer-based approach offers several advantages, it also comes with potential drawbacks that should be considered when implementing it in a \dsc algorithm: \textit{Increased complexity}: Introducing a timer mechanism can add complexity to the algorithm, as it requires additional logic to manage the timer and determine the activity of clusters. This may result in increased implementation effort and a steeper learning curve for users. \textit{Risk of preserving noisy clusters}: In some cases, the timer mechanism may inadvertently prevent the removal of noisy clusters that exhibit sporadic activity. These clusters may not be relevant to the overall data distribution but could still consume resources and affect the clustering results.
+
+\subcompact
+\subsubsection{Detection with Buffer and Timer (\buffertimer)}
+\label{subsec:buffertimer}
+Outlier buffer and outlier timer can be also used in combination (\buffertimer) as depicted in Figure~\ref{fig:outlier_detection_mechanisms}(d).
+Similar to \buffer, \buffertimer maintains a buffer to temporarily store outlier clusters, which may transform back to temporal clusters. Different from \buffer though, \buffertimer additionally checks if a sparse temporal cluster is inactive before transforming it to an outlier cluster with the timer. Furthermore, the algorithm will also periodically check and remove some inactive outlier clusters in the buffer. This helps the algorithm improve its clustering accuracy for handling \oef but also consumes a lot of time for buffer maintenance.
+
+\subsection{Refinement Strategy}
+\label{sec:refinement_strategy}
+The refinement strategy is responsible for updating the clustering model as new data points arrive and ensuring that the model remains accurate and up-to-date. This design aspect plays a crucial role in maintaining the adaptability of \dsc algorithms to evolving data distributions and concept drifts. Being another optional design aspect in \dsc algorithm, we study three design choices: \norefinement, \oneshotRefinement, and \incrementalRefinement. The choice of refinement strategy in \dsc algorithms depends on the desired trade-offs between computational efficiency, clustering accuracy, and adaptability to evolving data distributions. By carefully considering the specific requirements and characteristics of the data stream, users can select the most appropriate refinement strategy for their application.
+
+\subsubsection{No Refinement}
+\label{sec:no_refinement}
+In the \norefinement approach, the algorithm directly outputs the temporal clusters $C$ as the final clustering results without any further refinement, as shown in Figure~\ref{fig:refinement} (a). This strategy is computationally efficient as it requires no additional processing but may result in lower clustering accuracy, particularly when dealing with evolving data distributions or concept drifts.
+
+\subsubsection{One-shot Refinement}
+\label{sec:oneshot_refinement}
+\oneshotRefinement~\cite{StreamKM++:12, DStream:2007, DenStream:06} aims to balance computational efficiency and clustering accuracy by performing refinement less frequently, as opposed to the incremental refinement strategy. In this approach, the clustering model is refined at specific intervals or after a certain number of data points have been processed, as shown in Figure~\ref{fig:refinement} (b). While this approach can reduce the computational overhead associated with continuous updates, it may result in a less adaptive model if changes in the data distribution are not captured in a timely manner. The one-shot refinement strategy is particularly suited for applications where computational resources are limited, or when the data stream exhibits gradual changes, allowing for more infrequent model updates.
+
+\subsubsection{Incremental Refinement}
+\label{sec:incremental_refinement}
+\incrementalRefinement~\cite{Clustream:03, BIRCH:96, EDMStream:17, DBStream:16, SL-KMeans:20} involves updating the clustering model on-the-fly as new data points are processed, as illustrated in Figure~\ref{fig:refinement} (c). This approach ensures that the model remains current and adaptive to changes in the data distribution but may require more frequent updates, increasing computational overhead. Some batch clustering algorithms, such as \kmeans~\cite{KMeans:1967,KMeans:1982} or \dbscan~\cite{DBSCAN:1996}, can be applied for further refining the results before output. Such a scheme is also known as the online-offline scheme and was initially proposed by \clustream~\cite{Clustream:03}. The incremental refinement strategy offers improved clustering accuracy at the cost of increased computational complexity.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{Figures/Design Aspects/Offline Refinement.pdf}
+    \caption{Three Types of Refinement Strategies.}
+    \label{fig:refinement}
+\end{figure}

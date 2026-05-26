@@ -1,0 +1,571 @@
+%%%% AutoDSC --- IEEE ICDM 2026 (IEEE conference format)
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote.
+% If unneeded, comment it out.
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage[caption=false,font=footnotesize]{subfig} % \subfloat; caption=false avoids the caption-pkg warning
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{AutoDSC: An Automated Data Stream Clustering Framework}
+
+% For double-blind review, comment out the author block below and use the
+% anonymous one. The real author block is provided for the camera-ready.
+\author{\IEEEauthorblockN{Anonymous}}
+
+% \author{
+% \IEEEauthorblockN{Nilesh Verma}
+% \IEEEauthorblockA{\textit{AI Institute} \\ \textit{University of Waikato} \\ Hamilton, New Zealand \\ nv78@students.waikato.ac.nz}
+% \and
+% \IEEEauthorblockN{Albert Bifet}
+% \IEEEauthorblockA{\textit{AI Institute} \\ \textit{University of Waikato} \\ Hamilton, New Zealand \\ albert@waikato.ac.nz}
+% \and
+% \IEEEauthorblockN{Bernhard Pfahringer}
+% \IEEEauthorblockA{\textit{AI Institute} \\ \textit{University of Waikato} \\ Hamilton, New Zealand \\ bernhard@waikato.ac.nz}
+% \and
+% \IEEEauthorblockN{Maroua Bahri}
+% \IEEEauthorblockA{\textit{CNRS, LIP6} \\ \textit{Sorbonne Universit\'e} \\ Paris, France \\ maroua.bahri@lip6.fr}
+% }
+
+\maketitle
+
+\begin{abstract}
+Data stream clustering faces unique challenges in dynamic environments where data distributions evolve continuously and computational resources are limited. While AutoML has transformed supervised learning, its application to unsupervised streaming tasks remains largely unexplored. Traditional clustering algorithms are sensitive to algorithm selection, hyperparameter configuration, and changes in data characteristics. We introduce AutoDSC (Automated Data Stream Clustering), a novel framework that automatically optimizes algorithm selection and hyperparameter tuning for real-time stream clustering. AutoDSC employs Population-Guided Stochastic Search Optimization (PGSSO), leveraging elite configurations to guide efficient parameter exploration while dynamically adjusting exploration rates based on performance feedback. The framework incorporates drift-aware adaptation for a proactive response to distributional changes and multi-objective evaluation with clustering validation indices for robust performance assessment. Our theoretical analysis establishes regret bounds for the optimization process. Comprehensive experiments demonstrate that AutoDSC achieves statistically significant improvements in clustering quality while maintaining computational efficiency compared to existing automated approaches.
+\end{abstract}
+
+\begin{IEEEkeywords}
+data stream clustering, AutoML, concept drift, hyperparameter optimization, online learning
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+Automated Machine Learning (AutoML) has significantly advanced the accuracy and efficiency of machine learning workflows by automating tasks such as algorithm selection, hyperparameter optimization, and pipeline synthesis~\cite{hutter2019automated}. While AutoML has seen widespread adoption in supervised learning, its application to clustering remains comparatively less explored, mainly due to the absence of a universally applicable objective function for evaluation~\cite{poulakis2024survey}. Recent AutoML solutions for clustering include AutoML4Clust~\cite{Tschechlov2021AutoML4Clust}, AutoCluster~\cite{Liu2021AutoCluster}, cSmartML~\cite{ElShawi2021cSmartML}, ML2DAC~\cite{TrederTschechlov2023ML2DAC}, TPE-AutoClust~\cite{ElShawi2025TPEAutoClust}, and PoAC~\cite{daSilva2024PoAC}. These approaches address clustering challenges using various automated methodologies such as meta-learning, pipeline composition, and problem-specific heuristics.
+
+However, with the increasing availability of streaming data from sources like Internet of Things (IoT) sensors, web traffic, and social media, traditional static AutoML approaches are insufficient~\cite{yang2022iot}. They cannot adapt to dynamic environments or process data in a single pass due to concept drift and memory limitations~\cite{bifet2018machine}. Existing online AutoML frameworks such as Online AutoML~\cite{celik2023online}, ASML~\cite{pmlr-v256-verma24a}, ChaCha~\cite{pmlr-v139-wu21d}, and Auto-Reg~\cite{verma2025auto-reg} primarily focus on supervised learning tasks. Meanwhile, unsupervised learning, particularly clustering, requires specialized AutoML solutions. At present, ConfStream~\cite{carnein2020confstream} and OnlineAutoClust~\cite{el2023onlineautoclust} represent the only established AutoML solutions for stream clustering. Nevertheless, they suffer from significant limitations. ConfStream relies on single clustering evaluation metrics, and OnlineAutoClust uses computationally intensive offline search methods, which are inefficient for real-time streaming scenarios. These limitations highlight the critical need for tailored AutoML solutions designed specifically for data stream clustering~\cite{bahri2021data}. This paper introduces AutoDSC (Automated Data Stream Clustering), a comprehensive AutoML framework for unsupervised data stream clustering. Our key contributions are:
+
+\begin{itemize}
+\item We propose AutoDSC, the first AutoML framework to unify elite-guided parameter optimization, concept drift detection, and multi-objective clustering evaluation in a single practical framework, introducing Population-Guided Stochastic Search Optimization (PGSSO) as a novel optimization mechanism that dynamically balances exploration and exploitation based on performance feedback in non-stationary streaming environments.
+
+\item We establish formal regret bounds proving convergence for the optimization process and demonstrate efficient recovery after concept drift detection.
+
+\item Through extensive experiments on synthetic and real-world data streams, we demonstrate that AutoDSC achieves statistically significant improvements in clustering quality while maintaining computational efficiency.
+\end{itemize}
+
+\section{Related Work}\label{sec:related}
+
+Data stream clustering addresses the challenges of processing continuous, high-velocity data with limited computational resources~\cite{bifet2018machine,aggarwal2013data}. CluStream~\cite{aggarwal2003framework} pioneered the micro-cluster approach using pyramidal time frames to maintain summary statistics for scalable analysis. DenStream~\cite{Cao2006} advanced density-based clustering by introducing core-micro-clusters, potential micro-clusters, and outlier micro-clusters. DBSTREAM~\cite{Hahsler2016} enhanced density estimation by incorporating shared density graphs that explicitly model inter-micro-cluster relationships. This provides better resilience to concept drift compared to DenStream. For k-means-based approaches~\cite{Sculley2010}, mini-batch optimization combined with sparse projections has been developed to enable web-scale clustering with significantly reduced latency for real-time streaming applications. STREAMKMeans~\cite{montiel2021river} is an alternative version of the stream local search~\cite{OCallaghan2002} that replaces k-medians with incremental k-means.
+
+Recent developments have focused on automated algorithm selection and hyperparameter optimization (CASH)~\cite{hutter2019automated} for stream clustering. ConfStream~\cite{carnein2020confstream} represents an early attempt at automated stream clustering configuration, using an ensemble of different clustering algorithms and configurations that dynamically adapt by evaluating clustering quality and sampling nearby new configurations proportionally to their performance using a normal distribution. However, ConfStream has significant limitations, including its reliance on a single Silhouette Width metric for quality assessment and limited parameter search capabilities. OnlineAutoClust~\cite{el2023onlineautoclust} developed an AutoML framework that combines Bayesian optimization with clustering ensembles, employing Tree-structured Parzen Estimators (TPE) for algorithm selection and hyperparameter tuning. However, OnlineAutoClust suffers from critical limitations, including dependence on offline tuning methods, high computational requirements, and sensitivity to allocated time budgets, which can lead to suboptimal pipeline selections during rapid concept drift. For concept drift detection, Dynamic Adapting Window Independence Drift Detection (DAWIDD)~\cite{hinder2020towards} addresses drift through non-parametric independence tests between random variables, providing robust detection across diverse drift types without assuming underlying models.
+
+\section{Automated Data Stream Clustering}\label{sec:methodology}
+
+We introduce Automated Data Stream Clustering (AutoDSC), a novel AutoML framework tailored for non-stationary data stream clustering. AutoDSC processes data in fixed-size windows. At the end of each window, AutoDSC evaluates clustering configurations using multiple normalized validation indices. The framework maintains an elite population of high-performing configurations to guide future parameter exploration via PGSSO. The framework adaptively balances exploration and exploitation through dynamic rate adjustment based on performance feedback. To quickly adapt to distributional changes, AutoDSC employs DAWIDD drift detection that triggers an internal state reset when concept drift is detected. Figure~\ref{fig:framework_overview} illustrates the high-level workflow of AutoDSC, while Algorithm~\ref{alg:autodsc} details the complete operational steps.
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=0.70\linewidth]{images/AutoDSC_Diagram.png}
+    \caption{AutoDSC Framework Overview}
+    \label{fig:framework_overview}
+\end{figure*}
+
+AutoDSC processes an infinite data stream $\mathcal{S} = \{x_1, x_2, \ldots, x_t, \ldots\}$ where each instance $x_t \in \mathbb{R}^d$ arrives at timestamp $t$ through a fixed-size windowing mechanism $W_t = \{x_{t-w+1}, x_{t-w+2}, \ldots, x_t\}$ with capacity $w$. The framework maintains a configuration population $\mathcal{A}_t$ containing multiple clustering algorithms with different hyperparameter settings, continuously adapts these configurations based on performance feedback, and provides real-time predictions using the best-performing configuration. The configuration space $\Theta = \prod_{i=1}^{|\mathcal{A}|} \Theta_i$ encompasses parameter spaces across all algorithms in the portfolio $\mathcal{A}$, where each configuration $\theta = (a_i, \phi_i)$ specifies both algorithm selection $a_i \in \mathcal{A}$ and hyperparameter values $\phi_i \in \Theta_i$. As each new data point arrives, the system performs incremental updates across all configurations:
+
+\begin{equation}
+\forall \theta_i \in \mathcal{A}_t: \quad M_i^{(t)} = \text{LearnOne}(M_i^{(t-1)}, x_t)
+\end{equation}
+
+where $M_i^{(t)}$ represents the model state of configuration $\theta_i$ at time $t$. When the window reaches capacity, the framework initiates evaluation and optimization operations.
+
+AutoDSC first performs concept drift detection using DAWIDD~\cite{hinder2020towards} by extracting statistical features from each window $\mathbf{f}_t \leftarrow [\mu_{\|x\|}, \sigma_{\|x\|}, \min_{\|x\|}, \max_{\|x\|}, \text{median}_{\|x\|}, t]^T$. If significant distributional changes are detected (p-value $< \tau$), the system resets its internal state and increases exploration to rapidly adapt to the new data regime.
+
+For performance assessment, AutoDSC evaluates clustering quality using three normalized clustering validation indices: Normalized Silhouette Coefficient $\text{NSC} = (1+\text{SC})/2$, Normalized Davies-Bouldin Index $\text{NDBI} = 1-\tanh(\text{DBI})$, and Normalized Calinski-Harabasz Index $\text{NCHI} = \tanh(\text{CHI})$, ensuring all metrics are bounded to $[0,1]$ where higher values indicate better clustering quality. The expected clustering quality for configuration $\theta$ at time $t$ is:
+
+\begin{equation}
+\mu_t(\theta) = \frac{1}{3}[\text{NSC} + \text{NDBI} + \text{NCHI}]
+\end{equation}
+
+AutoDSC dynamically adjusts exploration behavior based on performance improvement trends. The exploration rate $\alpha_t$ adapts based on relative improvement:
+
+\begin{equation}
+\Delta \mu_t = \mu_t(\theta^*_t) - \mu_{t-1}(\theta^*_{t-1})
+\end{equation}
+
+\begin{equation}
+\alpha_{t+1} = \begin{cases}
+\max(0.1, \alpha_t \cdot (1 - \gamma \cdot r_t)) & \text{if } \Delta \mu_t > 0 \\
+\min(1.0, \alpha_t \cdot (1 + \gamma \cdot |r_t|)) & \text{if } \Delta \mu_t \leq 0
+\end{cases}
+\end{equation}
+
+where $r_t$ represents normalized relative improvement and $\gamma$ controls adaptation rate. This mechanism decreases exploration when performance improves (favoring exploitation) and increases exploration when performance stagnates (encouraging broader search).
+
+The framework employs \textbf{Population-Guided Stochastic Search Optimization (PGSSO)} (Algorithm~\ref{alg:pgsso}) to jointly optimize algorithm selection and hyperparameter tuning. PGSSO maintains an elite population $\mathcal{E}_t = \{(\theta_i, s_i)\}_{i=1}^{e}$ where each configuration $\theta_i = (a_i, \phi_i)$ pairs an algorithm choice with its hyperparameters, and $s_i = \mu_t(\theta_i)$ represents its performance score. By tracking which algorithm-hyperparameter combinations perform best, PGSSO naturally learns both which algorithms suit current data characteristics and their optimal settings. The elite population encodes this joint preference: frequently appearing algorithms indicate superior algorithmic choices, while their parameter distributions reveal effective settings. PGSSO adaptively balances exploration and exploitation through dynamic rate $\alpha_t$, computing statistical distributions over both algorithm selections (via frequencies) and their parameters (via means $\mu_j$ and variances $\sigma_j^2$), which together guide sampling of new promising algorithm-hyperparameter configurations.
+
+PGSSO generates new configurations through probabilistic sampling:
+
+\begin{equation}
+\theta_{\text{new}} = \begin{cases}
+\text{Elite-Guided}(\mathcal{E}_t) & \text{with probability } (1-\alpha_t) \\
+\text{Random}(\Theta) & \text{with probability } \alpha_t
+\end{cases}
+\end{equation}
+
+Elite-guided sampling first selects an algorithm based on elite frequencies, then samples its hyperparameters from learned distributions. Algorithm selection uses:
+
+\begin{equation}
+P(a = a_k) = \frac{\sum_{(\theta,s) \in \mathcal{E}_t} \mathbf{I}[a = a_k]}{|\mathcal{E}_t|}
+\end{equation}
+
+where $a_k \in \mathcal{A}$ represents available algorithms. Given selected algorithm $a_k$, numerical hyperparameters use Gaussian distributions from elite configurations of that algorithm:
+
+\begin{equation}
+\phi_j \sim \mathcal{N}(\mu_j, \sigma_j^2) \text{ where } \mu_j = \frac{1}{|\mathcal{E}_t^{a_k}|}\sum_{(\theta,s) \in \mathcal{E}_t^{a_k}} \phi_j
+\end{equation}
+
+and $\mathcal{E}_t^{a_k} = \{(\theta,s) \in \mathcal{E}_t : a = a_k\}$ contains elite configurations using algorithm $a_k$. Categorical hyperparameters similarly use frequency-based sampling within algorithm-specific elites. Figure~\ref{fig:parameter_sampling_visualization} illustrates this hierarchical sampling process.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=1\linewidth]{images/parameter_sampling_visualization.png}
+    \caption{Parameter Sampling Visualization.}
+    \label{fig:parameter_sampling_visualization}
+\end{figure}
+
+Population diversity is maintained by computing configuration distances:
+
+\begin{equation}
+d(\theta_1, \theta_2) = \begin{cases}
+1.0 & \text{if algorithms differ} \\
+\frac{1}{|\mathcal{P}|} \sum_{p \in \mathcal{P}} d_p(\theta_1[p], \theta_2[p]) & \text{otherwise}
+\end{cases}
+\end{equation}
+
+where $\mathcal{P}$ represents common parameters and $d_p$ computes normalized parameter-specific distances. New configurations are accepted only if they maintain a minimum pairwise diversity $\tau_{\text{div}}$ with existing population members.
+
+Throughout the process, AutoDSC provides real-time clustering predictions using the incumbent (best) configuration:
+\begin{equation}
+\theta^*_t = \arg\max_{\theta_i \in \mathcal{A}_t} \mu_t(\theta_i)
+\end{equation}
+
+\subsection{Computational Complexity}
+
+The framework's computational complexity scales efficiently with population size and window parameters. Per-instance processing requires $O(K \cdot C)$ operations where $K = |\mathcal{A}_t|$ and $C$ denotes average algorithm complexity. Window-end evaluation involves $O(K \cdot \rho w \cdot d)$ operations for evaluation on $\rho$-sampled data plus $O(K \cdot n_{\theta,t})$ for updating evaluation counts. Total per-window complexity is $O(K \cdot \rho w \cdot d + K^2)$, where $K^2$ accounts for population management. Space complexity is $O((K + e_{\max}) \cdot |\Theta| + w \cdot d)$.
+
+\begin{algorithm}[!ht]
+\caption{AutoDSC}
+\label{alg:autodsc}
+\textbf{Input:} Data stream $\mathcal{S} = \{x_1, x_2, \ldots\}$, $x_t \in \mathbb{R}^d$\\
+\textbf{Parameter:} Window size $w$, Population size $K$, Diversity threshold $\tau_{\text{div}}$, Adaptation rate $\gamma$\\
+\textbf{Output:} Cluster predictions $\{y_t\}_{t=1}^\infty$ using $\theta^*_t$
+\begin{algorithmic}[1]
+\State $e_{\max} \gets \lfloor K/2 \rfloor$, $\rho \gets 0.25$
+\State $\mathcal{E}_0 \gets \emptyset$, $\alpha_0 \gets 0.5$
+\State $\mathcal{A}_0 \gets \{\theta_i\}_{i=1}^K$ where $\theta_i \sim \text{Uniform}(\Theta)$
+\State $W_0 \gets \emptyset$, $\theta^*_0 \gets \emptyset$
+\State $\mu_{-1}(\theta^*_{-1}) \gets -\infty$
+\For{each $x_t \in \mathcal{S}$}
+    \State $W_t \gets W_{t-1} \cup \{x_t\}$
+    \For{$\theta_i \in \mathcal{A}_t$}
+        \State $M_i^{(t)} \gets \textsc{LearnOne}(M_i^{(t-1)}, x_t)$
+    \EndFor
+    \If{$|W_t| = w$}
+        \State $\mathbf{f}_t \gets [\mu_{\|x\|}, \sigma_{\|x\|}, \min_{\|x\|}, \max_{\|x\|}, \text{median}_{\|x\|}, t]^T$
+        \If{$\text{DAWIDD}(\mathbf{f}_t) = \text{drift}$}
+            \State $\textsc{Reset}()$
+            \State \textbf{continue}
+        \EndIf
+        \State $S_t \gets \textsc{Sample}(W_t, \rho)$
+        \For{$\theta_i \in \mathcal{A}_t$}
+            \State $L_i \gets \{\textsc{PredictOne}(M_i, s_j) : s_j \in S_t\}$
+            \State $\mu_t(\theta_i) \gets \textsc{NormCVI}(S_t, L_i)$
+            \State $n_{\theta_i,t} \gets n_{\theta_i,t-1} + 1$
+        \EndFor
+        \State $\mu_{\text{best}}^{(t)} \gets \max_i \mu_t(\theta_i)$
+        \State $\alpha_{t+1} \gets \textsc{Adapt}(\alpha_t, \mu_{t-1}(\theta^*_{t-1}), \mu_{\text{best}}^{(t)}, \gamma)$
+        \State $\mathcal{C}_{\text{new}} \gets \text{PGSSO}(\{(\theta_i, \mu_t(\theta_i))\}, \alpha_{t+1}, \Theta)$
+        \State $\mathcal{A}_{t+1} \gets \textsc{SelectDiverse}(\mathcal{A}_t \cup \mathcal{C}_{\text{new}}, K, \tau_{\text{div}})$
+        \State $\theta^*_t \gets \arg\max_{\theta_i \in \mathcal{A}_{t+1}} \mu_t(\theta_i)$
+        \State $W_t \gets \emptyset$
+    \EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[!ht]
+\caption{PGSSO}
+\label{alg:pgsso}
+\textbf{Input:} Current configurations with scores $\{(\theta_i, s_i)\}$\\
+\textbf{Parameter:} Exploration rate $\alpha \in [0,1]$, Parameter space $\Theta$\\
+\textbf{Output:} New configuration set $\mathcal{C}_{\text{new}}$
+\begin{algorithmic}[1]
+\State $\mathcal{E} \gets \textsc{UpdateElitePopulation}(\{(\theta_i, s_i)\}, e_{\max})$
+\State $\mathcal{E} \gets \textsc{UpdateParameterDistributions}(\mathcal{E})$
+\State $\mathcal{C}_{\text{new}} \gets \emptyset$
+\For{$j = 1$ to $n_{\text{gen}}$}
+    \State $u \gets \text{Uniform}(0,1)$
+    \If{$u > \alpha$}
+        \State $\theta_{\text{new}} \gets \textsc{SampleFromElite}(\mathcal{E}, \Theta)$
+    \Else
+        \State $\theta_{\text{new}} \gets \textsc{RandomSample}(\Theta)$
+    \EndIf
+    \State $\mathcal{C}_{\text{new}} \gets \mathcal{C}_{\text{new}} \cup \{\theta_{\text{new}}\}$
+\EndFor
+\State \textbf{return} $\mathcal{C}_{\text{new}}$
+\end{algorithmic}
+\end{algorithm}
+
+\section{Theoretical Analysis}\label{sec:theory}
+
+We analyze AutoDSC using a phase-based approach where phases correspond to periods with fixed incumbent configurations. Let $j \in \{1,...,T/w\}$ index windows where $T/w$ represents the total number of windows given $T$ instances and window size $w$, and $t \in \{1,...,T\}$ index instances. We analyze AutoDSC's performance over $T/w$ windows divided into $M+1$ phases, where phase $m$ spans $N_m$ windows from window $j_m$ to $j_{m+1}-1$ with population $\mathcal{A}_{j_m}$ and incumbent configuration $\theta^*_{j_m}$. We track cumulative evaluations $n_{\theta,j}$ for each configuration $\theta$ across all windows up to window $j$. The expected clustering quality for configuration $\theta$ at window $j$ is defined as:
+
+\begin{equation}
+\mu_j(\theta) = \mathbb{E}[r_j(\theta)]
+\end{equation}
+
+where $r_j(\theta) \in [0,1]$ represents the instantaneous composite CVI score, and $\theta^{\text{opt}}_j = \arg\max_{\theta \in \Theta} \mu_j(\theta)$ denotes the optimal configuration at window $j$.
+
+\textbf{Definition 1:} Let $p \in (0,1)$ denote the sample complexity parameter where estimation error decreases as $O(n^{-p})$ with $n$ samples (typically $p = 1/2$ for clustering).
+
+\textbf{Definition 2:} Let $\text{comp}_\theta$ denote the computational complexity of evaluating configuration $\theta$ on one window.
+
+\textbf{Assumption 1:} Rewards are bounded: $r_j(\theta) \in [0,1]$.
+
+\textbf{Assumption 2:} Within stationary segments, $\mu_j(\theta)$ is $L$-Lipschitz in $\theta$.
+
+\textbf{Assumption 3:} The optimal configuration $\theta^{\text{opt}}_j$ enters the population within $O(\log|\Theta|)$ windows after each concept drift.
+
+Define confidence intervals:
+\begin{equation}
+\epsilon_{\theta,j} = O\left(\sqrt{\frac{\log(|\Theta|j/\delta)}{n_{\theta,j}}}\right)
+\end{equation}
+where $n_{\theta,j}$ is the number of evaluations of $\theta$ by window $j$ and $\delta \in (0,1)$ is a confidence parameter~\cite{auer2002finite}.
+
+\textbf{Lemma 1 (PGSSO Selection Properties):} With probability $\geq 1-\delta$~\cite{cesa2006prediction}:
+
+\emph{Claim 1:} If $\mu_j(\theta) - \mu_j(\theta^*_{j_m}) + 2\epsilon_{\theta,j} + 3\epsilon_{\theta^*_{j_m},j} > 0$, then PGSSO selects $\theta$ as the new incumbent $\theta^*_{j_{m+1}}$.
+
+\emph{Claim 2:} When the incumbent switches from $\theta^*_{j_m}$ to $\theta^*_{j_{m+1}}$, we have $\mu_{j_{m+1}}(\theta^*_{j_m}) - \mu_{j_{m+1}}(\theta^*_{j_{m+1}}) > \epsilon_{\theta^*_{j_m},j_{m+1}}$.
+
+\emph{Claim 3:} If $\mu_j(\theta) < \mu_j(\theta^*_{j_m})$, then $\theta$ will not replace $\theta^*_{j_m}$ as the incumbent.
+
+\textbf{Lemma 2 (Drift Detection):} DAWIDD detects concept drift within $O(\log T)$ windows with probability $\geq 1-\delta$, triggering population reset.
+
+\textbf{Lemma 3 (Adaptive Exploration):} The adaptive exploration mechanism in PGSSO, which adjusts $\alpha_j$ based on performance trends, improves the expected regret constants by a factor of $(1+\gamma)^{-1}$ compared to fixed exploration, where $\gamma$ is the adaptation rate.
+
+\textbf{Proposition 1 (Window Regret):} With sample complexity parameter $p$ and properly set confidence intervals, AutoDSC achieves:
+
+\begin{align}
+&\sum_{m=0}^M \sum_{j=j_m}^{j_{m+1}-1} \left(\mu_j(\theta^{\text{opt}}_j) - \mu_j(\theta^*_{j_m})\right) \nonumber\\
+&= \tilde{O}\left(\frac{K \cdot \text{comp}_{\theta^{\text{opt}}} \cdot (T/w)^p}{p(1+\gamma)} + \text{comp}_{\theta^*} (T/w)^{\frac{1}{2-p}}\right)
+\end{align}
+
+where $K = \max_j |\mathcal{A}_j|$ is the maximum population size.
+
+\textbf{Proof Sketch:} The bound decomposes regret into two terms: (i) regret from suboptimal population sampling, bounded by PGSSO's exploration guarantee with adaptive exploration reducing the constant by $(1+\gamma)^{-1}$, and (ii) regret from incumbent updates. Lemma 1 ensures incumbent switches occur only when sufficiently beneficial, limiting the number of phases $M = O((T/w)^{\frac{1-p}{2-p}})$. The confidence intervals shrink as $O(n_{\theta,j}^{-1/2})$, yielding the stated bounds~\cite{auer2002finite}.
+
+\textbf{Theorem 1 (Total Regret):} Under the same conditions, AutoDSC achieves instance-level regret:
+\begin{align}
+&\sum_{t=1}^T \left(\mu_{\lceil t/w \rceil}(\theta^{\text{opt}}_{\lceil t/w \rceil}) - \mu_{\lceil t/w \rceil}(\theta^*_{\lceil t/w \rceil})\right) \nonumber\\
+&= \tilde{O}\left(\frac{K \cdot \text{comp}_{\theta^{\text{opt}}} \cdot T^p}{(1+\gamma)} + \text{comp}_{\theta^*} T^{\frac{1}{2-p}}\right)
+\end{align}
+
+\textbf{Proof Sketch:} Since clustering quality is constant within windows, summing over $T$ instances with window-level quality yields:
+\begin{equation}
+\sum_{t=1}^T (\cdot) = \sum_{j=1}^{T/w} w \cdot (\mu_j(\theta^{\text{opt}}_j) - \mu_j(\theta^*_j))
+\end{equation}
+Applying Proposition 1 and noting $w$ is constant gives the result.
+
+\textbf{Corollary 1 (Drift Recovery):} After concept drift, AutoDSC recovers $\epsilon$-optimal performance within $O(\log|\Theta|/\epsilon^2)$ windows.
+
+For $p = 1/2$, the regret bound becomes $\tilde{O}(\sqrt{T})$, matching optimal rates for non-stationary bandits with concept drift~\cite{besbes2014stochastic}.
+
+\section{Experimental Setup}\label{sec:setup}
+Our experimental design follows rigorous evaluation protocols to ensure reproducible and statistically valid results.\footnote{Datasets and code: \url{https://anonymous.4open.science/r/AutoDSC}}
+
+\textbf{Datasets:} We selected 12 datasets comprising 6 real-world and 6 synthetic streams with varying sizes, dimensionalities, and cluster counts, as summarized in Table~\ref{tab:dataset_summary}.
+
+\begin{table}[!ht]
+\centering
+\caption{Summary of Datasets}
+\label{tab:dataset_summary}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Dataset Name} & \textbf{Type} & \textbf{Instances} & \textbf{Attributes} & \textbf{Clusters} \\
+\midrule
+Adult                                                 & Real  & 48,842   & 14  & 4 \\
+Electricity                                           & Real  & 45,312   & 8   & 2 \\
+Forest Cover                                          & Real  & 581,012  & 54  & 7 \\
+Insects                                               & Real  & 52,848   & 33  & 6 \\
+Airlines                                              & Real  & 539,383  & 7   & 2 \\
+Vehicle                                               & Real  & 98,528   & 100 & 3 \\
+Hyperplane                                            & Synth & 500,000  & 10  & 2 \\
+Moving (RBF)                                          & Synth & 200,000  & 10  & 5 \\
+Moving Squares                                        & Synth & 200,000  & 2   & 4 \\
+SEA (Abrupt)                                          & Synth & 500,000  & 3   & 2 \\
+SEA (Mixed)                                           & Synth & 500,000  & 3   & 2 \\
+Random (RBF)                                          & Synth & 100,000  & 4   & 4 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\textbf{Evaluation Protocol:} All experiments use prequential evaluation (test-then-train)~\cite{bifet2018machine} with 10 independent runs using random seeds 1-10 to account for stochastic variability. Performance is measured using the non-adjusted Rand Index~\cite{rand1971objective}, where ground truth labels are used solely for evaluation, not training or model selection. We also record execution time (minutes) and memory usage (MB) to assess computational efficiency. Statistical significance is assessed using the Friedman test followed by the Nemenyi post-hoc test~\cite{demvsar2006statistical} with $\alpha = 0.10$.
+
+\textbf{Baseline Methods:} We compare AutoDSC against four baseline approaches. \textit{Default(Best)} represents the best-performing algorithm among CluStream, DenStream, DBSTREAM, KMeans, and STREAMKMeans using default parameters, selected per dataset based on mean Rand Index across 10 runs. This approach reflects common practice among non-expert users who apply standard algorithms without extensive hyperparameter tuning. \textit{ConfStream}~\cite{carnein2020confstream} and \textit{OnlineAutoClust}~\cite{el2023onlineautoclust} represent established AutoML approaches for stream clustering that optimize hyperparameters within the same parameter ranges. \textit{RandomSearch}~\cite{bergstra2012random} operates similarly to AutoDSC's framework structure but uses purely random sampling for algorithm selection and hyperparameter configuration generation, providing a direct comparison to our guided optimization approach.
+
+\textbf{Configuration:} AutoDSC uses the parameters specified in the methodology: population size 20, window size 1000, exploration rate 0.5, adaptation rate $\gamma=0.1$, and diversity threshold 0.1. For fair comparison, following standard AutoML benchmarking practices~\cite{gijsbers2024amlb}, all methods optimize hyperparameters within identical search spaces as specified in Table~\ref{tab:hyperparameters}. Other baseline-specific parameters remain as reported in their original papers.
+
+All experiments were conducted on AMD EPYC 7702 64-core servers with 1TB RAM, utilizing parallelization for computational efficiency. All clustering algorithms were implemented using the River Python library~\cite{montiel2021river} for online machine learning.
+
+\begin{table}[!ht]
+\centering
+\caption{Search Space Configuration}
+\label{tab:hyperparameters}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{llll}
+\toprule
+\textbf{Algorithm} & \textbf{Hyperparameter}       & \textbf{Type}        & \textbf{Range/Options}       \\
+\midrule
+\multirow{5}{*}{CluStream}
+  & n\_macro\_clusters        & integer     & [2, 10]                 \\
+  & max\_micro\_clusters      & integer     & [5, 50]                 \\
+  & time\_window             & integer     & [100, 2000]             \\
+  & micro\_cluster\_r\_factor & numeric     & [1.0, 5.0]              \\
+  & time\_gap                & integer     & [1, 100]                \\
+\midrule
+\multirow{6}{*}{DenStream}
+  & decaying\_factor         & numeric     & [0.01, 0.5]             \\
+  & beta                    & numeric     & [0.5, 1.0]              \\
+  & mu                      & numeric     & [2.0, 10.0]             \\
+  & epsilon                 & numeric     & [0.01, 0.5]             \\
+  & n\_samples\_init         & integer     & [10, 1000]              \\
+  & stream\_speed            & integer     & [10, 1000]              \\
+\midrule
+\multirow{5}{*}{DBSTREAM}
+  & clustering\_threshold    & numeric     & [0.1, 2.0]              \\
+  & fading\_factor           & numeric     & [0.001, 0.1]            \\
+  & cleanup\_interval        & integer     & [1, 100]                \\
+  & intersection\_factor     & numeric     & [0.1, 0.9]              \\
+  & minimum\_weight          & numeric     & [0.5, 5.0]              \\
+\midrule
+\multirow{5}{*}{KMeans}
+  & n\_clusters              & integer     & [2, 30]                 \\
+  & halflife                & numeric     & [0.01, 1.0]             \\
+  & mu                      & numeric     & [0.0, 1.0]              \\
+  & sigma                   & numeric     & [0.1, 2.0]              \\
+  & p                       & categorical & 1, 2                    \\
+\midrule
+\multirow{6}{*}{STREAMKMeans}
+  & chunk\_size             & integer     & [10, 100]               \\
+  & n\_clusters              & integer     & [2, 30]                 \\
+  & halflife                & numeric     & [0.01, 1.0]             \\
+  & mu                      & numeric     & [0.0, 1.0]              \\
+  & sigma                   & numeric     & [0.1, 2.0]              \\
+  & p                       & categorical & 1, 2                    \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\section{Results Analysis}\label{sec:results}
+
+Table~\ref{tab:performance_comparison_highlighted} presents a comprehensive comparison of AutoDSC against four baseline methods across twelve diverse datasets, evaluating both clustering quality (Rand Index) and computational efficiency (runtime).
+
+AutoDSC achieves the highest overall average Rand Index of \textbf{61.321\%}, substantially outperforming all baseline methods. The framework surpasses Default(Best) by 4.356 percentage points, ConfStream by 4.381 points, RandomSearch by 4.281 points, and OnlineAutoClust by 12.793 points. This demonstrates the effectiveness of the optimization approach in discovering optimal clustering configurations. The framework achieves the highest performance on 9 out of 12 datasets, with particularly notable improvements on complex synthetic datasets with concept drift, such as Moving RBF (75.786\% vs. 66.393\% for Default(Best)) and Moving Squares (71.514\% vs. 64.806\%). Temporal performance analysis reveals enhanced drift adaptation capabilities through rapid recovery after drift detection, as demonstrated in the SEA (Mixed) dataset (Figure~\ref{fig:sea_mixed}), and consistent outperformance across multiple drift regions in the Forest Cover dataset (Figure~\ref{fig:forest_cover}). AutoDSC shows particularly effective performance on high-dimensional datasets like Forest Cover (54 attributes) and Vehicle (100 attributes) through multi-objective evaluation.
+
+\begin{table*}[!ht]
+\caption{Performance comparison across datasets with highlighted best (bold) and second best (underlined)}
+\label{tab:performance_comparison_highlighted}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{|l|ccccc|ccccc|}
+\hline
+\multirow{2}{*}{\textbf{Dataset}} & \multicolumn{5}{c|}{\textbf{Rand Index (\%) - Higher is Better}} & \multicolumn{5}{c|}{\textbf{Runtime (minutes) - Lower is Better}} \\
+\cline{2-11}
+ & \textbf{AutoDSC} & \textbf{Default(Best)} & \textbf{ConfStream} & \textbf{OnlineAutoClust} & \textbf{RandomSearch} & \textbf{AutoDSC} & \textbf{Default(Best)} & \textbf{ConfStream} & \textbf{OnlineAutoClust} & \textbf{RandomSearch} \\
+\hline
+Adult & \textbf{64.57$\pm$0.007} & 58.36$\pm$0.019 & \underline{60.77$\pm$0.182} & 35.29$\pm$0.000 & 54.40$\pm$0.684 & \underline{5.070} & \textbf{0.494} & 6.904 & 4.415 & 10.377 \\
+Electricity & 49.16$\pm$0.044 & 49.33$\pm$0.011 & \underline{49.49$\pm$0.140} & \textbf{51.14$\pm$0.000} & 49.40$\pm$0.067 & 9.344 & \textbf{0.253} & 9.140 & \underline{5.122} & 16.759 \\
+Forest Cover & \textbf{60.91$\pm$0.181} & 57.40$\pm$0.004 & 58.46$\pm$0.317 & 37.69$\pm$0.000 & \underline{58.98$\pm$0.168} & \underline{10.885} & \textbf{6.576} & 116.545 & 674.920 & 210.887 \\
+Insects & \textbf{83.09$\pm$0.071} & 69.78$\pm$0.024 & \underline{70.96$\pm$0.873} & 63.93$\pm$24.910 & 68.90$\pm$2.028 & 102.728 & \textbf{0.748} & \underline{7.289} & 75.150 & 11.486 \\
+Airlines & 49.71$\pm$0.021 & 49.65$\pm$0.000 & 49.52$\pm$0.004 & \textbf{50.24$\pm$0.393} & \underline{49.54$\pm$0.019} & \underline{3.963} & \textbf{3.554} & 340.069 & 545.024 & 185.534 \\
+Vehicle & 61.34$\pm$0.404 & 57.46$\pm$0.001 & \underline{61.36$\pm$0.026} & \textbf{65.46$\pm$0.449} & 59.39$\pm$0.280 & \underline{3.431} & \textbf{2.952} & 47.762 & 15.649 & 35.211 \\
+Hyperplane & \textbf{50.05$\pm$0.056} & 50.00$\pm$0.000 & 50.00$\pm$0.000 & \underline{50.04$\pm$0.001} & 50.00$\pm$0.001 & \underline{6.896} & \textbf{3.828} & 58.787 & 36.284 & 145.277 \\
+Moving (RBF) & \textbf{75.79$\pm$0.608} & 66.39$\pm$0.001 & 68.48$\pm$0.353 & 22.85$\pm$0.260 & \underline{70.76$\pm$0.326} & \underline{30.549} & \textbf{1.599} & 32.627 & 409.552 & 39.721 \\
+Moving Squares & \textbf{71.51$\pm$0.728} & \underline{64.81$\pm$0.019} & 52.68$\pm$0.974 & 45.07$\pm$8.728 & 63.83$\pm$1.028 & \underline{67.709} & \textbf{0.495} & 99.143 & 865.629 & 150.458 \\
+SEA (Abrupt) & \textbf{48.72$\pm$0.964} & 48.32$\pm$0.002 & 47.90$\pm$0.032 & \underline{48.43$\pm$2.579} & 47.18$\pm$0.014 & \underline{2.844} & \textbf{1.920} & 56.269 & 35.115 & 133.179 \\
+SEA (Mixed) & \textbf{49.38$\pm$0.583} & \underline{49.08$\pm$0.003} & 48.85$\pm$0.040 & 48.52$\pm$0.005 & 48.43$\pm$0.006 & \underline{2.695} & \textbf{1.959} & 56.364 & 15.103 & 128.334 \\
+Random (RBF) & \textbf{71.63$\pm$0.010} & 63.01$\pm$0.001 & \underline{64.80$\pm$0.209} & 63.67$\pm$12.962 & 63.65$\pm$0.905 & 93.165 & \textbf{0.387} & \underline{13.225} & 93.358 & 21.138 \\
+\hline
+\textbf{Rank} & \textbf{1.800} & 3.967 & 3.300 & \underline{2.667} & 3.267 & \underline{2.400} & \textbf{1.133} & 3.333 & 4.000 & 4.133 \\
+\hline
+\end{tabular}
+}
+\end{table*}
+
+\begin{figure}[!ht]
+    \centering
+    \subfloat[SEA (Mixed)\label{fig:sea_mixed}]{\includegraphics[width=0.49\linewidth]{images/autodsc_comp_baselines_sea_high_mixed_drift.png}}
+    \hfil
+    \subfloat[Forest Cover\label{fig:forest_cover}]{\includegraphics[width=0.49\linewidth]{images/autodsc_comp_baselines_forest_cover.png}}
+    \caption{Comparison of AutoDSC with baselines.}
+    \label{fig:autodsc_combined}
+\end{figure}
+
+To rigorously validate these performance gains, the Critical Difference (CD) diagram in Figure~\ref{fig:asc_rand_index_cd_comparison} provides statistical validation of AutoDSC's performance using the Nemenyi post-hoc test with $\alpha = 0.10$. AutoDSC achieves the highest ranking with statistically significant improvements over all baseline methods, as evidenced by the absence of connecting lines between AutoDSC and these methods in the CD diagram. This comprehensive statistical validation confirms that AutoDSC's performance gains represent genuine algorithmic advances rather than random variation.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.75\linewidth]{images/asc_rand_index_cd_comparison.png}
+\caption{Critical Difference diagram.}
+\label{fig:asc_rand_index_cd_comparison}
+\end{figure}
+
+Beyond clustering quality, AutoDSC also demonstrates remarkable computational efficiency. While AutoDSC requires more computational resources than Default(Best), it achieves \textbf{2.5$\times$ faster execution} than ConfStream, \textbf{8.2$\times$ faster} than OnlineAutoClust, and \textbf{3.2$\times$ faster} than RandomSearch. This efficiency stems from AutoDSC's sampling ratio mechanism and efficient population management. Figure~\ref{fig:asc_time_and_memory_comp_plot} illustrates the time-memory trade-off across methods. AutoDSC achieves an optimal balance, consuming moderate memory while maintaining reasonable execution times. In contrast, OnlineAutoClust exhibits the worst trade-off with both high execution time and substantial memory consumption, making it impractical for resource-constrained streaming environments.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.75\linewidth]{images/asc_time_and_memory_comp_plot.png}
+\caption{Time-memory trade-off comparison.}
+\label{fig:asc_time_and_memory_comp_plot}
+\end{figure}
+
+To further understand the contribution of individual components, we conducted a comprehensive ablation study across real-world (Insects) and synthetic (Moving Squares) datasets by systematically disabling individual mechanisms. Figure~\ref{fig:ablation_study} demonstrates consistent patterns across both streams: elite guidance represents the most critical component, with its absence causing catastrophic performance degradation across both datasets. Diversity maintenance provides substantial performance retention compared to the full framework. Drift detection yields significant benefits with notable improvements across datasets, while adaptive exploration shows dynamic behavior with gradual improvement patterns. These findings establish elite guidance as essential while confirming that other components collectively enhance AutoDSC's robustness and validate the framework's integrated design.
+
+\begin{figure}[!ht]
+    \centering
+    \subfloat[Insects\label{fig:ablation_insects}]{\includegraphics[width=0.49\linewidth]{images/autodsc_ablation_comp_analysis_insects.png}}
+    \hfil
+    \subfloat[Moving Squares\label{fig:ablation_moving_squares}]{\includegraphics[width=0.49\linewidth]{images/autodsc_ablation_comp_analysis_moving_squares.png}}
+    \caption{Ablation study showing performance impact when individual AutoDSC components are disabled.}
+    \label{fig:ablation_study}
+\end{figure}
+
+Finally, beyond performance optimization, AutoDSC demonstrates intelligent adaptive configuration selection capabilities that dynamically adjust both clustering algorithms and their hyperparameter settings based on evolving stream characteristics. Figure~\ref{fig:model_selection_evolution} illustrates this comprehensive adaptive behavior on the Insects dataset, where the framework systematically transitions between different algorithms and hyperparameter combinations throughout the stream processing lifecycle.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=1.0\linewidth]{images/model_selection_evolution_insects.png}
+    \caption{Adaptive algorithm and hyperparameter evolution.}
+    \label{fig:model_selection_evolution}
+\end{figure}
+
+\section{Discussion}\label{sec:discussion}
+AutoDSC represents a significant advancement in AutoML for streaming environments through several key innovations. Our multi-objective evaluation strategy, combining three normalized clustering validation indices, provides robust performance assessment compared to single-metric approaches used in ConfStream (Silhouette Width only) and OnlineAutoClust's ensemble voting. This prevents optimization convergence to configurations that excel in one aspect while failing catastrophically in others~\cite{arbelaitz2013extensive,liu2010understanding}. The PGSSO outperforms existing methods by dynamically adjusting exploration rates based on performance trends, enabling rapid parameter space exploration after concept drift while efficiently exploiting successful configurations during stable periods, contrasting with ConfStream's fixed ensemble strategy and OnlineAutoClust's computationally intensive offline Bayesian optimization~\cite{hinder2020towards}. While our current evaluation focuses on tabular data streams with numerical and categorical features, extensions to high-dimensional sparse text streams, multi-modal event streams, or image-based data would require domain-specific clustering algorithms beyond this scope. These novel contributions collectively bridge the gap between traditional AutoML approaches and the dynamic requirements of deploying real-time streaming applications in IoT, sensor networks, and analytics platforms, where manual configuration is impractical~\cite{bahri2021data}.
+
+\section{Conclusion and Future Work}\label{sec:conclusion_and_future}
+
+We presented AutoDSC, a novel AutoML framework for adaptive data stream clustering that unifies algorithm selection, hyperparameter optimization, and concept drift adaptation. Extensive experiments across diverse datasets demonstrate AutoDSC's statistical significance, achieving the highest average Rand Index while executing faster than existing frameworks. The framework is supported by theoretical analysis providing convergence guarantees in non-stationary environments. Future research directions include extending AutoDSC to semi-supervised settings, multi-task clustering, and advanced multi-objective optimization techniques to balance trade-offs such as accuracy, efficiency, and robustness in dynamic settings.
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+%========================= APPENDIX =========================
+\appendix
+\section{Additional Results}\label{appendix:additional_results}
+
+\subsection{Sensitivity Analysis}\label{appendix:sensitivity}
+
+Comprehensive sensitivity analysis conducted across all twelve datasets evaluated AutoDSC's robustness across systematic hyperparameter variations, establishing optimal configuration ranges essential for practical deployment in diverse streaming environments. Results are averaged across real-world and synthetic streams to ensure generalizability. The diversity threshold parameter exhibits optimal performance within the range $\tau_{\text{div}} = 0.15-0.25$, achieving peak clustering quality (Figure~\ref{fig:sensitivity_diversity}), with lower threshold values causing premature convergence by allowing similar configurations to dominate the population, while higher values over-restrict configuration selection and reduce optimization efficiency. Adaptation rate analysis reveals $\gamma = 0.1$ as the optimal setting (Figure~\ref{fig:sensitivity_gamma}), as lower adaptation rates, such as $\gamma = 0.01$, result in sluggish responses to changing performance trends. In comparison, higher rates, including $\gamma \geq 0.2$ introduce excessive volatility that destabilizes the optimization process. Window size evaluation identifies the optimal range as $w = 1000-1500$, achieving consistent performance levels (Figure~\ref{fig:sensitivity_window}), with smaller window sizes providing insufficient data for reliable clustering evaluation and introducing noise through excessive optimization frequency, while larger windows delay adaptation responses to concept drift events. Population size demonstrates the most dramatic performance variation across tested values, with a clear optimum at $K = 20$ (Figure~\ref{fig:sensitivity_population}), as smaller population sizes limit exploration coverage of the parameter space, while larger sizes introduce computational overhead and complicate elite population management. These findings establish robust optimal configuration guidelines for practical AutoDSC deployment: diversity threshold $\tau_{\text{div}} = 0.1$, adaptation rate $\gamma = 0.1$, window size $w = 1000$, and population size $K = 20$, demonstrating that AutoDSC exhibits stable performance within reasonable hyperparameter ranges while showing graceful degradation outside optimal regions, with population size representing the most critical parameter requiring careful tuning for optimal performance.
+
+\begin{figure}[!ht]
+    \centering
+    \subfloat[Diversity Threshold\label{fig:sensitivity_diversity}]{\includegraphics[width=0.48\linewidth]{images/autodsc_sensitivity_diversity_threshold_insects.png}}
+    \hfil
+    \subfloat[Gamma ($\gamma$)\label{fig:sensitivity_gamma}]{\includegraphics[width=0.48\linewidth]{images/autodsc_sensitivity_gamma_insects.png}}
+    \\
+    \subfloat[Window Size\label{fig:sensitivity_window}]{\includegraphics[width=0.48\linewidth]{images/autodsc_sensitivity_window_size_insects.png}}
+    \hfil
+    \subfloat[Population Size\label{fig:sensitivity_population}]{\includegraphics[width=0.48\linewidth]{images/autodsc_sensitivity_population_size_insects.png}}
+    \caption{Sensitivity analysis revealing optimal hyperparameter ranges for AutoDSC deployment.}
+    \label{fig:sensitivity_study}
+\end{figure}
+
+\subsection{Adaptive Exploration Rate Dynamics}
+
+Figure~\ref{fig:adaptive_exploration_dynamics} demonstrates the effectiveness of AutoDSC's adaptive exploration rate mechanism through real-time performance tracking over 50 processing windows. The exploration rate (blue line) exhibits intelligent adaptive behavior, beginning at a high value of 0.50 to ensure comprehensive initial search of the configuration space, then systematically decreasing as the composite clustering score (red line) rapidly improves from 0.52 to 0.80 within the first three windows. This dynamic adjustment, controlled by the $\gamma$ parameter in the AutoDSC Framework, exemplifies the Population-Guided Stochastic Search Optimizer's ability to automatically transition from exploration to exploitation phases. Once optimal performance is achieved, the exploration rate stabilizes around 0.477, maintaining sufficient exploration to handle potential concept drift while primarily exploiting the discovered high-quality configurations. The sustained composite score of approximately 0.80 throughout the remaining windows validates the framework's capacity to maintain clustering quality while adapting its search strategy, demonstrating that AutoDSC successfully learns from elite configurations and avoids the inefficiencies associated with fixed exploration strategies.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/adaptive_exploration_dynamics_adult.png}
+    \caption{Adaptive exploration rate dynamics showing the evolution of exploration rate (blue) and composite clustering score (red) over the windows.}
+    \label{fig:adaptive_exploration_dynamics}
+\end{figure}
+
+\subsection{Performance Variability Analysis}\label{appendix:variability}
+
+Comprehensive performance variability analysis across 10 independent runs with different random seeds reveals AutoDSC's optimal balance between clustering effectiveness and result consistency in the performance-variance trade-off landscape. Figure~\ref{fig:performance_variance_tradeoff} demonstrates that AutoDSC achieves superior performance with 61.5\% average Rand Index while maintaining reasonable variance of 0.4\%, establishing the most desirable combination of clustering quality and stability compared to all baseline methods.
+
+The Default(Best) configuration exhibits the lowest variance at 0.1\% but suffers from substantially lower performance at 57.2\% Rand Index, representing a conservative approach that prioritizes consistency over clustering effectiveness. ConfStream and RandomSearch demonstrate similar moderate performance around 57.0--57.2\% with comparable variance levels of approximately 0.4\%, indicating consistent but suboptimal clustering capabilities. OnlineAutoClust presents the most problematic performance profile, combining poor clustering quality (48.5\% Rand Index) with extremely high variance (2.0\%), suggesting fundamental instability that makes it unreliable for practical deployment where consistent results are essential.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/performance_stability_tradeoff_all_datasets.png}
+    \caption{Performance-variance trade-off analysis showing average Rand Index performance versus standard deviation across all datasets and methods.}
+    \label{fig:performance_variance_tradeoff}
+\end{figure}
+
+\subsection{Memory Usage Analysis}
+
+Memory efficiency represents a critical performance dimension for streaming algorithms operating under resource constraints in real-world deployment scenarios. Table~\ref{tab:memory_usage} presents a comprehensive memory consumption analysis across twelve diverse datasets, revealing AutoDSC's competitive resource utilization characteristics.
+
+\begin{table*}[!t]
+\centering
+\caption{Memory usage comparison (MB), best performance is highlighted in \textbf{bold}, second-best is \underline{underlined}.}
+\label{tab:memory_usage}
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+Dataset & AutoDSC & Default(Best) & ConfStream & OnlineAutoClust & RandomSearch \\
+\midrule
+Adult & 8.766 & \textbf{0.821} & 8.184 & 35.373 & \underline{3.090} \\
+Electricity & 9.183 & \textbf{0.778} & \underline{6.541} & 35.891 & 7.646 \\
+Forest Cover & 237.523 & 244.101 & \underline{224.018} & 1801.302 & \textbf{38.135} \\
+Hyperplane & \textbf{37.868} & 45.298 & \underline{43.528} & 297.227 & 139.636 \\
+Insects & 92.183 & 13.167 & \textbf{1.122} & 123.561 & \underline{1.262} \\
+Moving RBF & 20.298 & 15.037 & \textbf{2.240} & 156.038 & \underline{12.325} \\
+Moving Squares & 25.253 & \textbf{0.000} & 7.554 & 99.255 & \underline{7.175} \\
+New Airlines & \underline{6.042} & \textbf{0.433} & 623.513 & 282.372 & 169.783 \\
+Sea High Abrupt Drift & \underline{7.271} & 11.384 & \textbf{4.536} & 178.975 & 90.451 \\
+Sea High Mixed Drift & \underline{8.119} & 10.974 & \textbf{3.887} & 188.485 & 93.002 \\
+Synth RandomRBF Drift & 80.109 & \textbf{1.746} & 8.683 & 72.791 & \underline{7.795} \\
+Vehicle SensIT & 69.878 & 74.954 & \underline{56.573} & 595.520 & \textbf{50.957} \\
+\midrule
+Mean & \underline{50.208} & \textbf{34.891} & 82.532 & 322.233 & 51.772 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Drift Detection Method Selection}\label{appendix:drift_detection}
+
+We adopt the Dynamic Adapting Window Independence Drift Detection (DAWIDD) method~\cite{hinder2020towards} for detecting concept drift in AutoDSC. Unlike traditional loss-based drift detectors such as DDM, EDDM, and ADWIN that rely on classification error as a proxy for distributional change, DAWIDD provides a non-parametric, model-free approach by reformulating drift detection as an independence test between data observations and their timestamps. This theoretical foundation, grounded in the equivalence between concept drift and statistical dependency of random variables, enables DAWIDD to detect diverse drift characteristics including both gradual and abrupt changes without requiring assumptions about the underlying drift type. As shown in Figure~\ref{fig:drift_heatmap}, DAWIDD consistently achieves superior True Positive (TP) detection rates on benchmark datasets common to both studies: obtaining TP values of 1.70 on Hyperplane, 1.30 on Random (RBF), and 1.40 on Forest Cover—substantially outperforming HDDDM, EDDM, DDM, and ADWIN which frequently achieve TP values below 0.5 on these same datasets. This superior detection capability, combined with its model-free nature, makes DAWIDD particularly well-suited for AutoDSC where the underlying clustering model is automatically selected and drift characteristics are unknown a priori.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/dawidd_tp_heatmap_autodsc.png}
+    \caption{True Positive (TP) rates comparison across drift detection methods. DAWIDD demonstrates consistently superior detection performance across benchmark datasets, validating its selection for AutoDSC.}
+    \label{fig:drift_heatmap}
+\end{figure}
+
+
+
+\end{document}

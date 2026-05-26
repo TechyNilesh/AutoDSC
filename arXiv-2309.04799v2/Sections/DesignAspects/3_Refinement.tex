@@ -1,0 +1,70 @@
+\section{Offline Refinement Strategy}
+\label{sec:offline_refinement_strategy}
+% \tony{Messy. Unreadable. Clean it up.}
+The basic idea of the offline refinement strategy is to utilize offline clustering algorithms to improve the online clustering results.
+% is to apply some offline clustering algorithms to refine the clustering results from stream clustering. 
+Being another optional design aspect in \dsc algorithm, we study two design choices, \norefinement and \refinement.
+As shown in Figure~\ref{fig:offline_refinement_strategy}, if apply \norefinement, the algorithm will directly output the temporal clusters $C$ as the final clustering results.
+Instead, if \refinement is applied, some batch clustering algorithms, such as \emph{density-based} (\dbscan) or \emph{distance-based} (\kmeans), will be applied on $C$ for further refining the results before output. 
+% Although it can be classified according to different types of offline clustering algorithms, such as \emph{density-based} (\dbscan) or \emph{distance-based} (\kmeans). Here we only consider two general conditions, which are \norefinement and \refinement. 
+% , otherwise some tradit
+% ional clustering algorithms will be applied on $C$ for further refining the results before output, which is denoted as \refinement. 
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.65\linewidth]{Figures/Design Aspects/Offline Refinement.pdf}
+    \caption{Offline Refinement Strategy.}
+    \label{fig:offline_refinement_strategy}
+\end{figure}
+
+% Similar to the outlier detection mechanism, offline refinement strategy is an optional design aspect for building a \dsc algorithms. Various \dsc algorithms, such as CluStream~\cite{Clustream:03} and DenStream~\cite{DenStream:06} utilize a distance-based or density-based offline clustering algorithm to refine their stream clustering results only once. 
+
+% The key idea of offline refinement strategy is illustrated in figure~\ref{fig:Offline-Refinement}(a). It mainly functions to apply some traditional clustering algorithms such as \kmeans~\cite{KMeans:1967,KMeans:1982} or \dbscan~\cite{DBSCAN:1996} to refine the stream clustering results. Such a scheme is also known as the online-offline scheme and was initially proposed by \clustream~\cite{Clustream:03}. 
+% %  optimize the stream clustering results by using 
+% % \dsc algorithms often adopt the ``two-phase scheme'' framework to process the infinite data streams, which is proposed in~\cite{Clustream:03}. 
+% %
+% The \emph{online component} evaluates input data points in real-time and captures relevant summary statistics of the observations. The online evaluation result is a number of \emph{micro-clusters} representing a large number of preliminary clusters in the input data stream.
+% %
+% As shown in figure~\ref{fig:Offline-Refinement}(b), the \emph{offline component} uses the micro-clusters to derive the final clustering, so-called macro-clusters. This process is also called reclustering and is usually not considered time-critical which allows employing variants of traditional clustering algorithms.
+% % Different from the other three design aspects discussed above, 
+% % Offline refinement can be executed at offline stages in \dsc algorithms 
+% Specifically, after finishing stream clustering, algorithms can run offline clustering on those final updated primitive data structures $\{D_1, D_2, ..., D_q\}$ to get the further refinement clusters $\{C_1, C_2, ..., C_m\}$. In most cases, $q$ is much bigger than $m$ and thus this step can also be regarded as a way for handling \emph{merge} type of \cef.
+
+\textbf{Discussion.}
+Offline refinement is optional and can be easily applied to refine online clustering results before outputting the result. The common wisdom is that it may further improve clustering quality.
+% , but bring some performance overheads.
+Unfortunately, there is no prior study about the real impact of this design aspect on both accuracy and efficiency. Even in recent years, some choose~\cite{StreamKM++:12} to involve this design aspect in their proposed \dsc algorithms, and some choose not~\cite{EDMStream:17}. We will empirically show its impact via extensive evaluations.
+% Therefore, it is still an unloving problem about when and how to use this design aspect for a better clustering behavior.
+% The true function of this design aspect is to improve the final clustering quality via some traditional clustering algorithms, which are often either based on distance or density. Since in most cases we may only obtain the clustering centers as the final result, this design aspect is optional and can be easily applied to refine these centers before outputting the result. However, due to the fact there are still a great number of \dsc algorithms which do not use this design aspect, its true impact and meaning towards the clustering behavior is still doubtful.
+% \tony{A few algorithms periodically apply offline refinement to incrementally updates online clustering results, such as EDMStream~\cite{EDMStream:17}. -- Double Check -- If yes, update the table 2: one-time-only vs periodical.}
+
+% \begin{figure}[t]
+%     \begin{subfigure}[t]{0.23\textwidth}
+%       \includegraphics[width=\linewidth]{Figures/Design Aspects/online-offline.png}
+%       \caption{Online-Offline framework}
+%     \end{subfigure}
+%     \begin{subfigure}[t]{0.23\textwidth}
+%       \includegraphics[width=\linewidth]{Figures/Design Aspects/refinement stage.pdf}
+%       \caption{Offline Refinement Process}
+%     \end{subfigure}
+%     \caption{Offline Refinement}
+%     \label{fig:Offline-Refinement}
+% \end{figure}
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

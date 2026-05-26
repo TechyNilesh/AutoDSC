@@ -1,0 +1,1128 @@
+{
+    "dataset": "synth_blobs_gradual_shift",
+    "model": "AutoDSC",
+    "purity_score": 0.22606,
+    "fowlkes_mallows_score": 0.20211880804819699,
+    "rand_score": 0.6808315035150352,
+    "adjusted_rand_score": 0.0028801145258025808,
+    "completeness_score": 0.004496075795951204,
+    "active_clusters": 5,
+    "total_runtime": 618.2237911224365,
+    "total_memory_usage": 8.94140625,
+    "instances": 100000,
+    "model_params": {
+        "window_size": 1000,
+        "population_size": 20,
+        "gamma": 0.1,
+        "diversity_threshold": 0.1,
+        "random_seed": 42
+    },
+    "AutoDSC_summary": {
+        "algorithm": "AutoDSC",
+        "windows_processed": 100,
+        "configurations_evaluated": 20,
+        "window_size": 1000,
+        "exploration_rate": 0.5,
+        "best_configuration": {
+            "algorithm": "DBSTREAM",
+            "parameters": {
+                "clustering_threshold": 0.4980633584658266,
+                "fading_factor": 0.027430804382862224,
+                "cleanup_interval": 88,
+                "intersection_factor": 0.6184283081972748,
+                "minimum_weight": 3.241089525501447
+            },
+            "scores": {
+                "silhouette": 0.8388185522618615,
+                "calinski": 0.8388185522618615,
+                "davies": 0.8388185522618615,
+                "composite_score": 0.8388185522618615
+            }
+        },
+        "optimizer_stats": {
+            "exploration_rate": 0.5,
+            "elite_population_size": 10,
+            "generation_count": 100,
+            "best_score": 0.8388185522618615
+        },
+        "adaptive_rate_info": {
+            "current_exploration_rate": 0.5,
+            "previous_best_score": 0.8388185522618615,
+            "gamma": 0.1
+        },
+        "performance_statistics": {
+            "mean_composite_score": 0.6663085819603686,
+            "std_composite_score": 0.16963156395966003,
+            "min_composite_score": 0.410374794158181,
+            "max_composite_score": 0.8388185522618615,
+            "num_valid_scores": 20
+        }
+    },
+    "window_metric": {
+        "window_size": 5000,
+        "purity_scores": [
+            0.2456,
+            0.2249,
+            0.22486666666666666,
+            0.225,
+            0.22412,
+            0.22526666666666667,
+            0.22597142857142857,
+            0.2256,
+            0.22575555555555554,
+            0.22618,
+            0.22565454545454544,
+            0.226,
+            0.22604615384615384,
+            0.22605714285714285,
+            0.22657333333333332,
+            0.226225,
+            0.22616470588235293,
+            0.22632222222222223,
+            0.2257684210526316,
+            0.22606
+        ],
+        "fowlkes_mallows_scores": [
+            0.21091993991508426,
+            0.20317627701967006,
+            0.20235517367043654,
+            0.20203751663465272,
+            0.20193476756243792,
+            0.20201876132052907,
+            0.20207717320385427,
+            0.20205382847706746,
+            0.20201121886662496,
+            0.2019296454858574,
+            0.20190689534006828,
+            0.20195940899808953,
+            0.20198484810722162,
+            0.20200294754466647,
+            0.2020616094221641,
+            0.202043121289241,
+            0.20206249291045422,
+            0.20206346842415435,
+            0.20204328960293674,
+            0.20211880804819699
+        ],
+        "rand_scores": [
+            0.6746194038807761,
+            0.6791317131713172,
+            0.6798615285463475,
+            0.6802975248762438,
+            0.6804591063642546,
+            0.6805593141993622,
+            0.6806358940867698,
+            0.6806460836520913,
+            0.6806589647671183,
+            0.6806735494709895,
+            0.6806945375866338,
+            0.6807172697322733,
+            0.6807256116366287,
+            0.6807588381874843,
+            0.6807888570958723,
+            0.680781350079376,
+            0.6807941469207596,
+            0.6807977049127706,
+            0.6807986304564979,
+            0.6808315035150352
+        ],
+        "cluster_counts": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+        ],
+        "runtimes": [
+            274.7095832824707,
+            453.67939281463623,
+            567.4586851596832,
+            581.8177101612091,
+            589.8976571559906,
+            595.0787904262543,
+            598.6427030563354,
+            601.2119867801666,
+            603.3257968425751,
+            605.0073573589325,
+            606.5184345245361,
+            607.9458856582642,
+            609.3268978595734,
+            610.6137053966522,
+            611.9475615024567,
+            613.1818192005157,
+            614.475175857544,
+            615.7068290710449,
+            616.9567000865936,
+            618.2229311466217
+        ],
+        "memory_usages": [
+            4.26171875,
+            4.54296875,
+            4.578125,
+            4.609375,
+            4.71484375,
+            4.984375,
+            5.2734375,
+            5.53515625,
+            5.7734375,
+            6.0546875,
+            6.33984375,
+            6.65234375,
+            6.921875,
+            7.21875,
+            7.51171875,
+            7.84375,
+            8.15234375,
+            8.4296875,
+            8.6640625,
+            8.94140625
+        ],
+        "adjusted_rand_scores": [
+            0.006112450672538831,
+            0.0020707339736226833,
+            0.0021499533073401824,
+            0.002438323763412568,
+            0.0022610094419564138,
+            0.0032150958462504055,
+            0.0030722344314936256,
+            0.002128275630083727,
+            0.0018817552792067798,
+            0.0019764232970593534,
+            0.0020692431955123512,
+            0.003389780733725068,
+            0.0028770439656434364,
+            0.0029375228615358567,
+            0.003643052559367618,
+            0.0023277863424965486,
+            0.0034081409794137815,
+            0.002418995887763499,
+            0.0028378799871909845,
+            0.004386588360437896
+        ],
+        "completeness_scores": [
+            0.00762073779462842,
+            0.00357342504466188,
+            0.0035933252699031863,
+            0.003968169072800629,
+            0.003839646431323227,
+            0.005045899113849707,
+            0.004693157557253077,
+            0.003548264204800727,
+            0.0032334047677161485,
+            0.0033512666468685716,
+            0.003580549091215554,
+            0.005082532983332738,
+            0.004466528418474137,
+            0.004731177848137793,
+            0.005338713055092207,
+            0.003950726208751158,
+            0.005340408050770107,
+            0.004006668457551322,
+            0.004514041453697545,
+            0.006442874448195958
+        ],
+        "exploration_rates": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5
+        ],
+        "composite_scores": [
+            0.8114554455134043,
+            0.8137935609237766,
+            0.8142547242554993,
+            0.8152003521582579,
+            0.8152003521582579,
+            0.8174963111602876,
+            0.818769102339099,
+            0.8200892934475615,
+            0.8212959069764176,
+            0.8212959069764176,
+            0.8256495415667945,
+            0.8256495415667945,
+            0.8267554248240718,
+            0.8281140970965435,
+            0.8281140970965435,
+            0.8303715466111804,
+            0.8324884388436488,
+            0.8324884388436488,
+            0.835906853323141,
+            0.8388185522618615
+        ],
+        "elite_population_sizes": [
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10
+        ],
+        "AutoDSC_summaries": [
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 5,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.8031483619569085,
+                        "calinski": 0.8031483619569085,
+                        "davies": 0.8031483619569085,
+                        "composite_score": 0.8031483619569085
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 5,
+                    "best_score": 0.8114554455134043
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.8031483619569085,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.5382561312272423,
+                    "std_composite_score": 0.1410604016981704,
+                    "min_composite_score": 0.3899681745186552,
+                    "max_composite_score": 0.8031483619569085,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 10,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.8137935609237766,
+                        "calinski": 0.8137935609237766,
+                        "davies": 0.8137935609237766,
+                        "composite_score": 0.8137935609237766
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 10,
+                    "best_score": 0.8137935609237766
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.8137935609237766,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.5383419341435417,
+                    "std_composite_score": 0.1448496970184603,
+                    "min_composite_score": 0.3973789756515546,
+                    "max_composite_score": 0.8137935609237766,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 15,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.8114928367152436,
+                        "calinski": 0.8114928367152436,
+                        "davies": 0.8114928367152436,
+                        "composite_score": 0.8114928367152436
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 15,
+                    "best_score": 0.8142547242554993
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.8114928367152436,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.5517913752871689,
+                    "std_composite_score": 0.14572256586393229,
+                    "min_composite_score": 0.4096089527014546,
+                    "max_composite_score": 0.8114928367152436,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 20,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.8108474786820977,
+                        "calinski": 0.8108474786820977,
+                        "davies": 0.8108474786820977,
+                        "composite_score": 0.8108474786820977
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 20,
+                    "best_score": 0.8152003521582579
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.8108474786820977,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.5377445711210181,
+                    "std_composite_score": 0.13611587361939653,
+                    "min_composite_score": 0.40038925884755416,
+                    "max_composite_score": 0.8108474786820977,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 25,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.8123022681387498,
+                        "calinski": 0.8123022681387498,
+                        "davies": 0.8123022681387498,
+                        "composite_score": 0.8123022681387498
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 25,
+                    "best_score": 0.8152003521582579
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.8123022681387498,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.5405130450533735,
+                    "std_composite_score": 0.14099016469434839,
+                    "min_composite_score": 0.3939233063213677,
+                    "max_composite_score": 0.8123022681387498,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 30,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.8131156996455825,
+                        "calinski": 0.8131156996455825,
+                        "davies": 0.8131156996455825,
+                        "composite_score": 0.8131156996455825
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 30,
+                    "best_score": 0.8174963111602876
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.8131156996455825,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.557589220334631,
+                    "std_composite_score": 0.1515524600786304,
+                    "min_composite_score": 0.406260025537839,
+                    "max_composite_score": 0.8131156996455825,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 35,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.8156674346284959,
+                        "calinski": 0.8156674346284959,
+                        "davies": 0.8156674346284959,
+                        "composite_score": 0.8156674346284959
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 35,
+                    "best_score": 0.818769102339099
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.8156674346284959,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.5435289196664082,
+                    "std_composite_score": 0.12178657096459965,
+                    "min_composite_score": 0.4008497741332615,
+                    "max_composite_score": 0.8156674346284959,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 40,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.8166637809630791,
+                        "calinski": 0.8166637809630791,
+                        "davies": 0.8166637809630791,
+                        "composite_score": 0.8166637809630791
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 40,
+                    "best_score": 0.8200892934475615
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.8166637809630791,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.5649653392460523,
+                    "std_composite_score": 0.123234017840893,
+                    "min_composite_score": 0.4057160899589163,
+                    "max_composite_score": 0.8166637809630791,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 45,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.8212959069764176,
+                        "calinski": 0.8212959069764176,
+                        "davies": 0.8212959069764176,
+                        "composite_score": 0.8212959069764176
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 45,
+                    "best_score": 0.8212959069764176
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.8212959069764176,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.5771964713136194,
+                    "std_composite_score": 0.11892240293080436,
+                    "min_composite_score": 0.4200924386083685,
+                    "max_composite_score": 0.8212959069764176,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 50,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.8150926183777015,
+                        "calinski": 0.8150926183777015,
+                        "davies": 0.8150926183777015,
+                        "composite_score": 0.8150926183777015
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 50,
+                    "best_score": 0.8212959069764176
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.8150926183777017,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.6196759977567725,
+                    "std_composite_score": 0.15297054429875084,
+                    "min_composite_score": 0.41336578719157097,
+                    "max_composite_score": 0.8150926183777017,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 55,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.8175280587873691,
+                        "calinski": 0.8175280587873691,
+                        "davies": 0.8175280587873691,
+                        "composite_score": 0.8175280587873691
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 55,
+                    "best_score": 0.8256495415667945
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.8175280587873691,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.6181510700555954,
+                    "std_composite_score": 0.1494007561332923,
+                    "min_composite_score": 0.41040104997638105,
+                    "max_composite_score": 0.8175280587873691,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 60,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.8200193023555503,
+                        "calinski": 0.8200193023555503,
+                        "davies": 0.8200193023555503,
+                        "composite_score": 0.8200193023555503
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 60,
+                    "best_score": 0.8256495415667945
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.8200193023555503,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.6246529410185406,
+                    "std_composite_score": 0.14923805714288219,
+                    "min_composite_score": 0.41210589279075815,
+                    "max_composite_score": 0.8200193023555503,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 65,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.8267554248240718,
+                        "calinski": 0.8267554248240718,
+                        "davies": 0.8267554248240718,
+                        "composite_score": 0.8267554248240718
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 65,
+                    "best_score": 0.8267554248240718
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.8267554248240718,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.6481965099611935,
+                    "std_composite_score": 0.15440618319544647,
+                    "min_composite_score": 0.40748524835441563,
+                    "max_composite_score": 0.8267554248240718,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 70,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.8281140970965435,
+                        "calinski": 0.8281140970965435,
+                        "davies": 0.8281140970965435,
+                        "composite_score": 0.8281140970965435
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 70,
+                    "best_score": 0.8281140970965435
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.8281140970965435,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.6584335476297197,
+                    "std_composite_score": 0.16599867712186991,
+                    "min_composite_score": 0.41196980966106045,
+                    "max_composite_score": 0.8281140970965435,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 75,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.823366259544566,
+                        "calinski": 0.823366259544566,
+                        "davies": 0.823366259544566,
+                        "composite_score": 0.823366259544566
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 75,
+                    "best_score": 0.8281140970965435
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.823366259544566,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.6671970001700923,
+                    "std_composite_score": 0.16700071260205399,
+                    "min_composite_score": 0.4145313979742755,
+                    "max_composite_score": 0.823366259544566,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 80,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.8303715466111804,
+                        "calinski": 0.8303715466111804,
+                        "davies": 0.8303715466111804,
+                        "composite_score": 0.8303715466111804
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 80,
+                    "best_score": 0.8303715466111804
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.8303715466111804,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.6639339947841142,
+                    "std_composite_score": 0.1679388852859414,
+                    "min_composite_score": 0.41427053537035174,
+                    "max_composite_score": 0.8303715466111804,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 85,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.8249610062393495,
+                        "calinski": 0.8249610062393495,
+                        "davies": 0.8249610062393495,
+                        "composite_score": 0.8249610062393495
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 85,
+                    "best_score": 0.8324884388436488
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.8249610062393496,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.6635466165849564,
+                    "std_composite_score": 0.16163160264521254,
+                    "min_composite_score": 0.4135249753036249,
+                    "max_composite_score": 0.8249610062393496,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 90,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.8288721150846553,
+                        "calinski": 0.8288721150846553,
+                        "davies": 0.8288721150846553,
+                        "composite_score": 0.8288721150846553
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 90,
+                    "best_score": 0.8324884388436488
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.8288721150846553,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.6648216908052804,
+                    "std_composite_score": 0.1643820297614812,
+                    "min_composite_score": 0.4122045309751002,
+                    "max_composite_score": 0.8288721150846553,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 95,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.830093935476438,
+                        "calinski": 0.830093935476438,
+                        "davies": 0.830093935476438,
+                        "composite_score": 0.830093935476438
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 95,
+                    "best_score": 0.835906853323141
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.830093935476438,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.6634898690575067,
+                    "std_composite_score": 0.16423119194191999,
+                    "min_composite_score": 0.4169295596649922,
+                    "max_composite_score": 0.830093935476438,
+                    "num_valid_scores": 20
+                }
+            },
+            {
+                "algorithm": "AutoDSC",
+                "windows_processed": 100,
+                "configurations_evaluated": 20,
+                "window_size": 1000,
+                "exploration_rate": 0.5,
+                "best_configuration": {
+                    "algorithm": "DBSTREAM",
+                    "parameters": {
+                        "clustering_threshold": 0.4980633584658266,
+                        "fading_factor": 0.027430804382862224,
+                        "cleanup_interval": 88,
+                        "intersection_factor": 0.6184283081972748,
+                        "minimum_weight": 3.241089525501447
+                    },
+                    "scores": {
+                        "silhouette": 0.8388185522618615,
+                        "calinski": 0.8388185522618615,
+                        "davies": 0.8388185522618615,
+                        "composite_score": 0.8388185522618615
+                    }
+                },
+                "optimizer_stats": {
+                    "exploration_rate": 0.5,
+                    "elite_population_size": 10,
+                    "generation_count": 100,
+                    "best_score": 0.8388185522618615
+                },
+                "adaptive_rate_info": {
+                    "current_exploration_rate": 0.5,
+                    "previous_best_score": 0.8388185522618615,
+                    "gamma": 0.1
+                },
+                "performance_statistics": {
+                    "mean_composite_score": 0.6663085819603686,
+                    "std_composite_score": 0.16963156395966003,
+                    "min_composite_score": 0.410374794158181,
+                    "max_composite_score": 0.8388185522618615,
+                    "num_valid_scores": 20
+                }
+            }
+        ]
+    }
+}

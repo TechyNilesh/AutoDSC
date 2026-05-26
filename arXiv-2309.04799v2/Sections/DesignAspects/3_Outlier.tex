@@ -1,0 +1,204 @@
+\section{Outlier Detection Mechanism}
+\label{sec:outlier_detection_mechanism}
+% Our next design aspect to illustrate is outlier detection mechanism. 
+Unlike the former two design aspects, the outlier detection mechanism is an optional design aspect. It further contains two optional independent optimizations: the use of a buffer and a timer, respectively. 
+Put them together, including not using any outer detection mechanism (\nod), we have five different choices for this design aspect. 
+% which are 1) w/o outlier detection (\nod), 2) outlier detection w/o buffer w/o timer (\od), 3) outlier detection w/ buffer (\buffer), 4) outlier detection w/ timer (\timer), and 5) outlier detection w/ buffer w/ timer (\buffertimer). 
+
+
+\subcompact
+\subsection{Outlier Detection (\od)}
+\label{subsec:detection}
+% \textbf{Outlier Detection (\od).}
+As depicted in Figure~\ref{fig:outlier_detection_mechanisms}(a), 
+% outlier detection refers to the process of 
+% % identifying the incoming data point that is currently different from the historical ones during the clustering process. 
+% %  the common and simplest way for detection is to 
+% dynamically identifying the outlier clusters from the temporal ones during the clustering process. 
+the basic outlier detection mechanism (\od) is to periodically select temporal clusters that are sparse in density (denoted in light colour in the figure) to transform into the outlier clusters and remove them from the memory~\cite{Clustream:03,DStream:2007}. Compared with \nod, its clustering accuracy will greatly improve. Moreover, the whole clustering efficiency may not even get influenced by adding this additional detection operation since the number of temporal clusters will be reduced, saving time for future data insertion and cluster updating.
+% To achieve better outlier detection accuracy and efficiency, we discuss two common optimizations in outlier detection including the buffer and timer mechanisms in the following.
+% to illustrate the use of a buffer and a timer 
+% Here we only discuss the former two since they are the most popular ones.
+
+
+% removing some of the real clusters from the summarizing data structure according to their updated timestamps. 
+% % Introduce two outlier detection mechanisms
+% Apart from identifying outliers based on density, many \dsc algorithms groups outlier objects into clusters for the convenience of transformation between outliers and real data points through two optional optimization techniques: \emph{outlier buffer}, which stores outlier candidates for further transformation; and \emph{outlier timer}, which maintains a timer for each real cluster to record the timestamps of receiving the latest data object. 
+% Not every \dsc algorithm applies outlier detection to their algorithm procedure. For those using this design aspect, they 
+% % the process to identify an incoming data that does not belong to any of the temporal clusters.
+% Not every \dsc algorithm applies outlier detection to their algorithm procedure. For those using this design aspect, their methods are either based on distance or density as illustrated in Figure~\ref{fig:outlier_detection}.
+% \tony{
+% --Overview--
+% Outlier detection is based on density, which is much more complex and requires more computational resources compared with distance-based one. In density-based outlier detection, density $N_0$ around a incoming data point $P$ is compared with the density around its neighboring clusters $\{N_1, N_2, N_3\}$. If the local density is much lower than the surrounding, then $P$ will be treated as an outlier.
+% -- Add buffer and timer overview here ---
+% }
+
+% \begin{figure}[t]
+% \centering
+% \includegraphics[width=0.38\textwidth]{Figures/Design Aspects/Outlier_Detection_Overview.pdf}
+% \caption{Outlier Detection Overview.}
+% \label{fig:outlier_detection}
+% \end{figure}
+% % The other type of 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{Figures/Design Aspects/Outlier Detection.pdf}
+    \caption{Four Types of Outlier Detection Mechanisms.}    \label{fig:outlier_detection_mechanisms}
+\end{figure}
+
+\subcompact
+\subsection{Outlier Detection with Buffer (\buffer)}
+\label{subsec:buffer}
+Due to the influence of \oef, some outliers, which can be grouped into sparse clusters with other outliers, need to be tracked during the clustering procedure. This is because these outlier clusters may become dense enough after adding more and more outliers and will be transformed into 
+temporal clusters. In this case, setting a buffer to store the summary of these outlier clusters for later detection (\buffer), as shown in Figure~\ref{fig:outlier_detection_mechanism}(b), is one of the most commonly used optimization strategies in outlier detection~\cite{DenStream:06,EDMStream:17}. 
+Another advantage of applying a buffer for detection is that incoming data once detected as outliers are immediately inserted into the outlier buffer rather than temporal clusters avoiding pollution. However, maintaining the outlier buffer consumes additional computational time and resources. 
+% In this way, the algorithm's ability for handling \cef will not get influenced by polluting the temporal clusters with some outliers. Although preserving these outliers helps the algorithm handle the potential evolving activities and improve its clustering accuracy, maintaining the whole buffer during the clustering procedure may consume a lot of computational time and resources. 
+
+
+% Since the initial proposal in the \denstream algorithm~\cite{DenStream:06}, some recent \dsc algorithms such as \edmstream~\cite{EDMStream:17} choose to create a buffer for storing temporal outliers. Due to the influence of concept evolution in a data stream, the temporal outlier clusters are required to be tracked during the clustering procedure so that they can be modified as clusters if they become dense enough after adding more and more ``outliers''. 
+
+% The key idea is shown in Figure~\ref{fig:outlier_detection_mechanisms}(a). 
+% If the incoming data point is far from any of the current clusters, it will be considered to join one of the outlier clusters inside the buffer. In this way, the density of the outlier clusters also keeps changing during the clustering procedure. 
+% When some of them become dense enough, they will be removed from the buffer and be appended to the current summarizing data structure as clusters. 
+
+% % It maintains two types of micro-clusters: \emph{p-microclusters} and \emph{o-microclusters}. 
+% % The \emph{p-microclusters} keep the statistical summary of data stream during the online phase. The algorithm periodically transforms \emph{p-microclusters} to \emph{o-microclusters} whose weight are below the threshold, and store them inside the outlier buffer. To avoid memory usage overhead, only the \emph{o-microclusters} whose weight increases over time are kept in the buffer, and they will be transformed back to \emph{p-microclusters} if their weight becomes higher than the threshold.
+
+% There are also some \dsc algorithms, such as \clustream~\cite{Clustream:03} and \dstream~\cite{DStream:2007}, do not utilize \buffer. Instead, they periodically select sparse clusters as the outlier cluster and remove them from the summarizing data structure. 
+% in a regular time.
+
+\subcompact
+\subsection{Outlier Detection with Timer (\timer)}
+\label{subsec:timer}
+% The other popular optimization is timer. 
+% which maintains \emph{outlier timers} for each cluster to identify outliers.
+% In order to identify the outlier more precisely, the other popular optimization is using timer as another criteria besides density for detection. Specifically, during the clustering procedure,
+Apart from periodically identifying outlier clusters via density information, \dsc algorithms may further check whether the temporal clusters are not active anymore before transforming them to outlier clusters with a timer (\timer) as illustrated in Figure~\ref{fig:outlier_detection_mechanism}(c). 
+Using a timer makes the detection more robust than \od since it helps to prevent accidentally removing temporal clusters that may soon become dense.
+% it requires the outlier identification based on one more criterion apart from density. 
+Additionally, using a timer helps the \dsc algorithm to be more focused on the recent cluster changes, thus bringing higher efficiency.
+
+% is suitable for the evolving data stream since it split those inactive clusters from the temporal ones and helps the \dsc algorithm to be more focused on the recent cluster changes. Moreover, it may bring in better efficiency as fewer clusters are left for further clustering.
+% In this case, they will maintain an outlier detection timer in each temporal cluster to record the timestamp of the latest update.
+% as depicted in Figure~\ref{fig:outlier_detection_mechanisms}. 
+% For algorithms using outlier timer but not using outlier buffer (\timer), which is shown in Figure~\ref{fig:outlier_detection_mechanism}(c), only the temporal clusters that are not only sparse but also inactive will be treated as outlier clusters and get removed from memory. 
+
+\subcompact
+\subsection{Outlier Detection with Buffer and Timer (\buffertimer)}
+\label{subsec:buffertimer}
+Outlier buffer and outlier timer can be also used in combination (\buffertimer) as depicted in Figure~\ref{fig:outlier_detection_mechanism}(d).
+% However, if using outlier timer in combination of outlier buffer (\buffertimer), as depicted in Figure~\ref{fig:outlier_detection_mechanism}(d), 
+Similar to \buffer, \buffertimer maintains a buffer to temporarily store outlier clusters, which may transform back to temporal clusters. Different from \buffer though, \buffertimer additionally checks if a sparse temporal cluster is inactive before transforming it to an outlier cluster with the timer. Furthermore, the algorithm will also periodically check and remove some inactive outlier clusters in the buffer. This helps the algorithm improve its clustering accuracy for handling \oef but also consumes a lot of time for buffer maintenance.
+% The algorithm will instead insert the sparse and inactive temporal clusters into the buffer and check whether some of the outlier clusters become dense enough to be transformed into temporal clusters. 
+% Moreover, 
+% \tony{Possibly, using buffer and timer together for outlier detection will synthesize both their pros and cons, making this operation more comprehensive and robust.}
+% for real clusters which are stored in summarizing data structure, at every regular interval, only those which are not only sparse in density (below $D$) but also inactive in timer (above $T$), will be regarded as outlier clusters and get removed or thrown into the buffer (if the buffer is used). 
+% Similarly, outlier clusters stored in the buffer will also get removed if being regularly checked as inactive (above $T$).  
+% When some of the sparse clusters are inactive for a long time, they will be regarded as outlier clusters or thrown into the buffer (if the buffer is used) as depicted in Figure~\ref{fig:outlier_detection_mechanisms}. 
+% Compared with detecting outliers merely based on density, including \od and \buffer, 
+
+
+% Algorithms such as \birch, keep identified outliers till the end of processing.
+% Some other \dsc algorithms, such as \clustream~\cite{Clustream:03}, \dstream~\cite{DStream:2007} and \edmstream~\cite{EDMStream:17} propose 
+% outlier detection w/ timer (\timer).
+% Specifically, they maintain \emph{outlier timers} for each cluster to identify outliers. 
+% The cluster timestamp will be renewed each time upon the arrival of a new data object, clusters with outdated timestamps might be removed from the summarizing data structure. 
+
+% As depicted in figure~\ref{fig:outlier_detection_mechanisms}(b), each cluster maintains a timer to record the timestamp of the latest update.
+% % the other metric that many \dsc algorithms, such as \clustream~\cite{Clustream:03}, \dstream~\cite{DStream:2007} and \edmstream~\cite{EDMStream:17} apply to detect outliers is setting the timer for every real cluster. 
+% When some of the clusters are always in low density for a long time, they are regarded as outlier clusters.
+% % and either be removed from the memory or put into the outlier buffer if utilized. 
+% When used together with an outlier buffer, this detecting metric can also help the buffer to regularly delete some of its old and sparse clusters for keeping the buffer size within an acceptable range to improve clustering efficiency. 
+% Although maintaining timers increases memory footprints and brings in additional overhead, it helps \dsc algorithms to identify outliers in a more comprehensive manner. 
+
+\textbf{Discussion.}
+The buffer and timer optimizations can be applied either separately or simultaneously, resulting in different decisions regarding the outlier detection mechanism. 
+% However, their main contribution to the final clustering behaviour is not the same. Specifically, 
+The use of a buffer can greatly improve the clustering quality due to its better ability for handling \oef. However, maintaining the outlier buffer in real-time will also bring down the efficiency. 
+On the contrary, the use of the timer may be beneficial for both better clustering accuracy and efficiency, especially under \oef. 
+Using a buffer and timer together in outlier detection further complicates the clustering behaviour and motivates an in-depth study.
+% the impact of the timer towards the clustering behaviour is less significant compared to the use of a buffer, but it 
+% In most cases it is beneficial 
+
+
+% Both two outlier detection mechanisms can contribute to better clustering behaviour but their contributions are quite different.
+% \underline{First}, 
+% buffers can be used to track the changes of temporal outliers in the stream, and they help to improve clustering accuracy, especially under varying workload characteristics. However, maintaining the outlier buffers brings significant performance overheads.
+% \underline{Second}, 
+% timers help to remove temporal clusters and improve clustering efficiency as a result. 
+% However, its impact on clustering accuracy is rather non-deterministic as it brings in a more sophisticated deletion process of outdated clusters.
+% rather than storing them in the buffer.
+% for detecting with buffer, since it can be used to track the changes of temporal outliers in the stream, this design selection can greatly improve the accuracy and thus indirectly improve its adaptability under varying workload characteristics. 
+% However, due to the requirement for frequently maintaining the outlier buffer, the clustering efficiency will decrease a lot.
+
+% For detecting with timer, its improvement on clustering accuracy is not as very large because it only brings in a more sophisticated and reasonable deletion of outdated clusters rather than storing them into the buffer. However, when more and more clusters are required to be deleted, the number of temporal clusters will decrease a lot and the total clustering efficiency will eventually get improved.
+
+% This will severely impact the whole clustering efficiency if growing to large. 
+
+% timer records the last timestamp for updating the current cluster.
+% and will be renewed after adding a new data point. 
+
+% Although frequently maintaining the timer for the real clusters will increase the memory footprint and bring in additional time consumption during the execution, it will help the \dsc algorithm to identify the outliers with a more comprehensive way. That is, when some of the real clusters are always in low density, they should also be regarded as outlier clusters and either be removed from the memory or put into the buffer. Also, when being used with buffer, this detecting metric can also help the buffer to regularly delete some of its old and sparse clusters for keeping the buffer size into an acceptable range, which will severely impact the whole clustering efficiency if growing to large. 
+
+% \tony{Who didn't apply timer? Add the discussion here.}
+% Many \dsc algorithms apply timer into their outlier detection mechanism. Some exceptional cases exist. 
+% % however, there are also some exceptional cases. 
+% For example, algorithms such as \birch do not consider timer for detecting outlier in the stream. For these algorithms, after inserting the new outlier into the clusters, they will keep these outliers till the end of processing and then directly remove those still in low density from the memory.
+
+% Both of the two former types need to find the nearest cluster $C_1$ of the input data. After that, distance-based methods use the distance between input data and $C_1$ while density-based methods directly check the density of $C_1$ to judge whether the input data is an outlier. Different from the two former types, buffer-based outlier detection gives every input data a unique weight changed with time and stores those temporal outliers into an outlier buffer. Moreover, buffer-based outlier detection periodically checks the weight of points to see whether some of the cluster points have become outliers or some of the outliers in the buffer have converted into the cluster points. 
+% instance that seems to be different from the remaining of the data. 
+% Upon a new data coming, it will be discarded into the outlier buffer if it does not belong to any of the clusters, or it belongs to a cluster whose cardinality is far less than other clusters. Outlier detection metrics are also helpful for handling concept evolution, especially for the emerge type of concept evolution. It is possible that some of the historical points in the outlier buffer are becoming connected with others and should be grouped into a new cluster in the current timestamp.
+
+
+% https://tex.stackexchange.com/questions/9584/how-to-put-subfigures-in-several-rows @Zhonghao
+
+% \begin{figure}
+% \centering
+% \begin{tabular}{cc}
+% \subfloat{
+%     \centering
+%     \includegraphics[width=.48\linewidth]{Figures/Design Aspects/Outlier_Buffer_Label.pdf}
+%     } &
+% \subfloat{
+%     \centering
+%     \includegraphics[width=.48\linewidth]{Figures/Design Aspects/Outlier_Timer_Label.pdf}
+%     }
+% \end{tabular}
+% \caption{Outlier Detection Mechanisms}\label{outlier_detection_mechanisms}
+% \end{figure}
+
+% \begin{figure}[htbp]
+%     \subfloat{
+%     \begin{minipage}[t]{0.44\linewidth}
+%         \centering
+%         \includegraphics[width=1\linewidth]{Figures/Design Aspects/OutlierBuffer.pdf}
+%         \label{fig:outlier_buffer}
+%         \caption{Outlier Buffer}
+%     \end{minipage}
+%     }\hfill
+%     \subfloat{
+%         \begin{minipage}[t]{0.44\linewidth}
+%         \centering
+%         \includegraphics[width=1\linewidth]{Figures/Design Aspects/Outlier_Detection_With_Timer.pdf}
+%         \caption{Outlier Timer}
+%         \label{fig:outlier_timer}
+%     \end{minipage}
+%     }\tony{Change to subfloat.}
+% \end{figure}
+
+
+% It is impractical to store the entire input data, not only because data streams are infinite, but also because the process of handling concept evolution will be hampered. 
+% It further consists of three key components: primitive data structures, global data structures, and the supported operations.
+% % usually consists of two categories in stream clustering, namely primitive data structures and global data structures. 
+% 1) 
+% Primitive data structure refers to the basic structure that summarizes the stream in order to preserve the meaning of the original objects without the need of actually storing them. 
+% Common primitive data structures include micro-clusters (MCs) and grids. 
+% A variety of DSC algorithms use MC as a primitive data structure, such as BIRCH~\cite{BIRCH:96}, ClusTree~\cite{Clustree:2011}, DenStream~\cite{DenStream:06} and Clustream~\cite{Clustream:03}. 
+% It maintains distribution information for a group of gathered data objects. 
+% Grid is a data structure formed by partitioning the n-dimensional feature space into density grid cells. Summary statistics are maintained for all objects that are mapped to the corresponding grid cell.
+% 2) Global data structure refers to the structure made up of the elements in primitive data structure. It mainly functions to provide relationships between these elements for further supported operations.
+% \tony{
+% --seems wrong---
+% 3) Supported operation refers to which kinds of concept evolution mentioned in Section~\ref{sec:2.1} the corresponding DSC algorithm can deal with. It is possible that algorithms with different key design aspects can handle different concept evolution.
+% }

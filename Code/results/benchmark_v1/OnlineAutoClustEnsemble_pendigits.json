@@ -1,0 +1,62 @@
+{
+  "dataset": "pendigits",
+  "model": "OnlineAutoClustEnsemble",
+  "purity_score": 0.8087700145560408,
+  "fowlkes_mallows_score": 0.5730763829081644,
+  "rand_score": 0.9238734861406388,
+  "adjusted_rand_score": 0.5305848638526589,
+  "completeness_score": 0.6830697268434991,
+  "active_clusters": 21,
+  "total_runtime": 49.80396747589111,
+  "total_memory_usage": 29.30078125,
+  "instances": 10992,
+  "model_params": {
+    "window_size": 1000,
+    "t_max": 60,
+    "delta": 0.1,
+    "top_n": 5,
+    "ensemble_k": 10
+  },
+  "window_metric": {
+    "window_size": 5000,
+    "purity_scores": [
+      0.8208,
+      0.8097
+    ],
+    "fowlkes_mallows_scores": [
+      0.5921345989801302,
+      0.5746503903218256
+    ],
+    "rand_scores": [
+      0.9271862372474495,
+      0.9241979597959796
+    ],
+    "cluster_counts": [
+      21,
+      21
+    ],
+    "runtimes": [
+      49.63183832168579,
+      49.770617723464966
+    ],
+    "memory_usages": [
+      29.30078125,
+      29.30078125
+    ],
+    "adjusted_rand_scores": [
+      0.547570355789176,
+      0.5135993719161418
+    ],
+    "completeness_scores": [
+      0.6886430572889568,
+      0.6774963963980414
+    ]
+  },
+  "additional_info": {
+    "seed": 42,
+    "run_count": null,
+    "windows_processed": 10,
+    "models_created": 10,
+    "timestamp": "2026-03-30 11:50:15"
+  }
+}

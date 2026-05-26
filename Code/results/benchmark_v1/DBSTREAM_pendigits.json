@@ -1,0 +1,55 @@
+{
+    "dataset": "pendigits",
+    "model": "DBSTREAM",
+    "purity_score": 0.12536390101892286,
+    "fowlkes_mallows_score": 0.06591054805629953,
+    "rand_score": 0.8652862663735593,
+    "adjusted_rand_score": -2.0929210382392147e-05,
+    "completeness_score": 0.00886691398817398,
+    "active_clusters": 28,
+    "total_runtime": 1.4135496616363525,
+    "total_memory_usage": 0.03515625,
+    "instances": 10992,
+    "model_params": {
+        "clustering_threshold": 1.0,
+        "fading_factor": 0.01,
+        "cleanup_interval": 1000.0,
+        "intersection_factor": 0.3,
+        "minimum_weight": 1.0
+    },
+    "window_metric": {
+        "window_size": 5000,
+        "purity_scores": [
+            0.1356,
+            0.1274
+        ],
+        "fowlkes_mallows_scores": [
+            0.06727861742071765,
+            0.06563805884963873
+        ],
+        "rand_scores": [
+            0.863974074814963,
+            0.8656066606660666
+        ],
+        "cluster_counts": [
+            28,
+            28
+        ],
+        "runtimes": [
+            0.4190351963043213,
+            1.3300952911376953
+        ],
+        "memory_usages": [
+            1.26171875,
+            1.30859375
+        ],
+        "adjusted_rand_scores": [
+            0.0001512080362707153,
+            -0.0001930664570354996
+        ],
+        "completeness_scores": [
+            0.009893606077574117,
+            0.007840221898773847
+        ]
+    }
+}
