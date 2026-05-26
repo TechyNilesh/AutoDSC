@@ -1,0 +1,404 @@
+{
+    "dataset": "real_pendigits",
+    "model": "RandomSearchStream_New",
+    "ari": 0.4363678720940072,
+    "nmi": 0.6123393905762621,
+    "purity": 0.686799853372434,
+    "cmm": 0.8224784246240323,
+    "latency_us": 316.7045298622165,
+    "throughput_ips": 3157.517198870044,
+    "memory_mb": 8.953125,
+    "total_runtime": 3.4812161922454834,
+    "active_clusters": 90,
+    "instances": 10992,
+    "model_params": {
+        "ensemble_size": 20,
+        "window_size": 1000,
+        "random_seed": 9
+    },
+    "window_metric": {
+        "window_size": 1000,
+        "ari": [
+            0.0,
+            0.4938930561496792,
+            0.5557297070619562,
+            0.6147706171728248,
+            0.4429921577833816,
+            0.38387791798496984,
+            0.55249120669318,
+            0.4959894674438966,
+            0.3752307293707561,
+            0.41643840268059457,
+            0.46863333069284024
+        ],
+        "nmi": [
+            0.0,
+            0.6863127604193165,
+            0.7383990610021438,
+            0.7395147902288063,
+            0.610799705390213,
+            0.6142544484451903,
+            0.6877361473693581,
+            0.6908025525571266,
+            0.6986818669577077,
+            0.6152583282736014,
+            0.6539736356954194
+        ],
+        "purity": [
+            0.115,
+            0.832,
+            0.918,
+            0.837,
+            0.588,
+            0.591,
+            0.761,
+            0.81,
+            0.925,
+            0.578,
+            0.5997983870967742
+        ],
+        "cmm": [
+            0.0,
+            0.9435773540910407,
+            0.9814194969952404,
+            0.9525814232058601,
+            0.8448532589947984,
+            0.8363193108535649,
+            0.9156708235575004,
+            0.9314148547281059,
+            0.9865181769755285,
+            0.8284247125616473,
+            0.8264832589010688
+        ],
+        "cluster_counts": [
+            1,
+            55,
+            62,
+            62,
+            62,
+            62,
+            62,
+            67,
+            90,
+            90,
+            90
+        ],
+        "runtimes": [
+            0.2924036979675293,
+            0.7839028835296631,
+            1.1853084564208984,
+            1.485231637954712,
+            1.8014779090881348,
+            2.075972080230713,
+            2.3090550899505615,
+            2.675689220428467,
+            3.0356836318969727,
+            3.317242383956909,
+            3.4809682369232178
+        ],
+        "memory_usages": [
+            4.28515625,
+            5.265625,
+            5.40234375,
+            8.18359375,
+            8.36328125,
+            5.3984375,
+            8.14453125,
+            5.75390625,
+            8.953125,
+            8.953125,
+            8.953125
+        ]
+    },
+    "run_count": 5,
+    "seed": 9,
+    "performance_summary": {
+        "windows_processed": 10,
+        "incumbent_algorithm": "STREAMKMeans",
+        "current_performance": 0.2979772656830979,
+        "performance_history": [
+            0.2944206957106777,
+            0.3050686781260738,
+            0.30079596593564595,
+            0.28447626126702724,
+            0.2907201388878841,
+            0.295682443917261,
+            0.2965946139426674,
+            0.3095506591200909,
+            0.2965021184408199,
+            0.2979772656830979
+        ],
+        "algorithm_history": [
+            "DBSTREAM",
+            "DBSTREAM",
+            "DBSTREAM",
+            "STREAMKMeans",
+            "CluStream",
+            "DBSTREAM",
+            "DBSTREAM",
+            "DBSTREAM",
+            "STREAMKMeans",
+            "STREAMKMeans"
+        ],
+        "algorithm_usage_counts": {
+            "DBSTREAM": 6,
+            "STREAMKMeans": 3,
+            "CluStream": 1
+        },
+        "ensemble_composition": {
+            "STREAMKMeans": 5,
+            "KMeans": 8,
+            "CluStream": 4,
+            "DBSTREAM": 2,
+            "DenStream": 1
+        },
+        "ensemble_size": 20,
+        "average_performance": 0.29717888410312465,
+        "best_performance": 0.3095506591200909,
+        "current_ensemble_details": [
+            {
+                "algorithm": "STREAMKMeans",
+                "params": {
+                    "chunk_size": 299,
+                    "n_clusters": 6,
+                    "halflife": 0.5285980512037015,
+                    "mu": -0.4335914489162612,
+                    "sigma": 1.4379360019320129,
+                    "p": 1.4846898267788025,
+                    "seed": 690
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "KMeans",
+                "params": {
+                    "n_clusters": 12,
+                    "halflife": 0.5570399417914136,
+                    "mu": -0.13226240316109084,
+                    "sigma": 1.5565457288293771,
+                    "p": 2.7567504153477675,
+                    "seed": 309
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "KMeans",
+                "params": {
+                    "n_clusters": 13,
+                    "halflife": 0.7498706704484648,
+                    "mu": 0.1607956594853054,
+                    "sigma": 1.5112626946229595,
+                    "p": 2.813004453331977,
+                    "seed": 878
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "KMeans",
+                "params": {
+                    "n_clusters": 10,
+                    "halflife": 0.41105563279175283,
+                    "mu": 0.4057073338631364,
+                    "sigma": 0.5810747872304546,
+                    "p": 2.732182096306095,
+                    "seed": 245
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "CluStream",
+                "params": {
+                    "n_macro_clusters": 6,
+                    "max_micro_clusters": 29,
+                    "micro_cluster_r_factor": 2.870558908991545,
+                    "time_window": 1411,
+                    "time_gap": 61,
+                    "seed": 584
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "STREAMKMeans",
+                "params": {
+                    "chunk_size": 116,
+                    "n_clusters": 11,
+                    "halflife": 0.5824820163373425,
+                    "mu": -0.11795110879444792,
+                    "sigma": 0.7275243172235217,
+                    "p": 2.1494686977882234,
+                    "seed": 528
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "CluStream",
+                "params": {
+                    "n_macro_clusters": 2,
+                    "max_micro_clusters": 32,
+                    "micro_cluster_r_factor": 1.121018437279191,
+                    "time_window": 1344,
+                    "time_gap": 61,
+                    "seed": 234
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "CluStream",
+                "params": {
+                    "n_macro_clusters": 2,
+                    "max_micro_clusters": 22,
+                    "micro_cluster_r_factor": 4.848122039780473,
+                    "time_window": 990,
+                    "time_gap": 5,
+                    "seed": 580
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "STREAMKMeans",
+                "params": {
+                    "chunk_size": 166,
+                    "n_clusters": 14,
+                    "halflife": 0.5355350066491579,
+                    "mu": 0.20016687369545583,
+                    "sigma": 1.4490132626799461,
+                    "p": 2.963829294515313,
+                    "seed": 384
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "KMeans",
+                "params": {
+                    "n_clusters": 5,
+                    "halflife": 0.821050069435499,
+                    "mu": 0.298635058057408,
+                    "sigma": 0.778292816223283,
+                    "p": 1.790181919133222,
+                    "seed": 793
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "DBSTREAM",
+                "params": {
+                    "clustering_threshold": 0.5893998289488226,
+                    "fading_factor": 0.041706266685337494,
+                    "cleanup_interval": 1842.0006116635393,
+                    "intersection_factor": 0.3943624247480882,
+                    "minimum_weight": 0.6780908884262571
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "STREAMKMeans",
+                "params": {
+                    "chunk_size": 385,
+                    "n_clusters": 4,
+                    "halflife": 0.6937805884404621,
+                    "mu": -0.19622414372862407,
+                    "sigma": 1.7722767559912498,
+                    "p": 2.2023017473661044,
+                    "seed": 286
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "DenStream",
+                "params": {
+                    "decaying_factor": 0.09333192704354942,
+                    "beta": 0.7766525446570788,
+                    "mu": 4.24597096710376,
+                    "epsilon": 0.29915664712657336,
+                    "n_samples_init": 162,
+                    "stream_speed": 8
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "STREAMKMeans",
+                "params": {
+                    "chunk_size": 480,
+                    "n_clusters": 10,
+                    "halflife": 0.41850414303554984,
+                    "mu": 0.37498232810992504,
+                    "sigma": 0.6968545374818493,
+                    "p": 1.963059683952849,
+                    "seed": 911
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "DBSTREAM",
+                "params": {
+                    "clustering_threshold": 1.4626745455085384,
+                    "fading_factor": 0.008956789608922775,
+                    "cleanup_interval": 1998.3312703835618,
+                    "intersection_factor": 0.3079573627049722,
+                    "minimum_weight": 1.496767045569424
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "CluStream",
+                "params": {
+                    "n_macro_clusters": 5,
+                    "max_micro_clusters": 11,
+                    "micro_cluster_r_factor": 1.3107981805297366,
+                    "time_window": 1591,
+                    "time_gap": 97,
+                    "seed": 790
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "KMeans",
+                "params": {
+                    "n_clusters": 13,
+                    "halflife": 0.304493100482233,
+                    "mu": 0.07565364163635402,
+                    "sigma": 1.1661840429977883,
+                    "p": 1.497690659431967,
+                    "seed": 129
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "KMeans",
+                "params": {
+                    "n_clusters": 2,
+                    "halflife": 0.5433547382840248,
+                    "mu": 0.10252745283511744,
+                    "sigma": 1.0002469452682208,
+                    "p": 2.7005014539142254,
+                    "seed": 750
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "KMeans",
+                "params": {
+                    "n_clusters": 6,
+                    "halflife": 0.7246690003781416,
+                    "mu": 0.04977123738773026,
+                    "sigma": 1.2750326972143975,
+                    "p": 1.3704097265215163,
+                    "seed": 907
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "KMeans",
+                "params": {
+                    "n_clusters": 5,
+                    "halflife": 0.32082214703596124,
+                    "mu": 0.2297320652106034,
+                    "sigma": 1.8831854519330984,
+                    "p": 2.9397748100233527,
+                    "seed": 893
+                },
+                "performance": 0.0
+            }
+        ]
+    }
+}
