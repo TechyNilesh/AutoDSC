@@ -109,15 +109,15 @@ def run_randomsearch(dataset_name, run_count=None, seed=42, progress_interval=10
                 continue
             ev.update(y, pred, x_values)
 
-        results = ev.finalize(model="RandomSearchStream_New", dataset=dataset_name,
+        results = ev.finalize(model="RandomSearchStream", dataset=dataset_name,
                               params=randomsearch_params, run_count=run_count,
                               seed=seed, verbose=verbose)
         try:
             results["performance_summary"] = model.get_performance_summary()
         except Exception:
             pass
-        file_name = (f"RandomSearchStream_New_{dataset_name}_{run_count}.json" if run_count is not None
-                     else f"RandomSearchStream_New_{dataset_name}.json")
+        file_name = (f"RandomSearchStream_{dataset_name}_{run_count}.json" if run_count is not None
+                     else f"RandomSearchStream_{dataset_name}.json")
         output_file = os.path.join(output_dir, file_name)
         with open(output_file, 'w') as f:
             json.dump(results, f, indent=4)

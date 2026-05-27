@@ -1,0 +1,276 @@
+{
+    "dataset": "real_pendigits",
+    "model": "RandomSearchStream",
+    "ari": 0.34309296964165664,
+    "nmi": 0.5657162580139434,
+    "purity": 0.6238057184750733,
+    "cmm": 0.7887453609670412,
+    "latency_us": 161.77459748724837,
+    "throughput_ips": 6181.4401984763,
+    "memory_mb": 8.04296875,
+    "total_runtime": 1.778226375579834,
+    "active_clusters": 221,
+    "instances": 10992,
+    "model_params": {
+        "ensemble_size": 10,
+        "window_size": 1000,
+        "random_seed": 241
+    },
+    "window_metric": {
+        "window_size": 1000,
+        "ari": [
+            0.0,
+            0.4519553550604634,
+            0.48459989814977317,
+            0.4635237669683206,
+            0.3676967410468401,
+            0.18282676634977643,
+            0.2306286722141803,
+            0.33996461504130193,
+            0.3250472037585699,
+            0.4967441138768336,
+            0.43103553359216346
+        ],
+        "nmi": [
+            0.0,
+            0.6354126377452536,
+            0.6988542901307327,
+            0.6251279823005941,
+            0.5600222355705201,
+            0.6305037454118879,
+            0.6501138560797294,
+            0.5628822269701799,
+            0.538157352554257,
+            0.6677305851143581,
+            0.6540739262758656
+        ],
+        "purity": [
+            0.115,
+            0.558,
+            0.905,
+            0.6,
+            0.492,
+            0.971,
+            0.973,
+            0.484,
+            0.478,
+            0.678,
+            0.6078629032258065
+        ],
+        "cmm": [
+            0.0,
+            0.8228959691478636,
+            0.9752632792615001,
+            0.8484425000095768,
+            0.7871607469617155,
+            0.9963841852304088,
+            0.995935821406171,
+            0.7806478004943354,
+            0.7535921193533828,
+            0.8852815991777251,
+            0.8305949495947723
+        ],
+        "cluster_counts": [
+            1,
+            7,
+            72,
+            72,
+            72,
+            196,
+            221,
+            221,
+            221,
+            221,
+            221
+        ],
+        "runtimes": [
+            0.1525261402130127,
+            0.36168909072875977,
+            0.5622055530548096,
+            0.7742135524749756,
+            0.9358971118927002,
+            1.064436912536621,
+            1.223433494567871,
+            1.3669652938842773,
+            1.510688066482544,
+            1.7471656799316406,
+            1.777939796447754
+        ],
+        "memory_usages": [
+            3.80078125,
+            4.30078125,
+            4.36328125,
+            7.08984375,
+            7.44921875,
+            4.703125,
+            7.265625,
+            4.890625,
+            8.02734375,
+            8.03125,
+            8.04296875
+        ]
+    },
+    "run_count": 3,
+    "seed": 241,
+    "performance_summary": {
+        "windows_processed": 10,
+        "incumbent_algorithm": "CluStream",
+        "current_performance": 0.30117395011039055,
+        "performance_history": [
+            0.2761555292855264,
+            0.27336810072451884,
+            0.2745139398712056,
+            0.2894040024816819,
+            0.33915834545060286,
+            0.34425243875064,
+            0.28253437990268315,
+            0.29101327191414533,
+            0.29829484684120805,
+            0.30117395011039055
+        ],
+        "algorithm_history": [
+            "CluStream",
+            "DBSTREAM",
+            "CluStream",
+            "CluStream",
+            "DBSTREAM",
+            "DBSTREAM",
+            "CluStream",
+            "CluStream",
+            "KMeans",
+            "CluStream"
+        ],
+        "algorithm_usage_counts": {
+            "CluStream": 6,
+            "DBSTREAM": 3,
+            "KMeans": 1
+        },
+        "ensemble_composition": {
+            "DBSTREAM": 3,
+            "DenStream": 5,
+            "KMeans": 2
+        },
+        "ensemble_size": 10,
+        "average_performance": 0.29698688053326033,
+        "best_performance": 0.34425243875064,
+        "current_ensemble_details": [
+            {
+                "algorithm": "DBSTREAM",
+                "params": {
+                    "clustering_threshold": 0.52752951513319,
+                    "fading_factor": 0.026460698702255193,
+                    "cleanup_interval": 1104.0430782461517,
+                    "intersection_factor": 0.35941001188506816,
+                    "minimum_weight": 1.6057347187362307
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "DenStream",
+                "params": {
+                    "decaying_factor": 0.0170234201720131,
+                    "beta": 0.538051805493823,
+                    "mu": 2.6896162341056784,
+                    "epsilon": 0.15755260703029966,
+                    "n_samples_init": 177,
+                    "stream_speed": 2
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "DenStream",
+                "params": {
+                    "decaying_factor": 0.05661651507177848,
+                    "beta": 0.4829049703456476,
+                    "mu": 3.7827631905267203,
+                    "epsilon": 0.17945041187214572,
+                    "n_samples_init": 107,
+                    "stream_speed": 9
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "DenStream",
+                "params": {
+                    "decaying_factor": 0.08369314961428283,
+                    "beta": 0.602631775012566,
+                    "mu": 3.7005914015014154,
+                    "epsilon": 0.14456913173565578,
+                    "n_samples_init": 180,
+                    "stream_speed": 9
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "KMeans",
+                "params": {
+                    "n_clusters": 4,
+                    "halflife": 0.4849635266646385,
+                    "mu": -0.047412291090058734,
+                    "sigma": 1.3680239692418819,
+                    "p": 1.3770889573125402,
+                    "seed": 488
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "KMeans",
+                "params": {
+                    "n_clusters": 4,
+                    "halflife": 0.4188851754249544,
+                    "mu": 0.014514764596579077,
+                    "sigma": 1.530637795497578,
+                    "p": 1.0646063316776668,
+                    "seed": 935
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "DBSTREAM",
+                "params": {
+                    "clustering_threshold": 0.9244225736860137,
+                    "fading_factor": 0.01656652088969551,
+                    "cleanup_interval": 1509.7937618768065,
+                    "intersection_factor": 0.38753335756670204,
+                    "minimum_weight": 1.5847432924155453
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "DenStream",
+                "params": {
+                    "decaying_factor": 0.07746030694108602,
+                    "beta": 0.3714066622239728,
+                    "mu": 2.042907453354803,
+                    "epsilon": 0.16682910342788393,
+                    "n_samples_init": 129,
+                    "stream_speed": 1
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "DBSTREAM",
+                "params": {
+                    "clustering_threshold": 1.9208662405998207,
+                    "fading_factor": 0.04775290530118873,
+                    "cleanup_interval": 1754.7453738005972,
+                    "intersection_factor": 0.2320240229088099,
+                    "minimum_weight": 1.9387469881657013
+                },
+                "performance": 0.0
+            },
+            {
+                "algorithm": "DenStream",
+                "params": {
+                    "decaying_factor": 0.09088617353125564,
+                    "beta": 0.5643851445752075,
+                    "mu": 4.96178636717109,
+                    "epsilon": 0.2928514663554235,
+                    "n_samples_init": 151,
+                    "stream_speed": 8
+                },
+                "performance": 0.0
+            }
+        ]
+    }
+}
