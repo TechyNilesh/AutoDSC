@@ -8,7 +8,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # Import stream_clustering algorithms
-from stream_clustering import CluStream, DenStream, DBStream, KMeans, StreamKMeans
+from stream_clustering import CluStream, DenStream, DBStream, KMeans
 
 @dataclass
 class ParameterConfig:
@@ -38,7 +38,7 @@ class RandomSearchStream:
     
     def __init__(
         self,
-        ensemble_size: int = 20,
+        ensemble_size: int = 10,
         window_size: int = 1000,
         random_seed: int = 42
     ):
@@ -119,18 +119,6 @@ class RandomSearchStream:
             ParameterConfig("seed", "integer", 0, 1000, default=42),
         ]
         configs.append(AlgorithmConfig("KMeans", KMeans, kmeans_params))
-
-        # STREAMKMeans configuration (stream_clustering version)
-        streamkmeans_params = [
-            ParameterConfig("chunk_size", "integer", 100, 500, default=200),
-            ParameterConfig("n_clusters", "integer", 2, 15, default=8),
-            ParameterConfig("halflife", "numeric", 0.1, 0.9, default=0.5),
-            ParameterConfig("mu", "numeric", -0.5, 0.5, default=0.0),
-            ParameterConfig("sigma", "numeric", 0.5, 2.0, default=1.0),
-            ParameterConfig("p", "numeric", 1.0, 3.0, default=2.0),
-            ParameterConfig("seed", "integer", 0, 1000, default=42),
-        ]
-        configs.append(AlgorithmConfig("STREAMKMeans", StreamKMeans, streamkmeans_params))
 
         return configs
     
@@ -284,15 +272,6 @@ class RandomSearchStream:
                 )
             elif config.algorithm_name == "KMeans":
                 return config.algorithm_class(
-                    n_clusters=int(config.current_params.get('n_clusters', 8)),
-                    halflife=float(config.current_params.get('halflife', 0.5)),
-                    mu=float(config.current_params.get('mu', 0.0)),
-                    sigma=float(config.current_params.get('sigma', 1.0)),
-                    p=int(config.current_params.get('p', 2))
-                )
-            elif config.algorithm_name == "STREAMKMeans":
-                return config.algorithm_class(
-                    chunk_size=int(config.current_params.get('chunk_size', 200)),
                     n_clusters=int(config.current_params.get('n_clusters', 8)),
                     halflife=float(config.current_params.get('halflife', 0.5)),
                     mu=float(config.current_params.get('mu', 0.0)),

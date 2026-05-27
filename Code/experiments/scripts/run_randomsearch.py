@@ -69,7 +69,7 @@ def load_streaming_dataset(dataset_name):
 
 
 def run_randomsearch(dataset_name, run_count=None, seed=42, progress_interval=1000, 
-                    output_dir="results/benchmark", verbose=True, ensemble_size=20, 
+                    output_dir="results/benchmark", verbose=True, ensemble_size=10,
                     window_size=1000):
     """Run RandomSearchStream algorithm on a dataset."""
     
@@ -148,7 +148,7 @@ if __name__ == "__main__":
                        help='Disable verbose output')
     
     # RandomSearchStream specific parameters
-    parser.add_argument('--ensemble_size', type=int, default=20,
+    parser.add_argument('--ensemble_size', type=int, default=10,
                        help='Number of ensemble members')
     parser.add_argument('--window_size', type=int, default=1000,
                        help='Size of the window for evaluating performance')
