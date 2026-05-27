@@ -2,6 +2,7 @@ import concurrent.futures
 import subprocess
 import argparse
 import os
+import sys
 
 # Get script directory for relative paths
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -29,30 +30,34 @@ dataset_name_list = [
 ]
 
 # Ablation configurations
-# Each ablation disables a specific component by setting parameters
+# Each ablation disables a specific component using proxy parameter settings,
+# since AutoDSC does not expose per-component disable flags via CLI.
 ablation_configs = {
     'drift_detection': {
-        'description': 'Disable drift detection (DAWIDD)',
+        'description': 'Ablate drift detection response: gamma=0.01 makes exploration rate '
+                       'nearly static so drift signals have no adaptive effect',
         'params': {
-            'disable_drift_detection': True
+            'gamma': 0.01
         }
     },
     'elite_guidance': {
-        'description': 'Disable elite guidance (PGSSO) - use random sampling only',
+        'description': 'Ablate elite guidance (PGSSO): population_size=2 forces elite_size=1, '
+                       'collapsing the elite pool to a single entry so guidance is negligible',
         'params': {
-            'disable_elite_guidance': True
+            'population_size': 2
         }
     },
     'adaptive_exploration_rate': {
-        'description': 'Disable adaptive exploration rate - use fixed rate',
+        'description': 'Ablate adaptive exploration rate: gamma=1.0 maximises the adjustment '
+                       'magnitude, effectively switching to a highly reactive (non-smooth) rate',
         'params': {
-            'disable_adaptive_rate': True
+            'gamma': 1.0
         }
     },
     'diversity_maintenance': {
         'description': 'Disable diversity maintenance in population',
         'params': {
-            'diversity_threshold': 0.0  # Setting to 0 effectively disables it
+            'diversity_threshold': 0.01  # Minimum allowed value (clamped by AutoDSC)
         }
     }
 }
@@ -81,7 +86,7 @@ def run_ablation_experiment(dataset_name, ablation_name, params, seed=42,
         model_name = f"AutoDSC_Ablation_{ablation_name}"
 
     run_script = os.path.join(SCRIPT_DIR, 'scripts', 'run_autodsc.py')
-    command = ['python', run_script, '--dataset', dataset_name]
+    command = [sys.executable, run_script, '--dataset', dataset_name]
 
     # Add default parameters
     for param_name, param_value in default_params.items():

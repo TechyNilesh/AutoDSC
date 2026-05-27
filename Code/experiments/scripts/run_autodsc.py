@@ -108,7 +108,7 @@ def run_AutoDSC(dataset_name, run_count=None, seed=42, progress_interval=1000,
                 continue
             ev.update(y, pred, x_values)
 
-        results = ev.finalize(model="AutoDSC", dataset=dataset_name,
+        results = ev.finalize(model=model_name, dataset=dataset_name,
                               params={"window_size": window_size, "population_size": population_size,
                                       "gamma": gamma, "diversity_threshold": diversity_threshold},
                               run_count=run_count, seed=seed, verbose=verbose)
@@ -116,8 +116,8 @@ def run_AutoDSC(dataset_name, run_count=None, seed=42, progress_interval=1000,
             results["AutoDSC_summary"] = model.get_performance_summary()
         except Exception:
             pass
-        file_name = (f"AutoDSC_{dataset_name}_{run_count}.json" if run_count is not None
-                     else f"AutoDSC_{dataset_name}.json")
+        file_name = (f"{model_name}_{dataset_name}_{run_count}.json" if run_count is not None
+                     else f"{model_name}_{dataset_name}.json")
         output_file = os.path.join(output_dir, file_name)
         with open(output_file, 'w') as f:
             json.dump(results, f, indent=4)

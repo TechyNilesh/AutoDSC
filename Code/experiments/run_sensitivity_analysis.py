@@ -3,13 +3,14 @@ import subprocess
 import random
 import argparse
 import os
+import sys
 import itertools
 
 # Get script directory for relative paths
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # How to run this script
-# python run_sensitivity_analysis.py --mode parameter --param elite_size --dataset adult
+# python run_sensitivity_analysis.py --mode parameter --param population_size --dataset adult
 # python run_sensitivity_analysis.py --mode dataset --dataset adult
 # python run_sensitivity_analysis.py --mode full --dataset adult
 # python run_sensitivity_analysis.py --mode random --dataset adult --configs 10
@@ -29,34 +30,30 @@ dataset_name_list = [
 ]
 
 # Parameter ranges for sensitivity analysis
+# Only parameters accepted by run_autodsc.py are included.
+# elite_size, exploration_rate, and sample_ratio are hardcoded internally in AutoDSC.
 parameter_ranges = {
-    'elite_size': [5, 10, 15, 20, 25, 30],
     'window_size': [500, 1000, 1500, 2000],
-    'exploration_rate': [0.1, 0.3, 0.5, 0.7, 0.9],
     'population_size': [10, 15, 20, 25, 30],
     'gamma': [0.01, 0.05, 0.1, 0.2, 0.3],
     'diversity_threshold': [0.05, 0.1, 0.15, 0.2, 0.25],
-    'sample_ratio': [0.1, 0.15, 0.2, 0.25, 0.3]
 }
 
 # Default parameter values
 default_params = {
-    'elite_size': 10,
     'window_size': 1000,
-    'exploration_rate': 0.5,
     'population_size': 20,
     'gamma': 0.1,
     'diversity_threshold': 0.1,
-    'sample_ratio': 0.2
 }
 
 def run_autodsc_with_params(dataset_name, params, run_count=None, seed=42, 
                                    progress_interval=1000, output_dir="sensitivity_results", 
                                    analysis_type="default"):
     """
-    Function to execute AutoStreamClust with specific parameter configuration.
+    Function to execute AutoDSC with specific parameter configuration.
     """
-    print(f"Running AutoStreamClust on {dataset_name} with params: {params}")
+    print(f"Running AutoDSC on {dataset_name} with params: {params}")
     
     # Create descriptive model name based on analysis type and parameters
     if analysis_type == "single_param":
@@ -64,25 +61,25 @@ def run_autodsc_with_params(dataset_name, params, run_count=None, seed=42,
         changed_params = {k: v for k, v in params.items() if v != default_params.get(k)}
         if changed_params:
             param_str = "_".join([f"{k}{v}" for k, v in sorted(changed_params.items())])
-            model_name = f"AutoStreamClust_SensitivityAnalysis_{param_str}"
+            model_name = f"AutoDSC_SensitivityAnalysis_{param_str}"
         else:
-            model_name = "AutoStreamClust_SensitivityAnalysis_Default"
+            model_name = "AutoDSC_SensitivityAnalysis_Default"
     elif analysis_type == "multi_param":
         # For multi-parameter analysis, include key parameters
-        key_params = ['elite_size', 'exploration_rate', 'gamma', 'diversity_threshold']
+        key_params = ['population_size', 'gamma', 'diversity_threshold']
         param_str = "_".join([f"{k}{v}" for k, v in sorted(params.items()) if k in key_params])
-        model_name = f"AutoStreamClust_MultiParam_{param_str}"
+        model_name = f"AutoDSC_MultiParam_{param_str}"
     elif analysis_type == "random_search":
         # For random search, create a hash-like identifier
         param_str = "_".join([f"{k}{v}" for k, v in sorted(params.items())])
-        model_name = f"AutoStreamClust_RandomSearch_{hash(param_str) % 10000}"
+        model_name = f"AutoDSC_RandomSearch_{hash(param_str) % 10000}"
     else:
         # Fallback to original naming
-        param_str = "_".join([f"{k}{v}" for k, v in sorted(params.items()) if k in ['elite_size', 'exploration_rate', 'gamma']])
-        model_name = f"AutoStreamClust_{param_str}"
+        param_str = "_".join([f"{k}{v}" for k, v in sorted(params.items()) if k in ['population_size', 'gamma', 'diversity_threshold']])
+        model_name = f"AutoDSC_{param_str}"
     
     run_script = os.path.join(SCRIPT_DIR, 'scripts', 'run_autodsc.py')
-    command = ['python', run_script, '--dataset', dataset_name]
+    command = [sys.executable, run_script, '--dataset', dataset_name]
     
     # Add parameter arguments
     for param_name, param_value in params.items():
@@ -160,8 +157,7 @@ def multi_parameter_sensitivity(dataset_name, progress_interval=1000,
     
     # Select fewer values for multi-parameter analysis to keep it manageable
     reduced_ranges = {
-        'elite_size': [5, 10, 20],
-        'exploration_rate': [0.3, 0.5, 0.7],
+        'population_size': [10, 20, 30],
         'gamma': [0.05, 0.1, 0.2],
         'diversity_threshold': [0.05, 0.1, 0.2]
     }
@@ -273,7 +269,7 @@ def all_datasets_sensitivity(param_name, progress_interval=1000,
                 print(f"Error in all datasets sensitivity: {e}")
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Sensitivity analysis for AutoStreamClust parameters.")
+    parser = argparse.ArgumentParser(description="Sensitivity analysis for AutoDSC parameters.")
     parser.add_argument('--mode', choices=['parameter', 'dataset', 'full', 'random', 'all_datasets'], 
                        required=True, help="Choose the sensitivity analysis mode")
     parser.add_argument('--param', help="Parameter name for single parameter sensitivity")
