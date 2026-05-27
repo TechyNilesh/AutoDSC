@@ -1,5 +1,5 @@
 import numpy as np
-from stream_clustering import CluStream, DenStream, DBStream, KMeans, StreamKMeans
+from stream_clustering import CluStream, DenStream, DBStream, KMeans
 from hyperopt import fmin, tpe, hp, Trials, STATUS_OK
 from sklearn.metrics import silhouette_score, calinski_harabasz_score, davies_bouldin_score
 from collections import deque
@@ -20,8 +20,7 @@ class OnlineAutoClustBase:
             'CluStream': self._get_clustream_space,
             'DenStream': self._get_denstream_space,
             'DBStream': self._get_dbstreak_space,
-            'KMeans': self._get_kmeans_space,
-            'StreamKMeans': self._get_streamkmeans_space
+            'KMeans': self._get_kmeans_space
         }
         self.current_model = None
         self.previous_quality = None
@@ -69,18 +68,6 @@ class OnlineAutoClustBase:
             'seed': hp.randint('kmeans_seed', 0, 1001)
         }
     
-    def _get_streamkmeans_space(self):
-        return {
-            'algorithm': 'StreamKMeans',
-            'chunk_size': hp.randint('streamkmeans_chunk_size', 10, 101),  # 10-100
-            'n_clusters': hp.randint('streamkmeans_n_clusters', 2, 31),  # 2-30
-            'halflife': hp.uniform('streamkmeans_halflife', 0.01, 1.0),
-            'mu': hp.uniform('streamkmeans_mu', 0.0, 1.0),
-            'sigma': hp.uniform('streamkmeans_sigma', 0.1, 2.0),
-            'p': hp.choice('streamkmeans_p', [1, 2]),
-            'seed': hp.randint('streamkmeans_seed', 0, 1001)
-        }
-    
     def _create_model(self, config):
         algo = config['algorithm']
         params = {k: v for k, v in config.items() if k != 'algorithm'}
@@ -122,16 +109,6 @@ class OnlineAutoClustBase:
                 )
             elif algo == 'KMeans':
                 return KMeans(
-                    n_clusters=int(params.get('n_clusters', 5)),
-                    halflife=float(params.get('halflife', 0.5)),
-                    mu=float(params.get('mu', 0.0)),
-                    sigma=float(params.get('sigma', 1.0)),
-                    p=params.get('p', 2),
-                    seed=int(params.get('seed', 42))
-                )
-            elif algo == 'StreamKMeans':
-                return StreamKMeans(
-                    chunk_size=int(params.get('chunk_size', 50)),
                     n_clusters=int(params.get('n_clusters', 5)),
                     halflife=float(params.get('halflife', 0.5)),
                     mu=float(params.get('mu', 0.0)),
@@ -407,17 +384,6 @@ class OnlineAutoClustEnsemble(OnlineAutoClustBase):
                 )
             elif model_class == 'KMeans':
                 return KMeans(
-                    n_clusters=getattr(model, 'n_clusters', 5),
-                    halflife=getattr(model, 'halflife', 0.5),
-                    mu=getattr(model, 'mu', 0.0),
-                    sigma=getattr(model, 'sigma', 1.0),
-                    p=getattr(model, 'p', 2),
-                    seed=getattr(model, 'seed', 42)
-                )
-            # Fix model class name check
-            elif model_class == 'StreamKMeans':  # Changed from 'StreamKMeans'
-                return StreamKMeans(
-                    chunk_size=getattr(model, 'chunk_size', 50),
                     n_clusters=getattr(model, 'n_clusters', 5),
                     halflife=getattr(model, 'halflife', 0.5),
                     mu=getattr(model, 'mu', 0.0),

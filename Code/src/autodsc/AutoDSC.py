@@ -566,17 +566,6 @@ class AutoDSC:
                     ParameterConfig("sigma", "numeric", 0.1, 2.0, default=1.0),
                     ParameterConfig("p", "categorical", categories=[1, 2], default=2),
                 ]
-            },
-            "STREAMKMeans": {
-                "class": stream_clustering.StreamKMeans,
-                "params": [
-                    ParameterConfig("chunk_size", "integer", 10, 100, default=50),
-                    ParameterConfig("n_clusters", "integer", 2, 30, default=5),
-                    ParameterConfig("halflife", "numeric", 0.01, 1.0, default=0.5),
-                    ParameterConfig("mu", "numeric", 0.0, 1.0, default=0.0),
-                    ParameterConfig("sigma", "numeric", 0.1, 2.0, default=1.0),
-                    ParameterConfig("p", "categorical", categories=[1, 2], default=2),
-                ]
             }
         }
 
@@ -626,14 +615,6 @@ class AutoDSC:
                 "sigma": config.current_params.get("sigma", 1.0),
                 "p": config.current_params.get("p", 2)
             },
-            "STREAMKMeans": {
-                "chunk_size": config.current_params.get("chunk_size", 50),
-                "n_clusters": config.current_params.get("n_clusters", 5),
-                "halflife": config.current_params.get("halflife", 0.5),
-                "mu": config.current_params.get("mu", 0.0),
-                "sigma": config.current_params.get("sigma", 1.0),
-                "p": config.current_params.get("p", 2)
-            }
         }
 
         if config.algorithm_name in param_mapping:
