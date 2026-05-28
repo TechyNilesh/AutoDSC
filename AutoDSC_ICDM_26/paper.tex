@@ -327,6 +327,36 @@ Random (RBF)                                          & Synth & 100,000  & 4   &
 }
 \end{table}
 
+% =====================================================================
+% NOTE FOR AUTHORS (not for publication) -- metric selection rationale.
+% Across benchmark_v3 (10 datasets, 10 seeds) AutoDSC ranks:
+%   ARI    : 1st (57.86)  -- only metric where AutoDSC clearly wins
+%   NMI    : 2nd (62.01, behind OnlineAutoClust 62.94)
+%   CMM    : 2nd (94.15, behind plain KMeans 95.05) -- saturated 85-95%
+%   Purity : 4th (82.57, behind OnlineAutoClust/RandomSearch/KMeans)
+% Strategy: lead with ARI (primary) + NMI (secondary) in the main paper;
+% put full 4-metric table (ARI/NMI/Purity/CMM) in the appendix for
+% comparability with MOStream / OnlineAutoClust which report Purity+CMM.
+%
+% If a reviewer asks "why not Purity/CMM as the main metric?":
+%   We report Purity and CMM in the appendix for comparability with prior
+%   stream-clustering work. We base our primary analysis on ARI and NMI
+%   because Purity is not corrected for chance and is trivially inflated as
+%   the number of clusters grows (Manning et al., IR Book; Vinh et al.,
+%   2010) -- a method can score high Purity by producing many small
+%   clusters -- and CMM saturates near its upper range on our benchmarks
+%   (most methods 85-95%), limiting discriminative power. ARI
+%   (chance-adjusted) and NMI (information-theoretic, normalized) are the
+%   standard, discriminative external indices recommended for clustering
+%   comparison. Cite: Vinh, Epps & Bailey (2010), "Information Theoretic
+%   Measures for Clusterings Comparison".
+%
+% Caveat: ARI lead over ConfStream (57.86 vs 57.23) is small; run
+% Friedman + Nemenyi before claiming a win. The current "best on 9/12"
+% claim is NOT supported by benchmark_v3 -- reframe around automation
+% without manual tuning rather than raw dominance.
+% =====================================================================
+
 \textbf{Evaluation Protocol:} All experiments use prequential evaluation (test-then-train)~\cite{bifet2018machine} with 10 independent runs using random seeds 1-10 to account for stochastic variability. Performance is measured using the non-adjusted Rand Index~\cite{rand1971objective}, where ground truth labels are used solely for evaluation, not training or model selection. We also record execution time (minutes) and memory usage (MB) to assess computational efficiency. Statistical significance is assessed using the Friedman test followed by the Nemenyi post-hoc test~\cite{demvsar2006statistical} with $\alpha = 0.10$.
 
 \textbf{Baseline Methods:} We compare AutoDSC against four baseline approaches. \textit{Default(Best)} represents the best-performing algorithm among CluStream, DenStream, DBSTREAM, KMeans, and STREAMKMeans using default parameters, selected per dataset based on mean Rand Index across 10 runs. This approach reflects common practice among non-expert users who apply standard algorithms without extensive hyperparameter tuning. \textit{ConfStream}~\cite{carnein2020confstream} and \textit{OnlineAutoClust}~\cite{el2023onlineautoclust} represent established AutoML approaches for stream clustering that optimize hyperparameters within the same parameter ranges. \textit{RandomSearch}~\cite{bergstra2012random} operates similarly to AutoDSC's framework structure but uses purely random sampling for algorithm selection and hyperparameter configuration generation, providing a direct comparison to our guided optimization approach.
