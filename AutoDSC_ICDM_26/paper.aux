@@ -29,11 +29,9 @@
 \citation{hutter2019automated}
 \citation{carnein2020confstream}
 \citation{el2023onlineautoclust}
-\citation{hinder2020towards}
 \@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{section.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{1}{section.2}\protected@file@percent }
 \newlabel{sec:related}{{II}{1}{Related Work}{section.2}{}}
-\citation{hinder2020towards}
 \@writefile{toc}{\contentsline {section}{\numberline {III}Automated Data Stream Clustering}{2}{section.3}\protected@file@percent }
 \newlabel{sec:methodology}{{III}{2}{Automated Data Stream Clustering}{section.3}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces AutoDSC Framework Overview}}{3}{figure.1}\protected@file@percent }
@@ -41,23 +39,24 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Parameter Sampling Visualization.}}{3}{figure.2}\protected@file@percent }
 \newlabel{fig:parameter_sampling_visualization}{{2}{3}{Parameter Sampling Visualization}{figure.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Computational Complexity}{3}{subsection.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {IV}Theoretical Analysis}{3}{section.4}\protected@file@percent }
-\newlabel{sec:theory}{{IV}{3}{Theoretical Analysis}{section.4}{}}
 \citation{auer2002finite}
 \citation{cesa2006prediction}
-\citation{auer2002finite}
 \@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces AutoDSC}}{4}{algorithm.1}\protected@file@percent }
 \newlabel{alg:autodsc}{{1}{4}{Computational Complexity}{algorithm.1}{}}
 \@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces PGSSO}}{4}{algorithm.2}\protected@file@percent }
 \newlabel{alg:pgsso}{{2}{4}{Computational Complexity}{algorithm.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Theoretical Analysis}{4}{section.4}\protected@file@percent }
+\newlabel{sec:theory}{{IV}{4}{Theoretical Analysis}{section.4}{}}
+\citation{auer2002finite}
 \citation{besbes2014stochastic}
 \citation{bifet2018machine}
 \citation{rand1971objective}
+\citation{kremer2011cmm}
 \citation{demvsar2006statistical}
 \citation{carnein2020confstream}
 \citation{el2023onlineautoclust}
 \citation{bergstra2012random}
-\citation{gijsbers2024amlb}
+\citation{wang2024mostream}
 \citation{montiel2021river}
 \@writefile{toc}{\contentsline {section}{\numberline {V}Experimental Setup}{5}{section.5}\protected@file@percent }
 \newlabel{sec:setup}{{V}{5}{Experimental Setup}{section.5}{}}
@@ -68,20 +67,26 @@
 \citation{arbelaitz2013extensive,liu2010understanding}
 \citation{hinder2020towards}
 \citation{bahri2021data}
-\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Search Space Configuration}}{6}{table.2}\protected@file@percent }
-\newlabel{tab:hyperparameters}{{II}{6}{Search Space Configuration}{table.2}{}}
-\newlabel{fig:sea_mixed}{{3a}{6}{Subfigure 3a}{subfigure.3.1}{}}
-\newlabel{sub@fig:sea_mixed}{{(a)}{a}{Subfigure 3a\relax }{subfigure.3.1}{}}
-\newlabel{fig:forest_cover}{{3b}{6}{Subfigure 3b}{subfigure.3.2}{}}
-\newlabel{sub@fig:forest_cover}{{(b)}{b}{Subfigure 3b\relax }{subfigure.3.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Comparison of AutoDSC with baselines.}}{6}{figure.3}\protected@file@percent }
-\newlabel{fig:autodsc_combined}{{3}{6}{Comparison of AutoDSC with baselines}{figure.3}{}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {SEA (Mixed)}}}{6}{subfigure.3.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Forest Cover}}}{6}{subfigure.3.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Critical Difference diagram.}}{6}{figure.4}\protected@file@percent }
-\newlabel{fig:asc_rand_index_cd_comparison}{{4}{6}{Critical Difference diagram}{figure.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Time-memory trade-off comparison.}}{6}{figure.5}\protected@file@percent }
-\newlabel{fig:asc_time_and_memory_comp_plot}{{5}{6}{Time-memory trade-off comparison}{figure.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Search Space Configuration. Window-dependent ranges (\texttt  {time\_window}, \texttt  {chunk\_size}) are shown for the default window size $w=1000$.}}{6}{table.2}\protected@file@percent }
+\newlabel{tab:hyperparameters}{{II}{6}{Search Space Configuration. Window-dependent ranges (\texttt {time\_window}, \texttt {chunk\_size}) are shown for the default window size $w=1000$}{table.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Sensitivity Analysis}{6}{subsection.6.1}\protected@file@percent }
+\newlabel{sec:sensitivity}{{\mbox  {VI-A}}{6}{Sensitivity Analysis}{subsection.6.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Discussion}{6}{section.7}\protected@file@percent }
+\newlabel{sec:discussion}{{VII}{6}{Discussion}{section.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Clustering quality across datasets, averaged over 10 seeds. For each method, ARI and CMM are reported ($\uparrow $ higher is better). Best per metric per row in \textbf  {bold}, second best \underline  {underlined}. Methods grouped into AutoML, the rule-based adaptive method MOStream, and single (fixed) algorithms. ConfStr=ConfStream, RandS=RandomSearchStream, OAClE=OnlineAutoClustEnsemble, CluStr=CluStream, DenStr=DenStream.}}{7}{table.3}\protected@file@percent }
+\newlabel{tab:performance_comparison_highlighted}{{III}{7}{Clustering quality across datasets, averaged over 10 seeds. For each method, ARI and CMM are reported ($\uparrow $ higher is better). Best per metric per row in \textbf {bold}, second best \underline {underlined}. Methods grouped into AutoML, the rule-based adaptive method MOStream, and single (fixed) algorithms. ConfStr=ConfStream, RandS=RandomSearchStream, OAClE=OnlineAutoClustEnsemble, CluStr=CluStream, DenStr=DenStream}{table.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Prequential clustering quality (ARI and CMM) across stream stages for AutoDSC and all baselines, on a representative real-world stream (Pendigits) and a synthetic drifting stream (Expanding). AutoDSC (thick black) stays at or above every baseline throughout the stream on both metrics.}}{7}{figure.3}\protected@file@percent }
+\newlabel{fig:autodsc_combined}{{3}{7}{Prequential clustering quality (ARI and CMM) across stream stages for AutoDSC and all baselines, on a representative real-world stream (Pendigits) and a synthetic drifting stream (Expanding). AutoDSC (thick black) stays at or above every baseline throughout the stream on both metrics}{figure.3}{}}
+\newlabel{fig:cd_ari}{{4a}{7}{Subfigure 4a}{subfigure.4.1}{}}
+\newlabel{sub@fig:cd_ari}{{(a)}{a}{Subfigure 4a\relax }{subfigure.4.1}{}}
+\newlabel{fig:cd_cmm}{{4b}{7}{Subfigure 4b}{subfigure.4.2}{}}
+\newlabel{sub@fig:cd_cmm}{{(b)}{b}{Subfigure 4b\relax }{subfigure.4.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Critical Difference diagrams (Nemenyi, $\alpha =0.05$) for ARI and CMM. Methods connected by a bar are not significantly different; AutoDSC holds the best mean rank on both metrics.}}{7}{figure.4}\protected@file@percent }
+\newlabel{fig:asc_rand_index_cd_comparison}{{4}{7}{Critical Difference diagrams (Nemenyi, $\alpha =0.05$) for ARI and CMM. Methods connected by a bar are not significantly different; AutoDSC holds the best mean rank on both metrics}{figure.4}{}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {ARI}}}{7}{subfigure.4.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {CMM}}}{7}{subfigure.4.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Throughput vs.\ memory trade-off (mean over all datasets). AutoDSC ($\star $) attains the highest clustering quality at a low memory footprint and moderate throughput.}}{7}{figure.5}\protected@file@percent }
+\newlabel{fig:asc_time_and_memory_comp_plot}{{5}{7}{Throughput vs.\ memory trade-off (mean over all datasets). AutoDSC ($\star $) attains the highest clustering quality at a low memory footprint and moderate throughput}{figure.5}{}}
 \bibstyle{IEEEtran}
 \bibdata{references}
 \bibcite{hutter2019automated}{1}
@@ -89,23 +94,6 @@
 \bibcite{Tschechlov2021AutoML4Clust}{3}
 \bibcite{Liu2021AutoCluster}{4}
 \bibcite{ElShawi2021cSmartML}{5}
-\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Clustering quality across datasets, averaged over 10 seeds. For each method, ARI and NMI are reported ($\uparrow $ higher is better). Best per metric per row in \textbf  {bold}, second best \underline  {underlined}. Methods grouped into AutoML, the rule-based adaptive method MOStream, and single (fixed) algorithms. ConfStr=ConfStream, RandS=RandomSearchStream, OAClE=OnlineAutoClustEnsemble, CluStr=CluStream, DenStr=DenStream.}}{7}{table.3}\protected@file@percent }
-\newlabel{tab:performance_comparison_highlighted}{{III}{7}{Clustering quality across datasets, averaged over 10 seeds. For each method, ARI and NMI are reported ($\uparrow $ higher is better). Best per metric per row in \textbf {bold}, second best \underline {underlined}. Methods grouped into AutoML, the rule-based adaptive method MOStream, and single (fixed) algorithms. ConfStr=ConfStream, RandS=RandomSearchStream, OAClE=OnlineAutoClustEnsemble, CluStr=CluStream, DenStr=DenStream}{table.3}{}}
-\newlabel{fig:ablation_insects}{{6a}{7}{Subfigure 6a}{subfigure.6.1}{}}
-\newlabel{sub@fig:ablation_insects}{{(a)}{a}{Subfigure 6a\relax }{subfigure.6.1}{}}
-\newlabel{fig:ablation_moving_squares}{{6b}{7}{Subfigure 6b}{subfigure.6.2}{}}
-\newlabel{sub@fig:ablation_moving_squares}{{(b)}{b}{Subfigure 6b\relax }{subfigure.6.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Ablation study showing performance impact when individual AutoDSC components are disabled.}}{7}{figure.6}\protected@file@percent }
-\newlabel{fig:ablation_study}{{6}{7}{Ablation study showing performance impact when individual AutoDSC components are disabled}{figure.6}{}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Insects}}}{7}{subfigure.6.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Moving Squares}}}{7}{subfigure.6.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Adaptive algorithm and hyperparameter evolution.}}{7}{figure.7}\protected@file@percent }
-\newlabel{fig:model_selection_evolution}{{7}{7}{Adaptive algorithm and hyperparameter evolution}{figure.7}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {VII}Discussion}{7}{section.7}\protected@file@percent }
-\newlabel{sec:discussion}{{VII}{7}{Discussion}{section.7}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {VIII}Conclusion and Future Work}{7}{section.8}\protected@file@percent }
-\newlabel{sec:conclusion_and_future}{{VIII}{7}{Conclusion and Future Work}{section.8}{}}
-\@writefile{toc}{\contentsline {section}{References}{7}{section*.1}\protected@file@percent }
 \bibcite{TrederTschechlov2023ML2DAC}{6}
 \bibcite{ElShawi2025TPEAutoClust}{7}
 \bibcite{daSilva2024PoAC}{8}
@@ -115,6 +103,17 @@
 \bibcite{pmlr-v256-verma24a}{12}
 \bibcite{pmlr-v139-wu21d}{13}
 \bibcite{verma2025auto-reg}{14}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Per-point latency across stream stages on representative real and synthetic streams. Latency is bounded and does not grow with stream length.}}{8}{figure.6}\protected@file@percent }
+\newlabel{fig:latency}{{6}{8}{Per-point latency across stream stages on representative real and synthetic streams. Latency is bounded and does not grow with stream length}{figure.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Leave-one-out ablation on real-world streams: ARI and CMM of each variant relative to the full AutoDSC (dashed line $=1.0$). Bars below the line indicate the removed component helps; the multi-objective CVI score contributes most.}}{8}{figure.7}\protected@file@percent }
+\newlabel{fig:ablation_study}{{7}{8}{Leave-one-out ablation on real-world streams: ARI and CMM of each variant relative to the full AutoDSC (dashed line $=1.0$). Bars below the line indicate the removed component helps; the multi-objective CVI score contributes most}{figure.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Evolution of the AutoDSC population composition over the Insects stream. Rows are population slots, columns are stream stages, and colors denote the selected base algorithm.}}{8}{figure.8}\protected@file@percent }
+\newlabel{fig:model_selection_evolution}{{8}{8}{Evolution of the AutoDSC population composition over the Insects stream. Rows are population slots, columns are stream stages, and colors denote the selected base algorithm}{figure.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Sensitivity of AutoDSC to window size (left) and population size (right): ARI (blue, left axis) and throughput (orange, right axis), averaged over all datasets. Defaults $w=1000$, $K=10$ sit at the quality/efficiency sweet spot.}}{8}{figure.9}\protected@file@percent }
+\newlabel{fig:sensitivity_study}{{9}{8}{Sensitivity of AutoDSC to window size (left) and population size (right): ARI (blue, left axis) and throughput (orange, right axis), averaged over all datasets. Defaults $w=1000$, $K=10$ sit at the quality/efficiency sweet spot}{figure.9}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Conclusion and Future Work}{8}{section.8}\protected@file@percent }
+\newlabel{sec:conclusion_and_future}{{VIII}{8}{Conclusion and Future Work}{section.8}{}}
+\@writefile{toc}{\contentsline {section}{References}{8}{section*.1}\protected@file@percent }
 \bibcite{carnein2020confstream}{15}
 \bibcite{el2023onlineautoclust}{16}
 \bibcite{bahri2021data}{17}
@@ -125,47 +124,15 @@
 \bibcite{Sculley2010}{22}
 \bibcite{montiel2021river}{23}
 \bibcite{OCallaghan2002}{24}
-\bibcite{hinder2020towards}{25}
-\bibcite{auer2002finite}{26}
-\bibcite{cesa2006prediction}{27}
-\bibcite{besbes2014stochastic}{28}
-\bibcite{rand1971objective}{29}
+\bibcite{auer2002finite}{25}
+\bibcite{cesa2006prediction}{26}
+\bibcite{besbes2014stochastic}{27}
+\bibcite{rand1971objective}{28}
+\bibcite{kremer2011cmm}{29}
 \bibcite{demvsar2006statistical}{30}
 \bibcite{bergstra2012random}{31}
-\bibcite{gijsbers2024amlb}{32}
+\bibcite{wang2024mostream}{32}
 \bibcite{arbelaitz2013extensive}{33}
 \bibcite{liu2010understanding}{34}
-\@writefile{toc}{\contentsline {section}{Appendix}{8}{section*.2}\protected@file@percent }
-\newlabel{appendix:additional_results}{{A}{8}{\appendixname }{section*.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {A}Sensitivity Analysis}{8}{subsection.Appendix.A.1}\protected@file@percent }
-\newlabel{appendix:sensitivity}{{A}{8}{Sensitivity Analysis}{subsection.Appendix.A.1}{}}
-\newlabel{fig:sensitivity_diversity}{{8a}{9}{Subfigure 8a}{subfigure.8.1}{}}
-\newlabel{sub@fig:sensitivity_diversity}{{(a)}{a}{Subfigure 8a\relax }{subfigure.8.1}{}}
-\newlabel{fig:sensitivity_gamma}{{8b}{9}{Subfigure 8b}{subfigure.8.2}{}}
-\newlabel{sub@fig:sensitivity_gamma}{{(b)}{b}{Subfigure 8b\relax }{subfigure.8.2}{}}
-\newlabel{fig:sensitivity_window}{{8c}{9}{Subfigure 8c}{subfigure.8.3}{}}
-\newlabel{sub@fig:sensitivity_window}{{(c)}{c}{Subfigure 8c\relax }{subfigure.8.3}{}}
-\newlabel{fig:sensitivity_population}{{8d}{9}{Subfigure 8d}{subfigure.8.4}{}}
-\newlabel{sub@fig:sensitivity_population}{{(d)}{d}{Subfigure 8d\relax }{subfigure.8.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Sensitivity analysis revealing optimal hyperparameter ranges for AutoDSC deployment.}}{9}{figure.8}\protected@file@percent }
-\newlabel{fig:sensitivity_study}{{8}{9}{Sensitivity analysis revealing optimal hyperparameter ranges for AutoDSC deployment}{figure.8}{}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Diversity Threshold}}}{9}{subfigure.8.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Gamma ($\gamma $)}}}{9}{subfigure.8.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {Window Size}}}{9}{subfigure.8.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(d)}{\ignorespaces {Population Size}}}{9}{subfigure.8.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {B}Adaptive Exploration Rate Dynamics}{9}{subsection.Appendix.A.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Adaptive exploration rate dynamics showing the evolution of exploration rate (blue) and composite clustering score (red) over the windows.}}{9}{figure.9}\protected@file@percent }
-\newlabel{fig:adaptive_exploration_dynamics}{{9}{9}{Adaptive exploration rate dynamics showing the evolution of exploration rate (blue) and composite clustering score (red) over the windows}{figure.9}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C}Performance Variability Analysis}{9}{subsection.Appendix.A.3}\protected@file@percent }
-\newlabel{appendix:variability}{{C}{9}{Performance Variability Analysis}{subsection.Appendix.A.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Performance-variance trade-off analysis showing average Rand Index performance versus standard deviation across all datasets and methods.}}{9}{figure.10}\protected@file@percent }
-\newlabel{fig:performance_variance_tradeoff}{{10}{9}{Performance-variance trade-off analysis showing average Rand Index performance versus standard deviation across all datasets and methods}{figure.10}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {D}Memory Usage Analysis}{9}{subsection.Appendix.A.4}\protected@file@percent }
-\citation{hinder2020towards}
-\@writefile{toc}{\contentsline {subsection}{\numberline {E}Drift Detection Method Selection}{10}{subsection.Appendix.A.5}\protected@file@percent }
-\newlabel{appendix:drift_detection}{{E}{10}{Drift Detection Method Selection}{subsection.Appendix.A.5}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces True Positive (TP) rates comparison across drift detection methods. DAWIDD demonstrates consistently superior detection performance across benchmark datasets, validating its selection for AutoDSC.}}{10}{figure.11}\protected@file@percent }
-\newlabel{fig:drift_heatmap}{{11}{10}{True Positive (TP) rates comparison across drift detection methods. DAWIDD demonstrates consistently superior detection performance across benchmark datasets, validating its selection for AutoDSC}{figure.11}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces Memory usage comparison (MB), best performance is highlighted in \textbf  {bold}, second-best is \underline  {underlined}.}}{11}{table.4}\protected@file@percent }
-\newlabel{tab:memory_usage}{{IV}{11}{Memory usage comparison (MB), best performance is highlighted in \textbf {bold}, second-best is \underline {underlined}}{table.4}{}}
-\gdef \@abspage@last{11}
+\bibcite{hinder2020towards}{35}
+\gdef \@abspage@last{9}
