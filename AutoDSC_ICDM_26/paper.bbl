@@ -214,15 +214,15 @@ J.~Dem{\v{s}}ar, ``Statistical comparisons of classifiers over multiple data
   sets,'' \emph{Journal of Machine learning research}, vol.~7, no. Jan, pp.
   1--30, 2006.
 
-\bibitem{bergstra2012random}
-J.~Bergstra and Y.~Bengio, ``Random search for hyper-parameter optimization,''
-  \emph{The journal of machine learning research}, vol.~13, no.~1, pp.
-  281--305, 2012.
-
 \bibitem{wang2024mostream}
 Z.~Wang, X.~Wang, and S.~Zhang, ``{MOStream}: A modular and self-optimizing
   data stream clustering algorithm,'' in \emph{2024 IEEE International
   Conference on Data Mining (ICDM)}, 2024, pp. 500--509.
+
+\bibitem{bergstra2012random}
+J.~Bergstra and Y.~Bengio, ``Random search for hyper-parameter optimization,''
+  \emph{The journal of machine learning research}, vol.~13, no.~1, pp.
+  281--305, 2012.
 
 \bibitem{arbelaitz2013extensive}
 O.~Arbelaitz, I.~Gurrutxaga, J.~Muguerza, J.~M. P{\'e}rez, and I.~Perona, ``An

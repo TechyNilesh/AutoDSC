@@ -25,12 +25,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 RESULTS_DIR = os.path.join(HERE, '..', 'benchmark')
 CHARTS_DIR = os.path.join(HERE, 'charts')
 
-# 2 real + 2 synthetic datasets, with display names + styles
+# 2 real + 2 synthetic datasets (canonical display names, see CLAUDE.md)
 DATASETS = [
     ('real_kdd99', 'KDD99', '#0072B2', '-', 'o'),
     ('real_insects', 'Insects', '#D55E00', '--', 's'),
-    ('synth_blobs_sudden', 'Blobs (Sudden)', '#CC79A7', '-.', 'D'),
-    ('synth_rbf_fast', 'RBF (Fast)', '#009E73', ':', 'v'),
+    ('synth_blobs_sudden', 'Sudden', '#CC79A7', '-.', 'D'),
+    ('synth_rbf_fast', 'Fast-RBF', '#009E73', ':', 'v'),
 ]
 
 

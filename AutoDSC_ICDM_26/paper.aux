@@ -26,12 +26,13 @@
 \citation{Sculley2010}
 \citation{montiel2021river}
 \citation{OCallaghan2002}
-\citation{hutter2019automated}
-\citation{carnein2020confstream}
-\citation{el2023onlineautoclust}
+\providecommand \oddpage@label [2]{}
 \@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{section.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{1}{section.2}\protected@file@percent }
 \newlabel{sec:related}{{II}{1}{Related Work}{section.2}{}}
+\citation{hutter2019automated}
+\citation{carnein2020confstream}
+\citation{el2023onlineautoclust}
 \@writefile{toc}{\contentsline {section}{\numberline {III}Automated Data Stream Clustering}{2}{section.3}\protected@file@percent }
 \newlabel{sec:methodology}{{III}{2}{Automated Data Stream Clustering}{section.3}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces AutoDSC Framework Overview}}{3}{figure.1}\protected@file@percent }
@@ -41,10 +42,10 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Computational Complexity}{3}{subsection.3.1}\protected@file@percent }
 \citation{auer2002finite}
 \citation{cesa2006prediction}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces AutoDSC}}{4}{algorithm.1}\protected@file@percent }
-\newlabel{alg:autodsc}{{1}{4}{Computational Complexity}{algorithm.1}{}}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces PGSSO}}{4}{algorithm.2}\protected@file@percent }
-\newlabel{alg:pgsso}{{2}{4}{Computational Complexity}{algorithm.2}{}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces AutoDSC}}{4}{algocf.1}\protected@file@percent }
+\newlabel{alg:autodsc}{{1}{4}{Computational Complexity}{algocf.1}{}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces PGSSO}}{4}{algocf.2}\protected@file@percent }
+\newlabel{alg:pgsso}{{2}{4}{Computational Complexity}{algocf.2}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {IV}Theoretical Analysis}{4}{section.4}\protected@file@percent }
 \newlabel{sec:theory}{{IV}{4}{Theoretical Analysis}{section.4}{}}
 \citation{auer2002finite}
@@ -55,46 +56,58 @@
 \citation{demvsar2006statistical}
 \citation{carnein2020confstream}
 \citation{el2023onlineautoclust}
-\citation{bergstra2012random}
 \citation{wang2024mostream}
+\citation{bergstra2012random}
+\citation{el2023onlineautoclust}
 \citation{montiel2021river}
+\citation{el2023onlineautoclust}
 \@writefile{toc}{\contentsline {section}{\numberline {V}Experimental Setup}{5}{section.5}\protected@file@percent }
 \newlabel{sec:setup}{{V}{5}{Experimental Setup}{section.5}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Summary of Datasets}}{5}{table.1}\protected@file@percent }
 \newlabel{tab:dataset_summary}{{I}{5}{Summary of Datasets}{table.1}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {VI}Results Analysis}{5}{section.6}\protected@file@percent }
 \newlabel{sec:results}{{VI}{5}{Results Analysis}{section.6}{}}
-\citation{arbelaitz2013extensive,liu2010understanding}
-\citation{hinder2020towards}
-\citation{bahri2021data}
+\citation{el2023onlineautoclust}
 \@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Search Space Configuration. Window-dependent ranges (\texttt  {time\_window}, \texttt  {chunk\_size}) are shown for the default window size $w=1000$.}}{6}{table.2}\protected@file@percent }
 \newlabel{tab:hyperparameters}{{II}{6}{Search Space Configuration. Window-dependent ranges (\texttt {time\_window}, \texttt {chunk\_size}) are shown for the default window size $w=1000$}{table.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Sensitivity Analysis}{6}{subsection.6.1}\protected@file@percent }
 \newlabel{sec:sensitivity}{{\mbox  {VI-A}}{6}{Sensitivity Analysis}{subsection.6.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {VII}Discussion}{6}{section.7}\protected@file@percent }
-\newlabel{sec:discussion}{{VII}{6}{Discussion}{section.7}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Clustering quality across datasets, averaged over 10 seeds. For each method, ARI and CMM are reported ($\uparrow $ higher is better). Best per metric per row in \textbf  {bold}, second best \underline  {underlined}. Methods grouped into AutoML, the rule-based adaptive method MOStream, and single (fixed) algorithms. ConfStr=ConfStream, RandS=RandomSearchStream, OAClE=OnlineAutoClustEnsemble, CluStr=CluStream, DenStr=DenStream.}}{7}{table.3}\protected@file@percent }
-\newlabel{tab:performance_comparison_highlighted}{{III}{7}{Clustering quality across datasets, averaged over 10 seeds. For each method, ARI and CMM are reported ($\uparrow $ higher is better). Best per metric per row in \textbf {bold}, second best \underline {underlined}. Methods grouped into AutoML, the rule-based adaptive method MOStream, and single (fixed) algorithms. ConfStr=ConfStream, RandS=RandomSearchStream, OAClE=OnlineAutoClustEnsemble, CluStr=CluStream, DenStr=DenStream}{table.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Prequential clustering quality (ARI and CMM) across stream stages for AutoDSC and all baselines, on a representative real-world stream (Pendigits) and a synthetic drifting stream (Expanding). AutoDSC (thick black) stays at or above every baseline throughout the stream on both metrics.}}{7}{figure.3}\protected@file@percent }
-\newlabel{fig:autodsc_combined}{{3}{7}{Prequential clustering quality (ARI and CMM) across stream stages for AutoDSC and all baselines, on a representative real-world stream (Pendigits) and a synthetic drifting stream (Expanding). AutoDSC (thick black) stays at or above every baseline throughout the stream on both metrics}{figure.3}{}}
-\newlabel{fig:cd_ari}{{4a}{7}{Subfigure 4a}{subfigure.4.1}{}}
-\newlabel{sub@fig:cd_ari}{{(a)}{a}{Subfigure 4a\relax }{subfigure.4.1}{}}
-\newlabel{fig:cd_cmm}{{4b}{7}{Subfigure 4b}{subfigure.4.2}{}}
-\newlabel{sub@fig:cd_cmm}{{(b)}{b}{Subfigure 4b\relax }{subfigure.4.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Critical Difference diagrams (Nemenyi, $\alpha =0.05$) for ARI and CMM. Methods connected by a bar are not significantly different; AutoDSC holds the best mean rank on both metrics.}}{7}{figure.4}\protected@file@percent }
-\newlabel{fig:asc_rand_index_cd_comparison}{{4}{7}{Critical Difference diagrams (Nemenyi, $\alpha =0.05$) for ARI and CMM. Methods connected by a bar are not significantly different; AutoDSC holds the best mean rank on both metrics}{figure.4}{}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {ARI}}}{7}{subfigure.4.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {CMM}}}{7}{subfigure.4.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Throughput vs.\ memory trade-off (mean over all datasets). AutoDSC ($\star $) attains the highest clustering quality at a low memory footprint and moderate throughput.}}{7}{figure.5}\protected@file@percent }
-\newlabel{fig:asc_time_and_memory_comp_plot}{{5}{7}{Throughput vs.\ memory trade-off (mean over all datasets). AutoDSC ($\star $) attains the highest clustering quality at a low memory footprint and moderate throughput}{figure.5}{}}
+\citation{arbelaitz2013extensive,liu2010understanding}
+\citation{hinder2020towards}
+\citation{bahri2021data}
 \bibstyle{IEEEtran}
 \bibdata{references}
 \bibcite{hutter2019automated}{1}
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Clustering quality across datasets over 10 seeds, reported as mean$\pm $std (leading zeros omitted). For each method, ARI and CMM are shown ($\uparrow $ higher is better). Best per metric per row in \textbf  {bold}, second best \underline  {underlined}. Methods grouped into AutoML, the rule-based adaptive method MOStream, and the Baselines. OACE = OnlineAutoClust. Default(Best) is the default-baseline of OnlineAutoClust~\cite  {el2023onlineautoclust}: per dataset, the best-performing River algorithm run at its default hyperparameters.}}{7}{table.3}\protected@file@percent }
+\newlabel{tab:performance_comparison_highlighted}{{III}{7}{Clustering quality across datasets over 10 seeds, reported as mean$\pm $std (leading zeros omitted). For each method, ARI and CMM are shown ($\uparrow $ higher is better). Best per metric per row in \textbf {bold}, second best \underline {underlined}. Methods grouped into AutoML, the rule-based adaptive method MOStream, and the Baselines. OACE = OnlineAutoClust. Default(Best) is the default-baseline of OnlineAutoClust~\cite {el2023onlineautoclust}: per dataset, the best-performing River algorithm run at its default hyperparameters}{table.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Prequential clustering quality (ARI and CMM) across stream stages for AutoDSC and all baselines, on a representative real-world stream (Pendigits) and a synthetic drifting stream (Expanding). AutoDSC (thick black) stays at or above every baseline throughout the stream on both metrics.}}{7}{figure.3}\protected@file@percent }
+\newlabel{fig:autodsc_combined}{{3}{7}{Prequential clustering quality (ARI and CMM) across stream stages for AutoDSC and all baselines, on a representative real-world stream (Pendigits) and a synthetic drifting stream (Expanding). AutoDSC (thick black) stays at or above every baseline throughout the stream on both metrics}{figure.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Discussion}{7}{section.7}\protected@file@percent }
+\newlabel{sec:discussion}{{VII}{7}{Discussion}{section.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Conclusion and Future Work}{7}{section.8}\protected@file@percent }
+\newlabel{sec:conclusion_and_future}{{VIII}{7}{Conclusion and Future Work}{section.8}{}}
 \bibcite{poulakis2024survey}{2}
 \bibcite{Tschechlov2021AutoML4Clust}{3}
 \bibcite{Liu2021AutoCluster}{4}
 \bibcite{ElShawi2021cSmartML}{5}
 \bibcite{TrederTschechlov2023ML2DAC}{6}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Per-window ARI (seed-averaged) under drift. (a) \emph  {Merge-Split}: a discrete drift event (shaded) causes a temporary dip from which all adaptive methods recover; AutoDSC stays highest on both shoulders. (b) \emph  {Expanding}: continuous drift (left-to-right gradient); AutoDSC sustains near-perfect ARI while baselines converge slowly or plateau below.}}{8}{figure.4}\protected@file@percent }
+\newlabel{fig:recovery}{{4}{8}{Per-window ARI (seed-averaged) under drift. (a) \emph {Merge-Split}: a discrete drift event (shaded) causes a temporary dip from which all adaptive methods recover; AutoDSC stays highest on both shoulders. (b) \emph {Expanding}: continuous drift (left-to-right gradient); AutoDSC sustains near-perfect ARI while baselines converge slowly or plateau below}{figure.4}{}}
+\newlabel{fig:cd_ari}{{5a}{8}{Subfigure 5a}{subfigure.5.1}{}}
+\newlabel{sub@fig:cd_ari}{{(a)}{a}{Subfigure 5a\relax }{subfigure.5.1}{}}
+\newlabel{fig:cd_cmm}{{5b}{8}{Subfigure 5b}{subfigure.5.2}{}}
+\newlabel{sub@fig:cd_cmm}{{(b)}{b}{Subfigure 5b\relax }{subfigure.5.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Critical Difference diagrams (Nemenyi, $\alpha =0.05$) for ARI and CMM. Methods connected by a bar are not significantly different; AutoDSC holds the best mean rank on both metrics.}}{8}{figure.5}\protected@file@percent }
+\newlabel{fig:asc_rand_index_cd_comparison}{{5}{8}{Critical Difference diagrams (Nemenyi, $\alpha =0.05$) for ARI and CMM. Methods connected by a bar are not significantly different; AutoDSC holds the best mean rank on both metrics}{figure.5}{}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {ARI}}}{8}{subfigure.5.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {CMM}}}{8}{subfigure.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{References}{8}{section*.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Computational efficiency of AutoDSC. \emph  {Left:} throughput vs.\ memory trade-off (mean over all datasets; log--log axes); the shaded green area marks the favorable region (high throughput, low memory), where AutoDSC ($\star $) sits with the highest clustering quality, while MOStream and OACE fall outside it. \emph  {Right:} the same plane with each dataset colored by its feature-count range---memory grows only mildly with dimensionality while throughput stays bounded, indicating graceful scaling to $100$ features.}}{8}{figure.6}\protected@file@percent }
+\newlabel{fig:efficiency_dim}{{6}{8}{Computational efficiency of AutoDSC. \emph {Left:} throughput vs.\ memory trade-off (mean over all datasets; log--log axes); the shaded green area marks the favorable region (high throughput, low memory), where AutoDSC ($\star $) sits with the highest clustering quality, while MOStream and OACE fall outside it. \emph {Right:} the same plane with each dataset colored by its feature-count range---memory grows only mildly with dimensionality while throughput stays bounded, indicating graceful scaling to $100$ features}{figure.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Leave-one-out ablation on real-world streams: ARI and CMM of each variant relative to the full AutoDSC (dashed line $=1.0$). Bars below the line indicate the removed component helps; the multi-objective CVI score contributes most.}}{8}{figure.7}\protected@file@percent }
+\newlabel{fig:ablation_study}{{7}{8}{Leave-one-out ablation on real-world streams: ARI and CMM of each variant relative to the full AutoDSC (dashed line $=1.0$). Bars below the line indicate the removed component helps; the multi-objective CVI score contributes most}{figure.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Evolution of the AutoDSC population composition over the Insects stream. Rows are population slots, columns are stream stages, and colors denote the selected base algorithm.}}{8}{figure.8}\protected@file@percent }
+\newlabel{fig:model_selection_evolution}{{8}{8}{Evolution of the AutoDSC population composition over the Insects stream. Rows are population slots, columns are stream stages, and colors denote the selected base algorithm}{figure.8}{}}
 \bibcite{ElShawi2025TPEAutoClust}{7}
 \bibcite{daSilva2024PoAC}{8}
 \bibcite{yang2022iot}{9}
@@ -103,17 +116,6 @@
 \bibcite{pmlr-v256-verma24a}{12}
 \bibcite{pmlr-v139-wu21d}{13}
 \bibcite{verma2025auto-reg}{14}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Per-point latency across stream stages on representative real and synthetic streams. Latency is bounded and does not grow with stream length.}}{8}{figure.6}\protected@file@percent }
-\newlabel{fig:latency}{{6}{8}{Per-point latency across stream stages on representative real and synthetic streams. Latency is bounded and does not grow with stream length}{figure.6}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Leave-one-out ablation on real-world streams: ARI and CMM of each variant relative to the full AutoDSC (dashed line $=1.0$). Bars below the line indicate the removed component helps; the multi-objective CVI score contributes most.}}{8}{figure.7}\protected@file@percent }
-\newlabel{fig:ablation_study}{{7}{8}{Leave-one-out ablation on real-world streams: ARI and CMM of each variant relative to the full AutoDSC (dashed line $=1.0$). Bars below the line indicate the removed component helps; the multi-objective CVI score contributes most}{figure.7}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Evolution of the AutoDSC population composition over the Insects stream. Rows are population slots, columns are stream stages, and colors denote the selected base algorithm.}}{8}{figure.8}\protected@file@percent }
-\newlabel{fig:model_selection_evolution}{{8}{8}{Evolution of the AutoDSC population composition over the Insects stream. Rows are population slots, columns are stream stages, and colors denote the selected base algorithm}{figure.8}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Sensitivity of AutoDSC to window size (left) and population size (right): ARI (blue, left axis) and throughput (orange, right axis), averaged over all datasets. Defaults $w=1000$, $K=10$ sit at the quality/efficiency sweet spot.}}{8}{figure.9}\protected@file@percent }
-\newlabel{fig:sensitivity_study}{{9}{8}{Sensitivity of AutoDSC to window size (left) and population size (right): ARI (blue, left axis) and throughput (orange, right axis), averaged over all datasets. Defaults $w=1000$, $K=10$ sit at the quality/efficiency sweet spot}{figure.9}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {VIII}Conclusion and Future Work}{8}{section.8}\protected@file@percent }
-\newlabel{sec:conclusion_and_future}{{VIII}{8}{Conclusion and Future Work}{section.8}{}}
-\@writefile{toc}{\contentsline {section}{References}{8}{section*.1}\protected@file@percent }
 \bibcite{carnein2020confstream}{15}
 \bibcite{el2023onlineautoclust}{16}
 \bibcite{bahri2021data}{17}
@@ -130,9 +132,11 @@
 \bibcite{rand1971objective}{28}
 \bibcite{kremer2011cmm}{29}
 \bibcite{demvsar2006statistical}{30}
-\bibcite{bergstra2012random}{31}
-\bibcite{wang2024mostream}{32}
+\bibcite{wang2024mostream}{31}
+\bibcite{bergstra2012random}{32}
 \bibcite{arbelaitz2013extensive}{33}
 \bibcite{liu2010understanding}{34}
 \bibcite{hinder2020towards}{35}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Sensitivity of AutoDSC to window size (left) and population size (right): ARI (blue, left axis) and throughput (orange, right axis), averaged over all datasets. Defaults $w=1000$, $K=10$ sit at the quality/efficiency sweet spot.}}{9}{figure.9}\protected@file@percent }
+\newlabel{fig:sensitivity_study}{{9}{9}{Sensitivity of AutoDSC to window size (left) and population size (right): ARI (blue, left axis) and throughput (orange, right axis), averaged over all datasets. Defaults $w=1000$, $K=10$ sit at the quality/efficiency sweet spot}{figure.9}{}}
 \gdef \@abspage@last{9}

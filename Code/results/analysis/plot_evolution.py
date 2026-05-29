@@ -30,9 +30,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CAPTURE = os.path.join(HERE, 'evolution_capture.json')
 CHARTS_DIR = os.path.join(HERE, 'charts')
 
-# fixed algorithm order + colors (match benchmark-stages chart)
+# fixed algorithm order + colors (canonical single-algorithm palette, see CLAUDE.md)
 ALGOS = ['CluStream', 'DenStream', 'DBSTREAM', 'StreamKMeans']
-COLORS = ['#CC79A7', '#56B4E9', '#F0E442', '#999999']
+COLORS = ['#0072B2', '#E69F00', '#009E73', '#CC79A7']
 CODE = {a: i for i, a in enumerate(ALGOS)}
 
 

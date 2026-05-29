@@ -1,90 +1,80 @@
 #!/usr/bin/env python3
 """
-Throughput vs Memory trade-off chart for AutoDSC vs baselines.
+Throughput vs Memory trade-off chart for the 6 canonical methods.
 
-A single scatter: one point per method (mean over all datasets and seeds),
-x = throughput (log scale), y = peak memory. Shows the speed/footprint
-trade-off; quality (ARI/CMM) is reported separately. AutoDSC is emphasized
-(black star). Colors match the benchmark-stages chart. Bold fonts, vector PDF.
+One point per method (mean over all datasets and seeds): x = throughput (log),
+y = peak memory (log, to accommodate the wide range). Each point is labelled
+in place with the method name and its mean ARI, so the speed/footprint/quality
+trade-off is readable without a separate legend. AutoDSC is emphasized (red
+star). Names/colors/markers from style.py.
 
 Usage:
     python plot_efficiency.py
 Output:
     charts/efficiency.pdf / .png
 """
-import json
-import glob
 import os
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from collections import defaultdict
+from matplotlib.patches import Rectangle
+import style as S
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-RESULTS_DIR = os.path.join(HERE, '..', 'benchmark')
-CHARTS_DIR = os.path.join(HERE, 'charts')
-
-MODELS = ['AutoDSC', 'ConfStream', 'OnlineAutoClustEnsemble', 'RandomSearchStream',
-          'MOStream', 'CluStream', 'DenStream', 'DBSTREAM', 'STREAMKMeans']
-MLABELS = {
-    'AutoDSC': 'AutoDSC', 'ConfStream': 'ConfStream',
-    'OnlineAutoClustEnsemble': 'OAClEns', 'RandomSearchStream': 'RandSearch',
-    'MOStream': 'MOStream', 'CluStream': 'CluStream', 'DenStream': 'DenStream',
-    'DBSTREAM': 'DBSTREAM', 'STREAMKMeans': 'STREAMKMeans',
+# per-method label placement: (dx, dy) in points, and text anchor
+OFFSET = {
+    'AutoDSC':      (13, 6, 'left'),
+    'ConfStream':   (0, 11, 'center'),
+    'OACE':         (0, 11, 'center'),
+    'MOStream':     (0, 11, 'center'),
+    'RandomSearch': (0, -20, 'center'),
+    'Default(Best)': (0, 11, 'center'),
 }
-COLOR = {
-    'AutoDSC': '#000000', 'ConfStream': '#0072B2', 'OnlineAutoClustEnsemble': '#E69F00',
-    'RandomSearchStream': '#009E73', 'MOStream': '#D55E00', 'CluStream': '#CC79A7',
-    'DenStream': '#56B4E9', 'DBSTREAM': '#F0E442', 'STREAMKMeans': '#999999',
-}
-
-
-def aggregate():
-    agg = defaultdict(lambda: defaultdict(list))
-    for f in glob.glob(os.path.join(RESULTS_DIR, '*.json')):
-        r = json.load(open(f))
-        if r.get('model') not in MODELS:
-            continue
-        for k in ['throughput_ips', 'memory_mb']:
-            agg[r['model']][k].append(r.get(k, 0))
-    return {m: {k: np.mean(agg[m][k]) for k in ['throughput_ips', 'memory_mb']}
-            for m in MODELS}
 
 
 def main():
-    os.makedirs(CHARTS_DIR, exist_ok=True)
-    M = aggregate()
-    plt.rcParams.update({'font.size': 13, 'font.family': 'DejaVu Sans'})
-    fig, ax = plt.subplots(figsize=(8.5, 5.2))
-    for m in MODELS:
-        is_auto = m == 'AutoDSC'
-        ax.scatter(M[m]['throughput_ips'], M[m]['memory_mb'],
-                   s=380 if is_auto else 200,
-                   marker='*' if is_auto else 'o',
-                   color=COLOR[m], edgecolor='black',
-                   linewidth=1.2 if is_auto else 0.8,
-                   label=MLABELS[m], zorder=(6 if is_auto else 3))
+    os.makedirs(S.CHARTS_DIR, exist_ok=True)
+    S.set_rc()
+    fig, ax = plt.subplots(figsize=(7.6, 5.0))
+
+    for m in S.METHODS:
+        tp = S.scalar_overall(m, 'throughput_ips')
+        mem = S.scalar_overall(m, 'memory_mb')
+        is_auto = m == S.EMPHASIS
+        ax.scatter(tp, mem, s=520 if is_auto else 260,
+                   marker='*' if is_auto else S.METHOD_MARKER[m],
+                   color=S.METHOD_COLOR[m], edgecolor='black',
+                   linewidth=1.4 if is_auto else 0.9, zorder=5)
+        dx, dy, ha = OFFSET[m]
+        ax.annotate(S.METHOD_NAME[m], (tp, mem),
+                    textcoords='offset points', xytext=(dx, dy), ha=ha,
+                    fontsize=12, fontweight='bold', color=S.METHOD_COLOR[m],
+                    zorder=6)
 
     ax.set_xscale('log')
-    ax.set_xlabel(r'Throughput (ips) $\uparrow$', fontsize=15, fontweight='bold')
+    ax.set_yscale('log')
+    ax.set_xlabel(r'Throughput (instances/s) $\uparrow$', fontsize=15, fontweight='bold')
     ax.set_ylabel(r'Memory (MB) $\downarrow$', fontsize=15, fontweight='bold')
+    # pad limits so labels are not clipped
+    ax.set_xlim(ax.get_xlim()[0] * 0.5, ax.get_xlim()[1] * 2.2)
+    ax.set_ylim(ax.get_ylim()[0] * 0.78, ax.get_ylim()[1] * 1.4)
+    ax.set_yticks([15, 25, 50, 100, 166])
+    ax.get_yaxis().set_major_formatter(plt.matplotlib.ticker.ScalarFormatter())
     ax.tick_params(axis='both', labelsize=12)
-    for lbl in ax.get_xticklabels() + ax.get_yticklabels():
-        lbl.set_fontweight('bold')
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
+    S.bold_ticks(ax)
+    S.clean_spines(ax)
+    ax.grid(axis='both', which='major', alpha=0.18, linewidth=0.6)
 
-    # top legend, two rows, matching the benchmark-stages chart style/font
-    handles, labels = ax.get_legend_handles_labels()
-    fig.legend(handles, labels, loc='upper center', ncol=5,
-               frameon=False, bbox_to_anchor=(0.5, 1.08),
-               columnspacing=1.0, handletextpad=0.4,
-               prop={'weight': 'bold', 'size': 13})
+    # shade the favorable region: fast (high throughput) + low memory
+    xl, yl = ax.get_xlim(), ax.get_ylim()
+    rx0, ry1 = 350.0, 32.0   # throughput >= rx0 and memory <= ry1
+    ax.add_patch(Rectangle((rx0, yl[0]), xl[1] - rx0, ry1 - yl[0],
+                           facecolor='#9ed99a', alpha=0.35, edgecolor='none',
+                           zorder=0))
 
-    plt.tight_layout(rect=[0, 0, 1, 0.90])
+    plt.tight_layout()
     for ext in ('pdf', 'png'):
-        plt.savefig(os.path.join(CHARTS_DIR, f'efficiency.{ext}'),
+        plt.savefig(os.path.join(S.CHARTS_DIR, f'efficiency.{ext}'),
                     dpi=300, bbox_inches='tight')
     print('Saved charts/efficiency.pdf / .png')
 

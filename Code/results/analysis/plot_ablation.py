@@ -35,10 +35,10 @@ VLABELS = {
     'no_adaptive': 'w/o Adaptive', 'single_cvi': 'w/o Multi-CVI',
     'no_diversity': 'w/o Diversity',
 }
-# Okabe-Ito colorblind-safe palette
+# Okabe-Ito colorblind-safe palette; 'full' = AutoDSC vermilion-red (brand)
 COLORS = {
-    'full': '#0072B2', 'no_recency': '#E69F00', 'no_adaptive': '#009E73',
-    'single_cvi': '#D55E00', 'no_diversity': '#CC79A7',
+    'full': '#D55E00', 'no_recency': '#0072B2', 'no_adaptive': '#009E73',
+    'single_cvi': '#E69F00', 'no_diversity': '#CC79A7',
 }
 HATCHES = {'full': '', 'no_recency': '//', 'no_adaptive': '\\\\',
            'single_cvi': 'xx', 'no_diversity': '..'}

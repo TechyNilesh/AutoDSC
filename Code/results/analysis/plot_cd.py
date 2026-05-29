@@ -12,48 +12,34 @@ Usage:
 Output:
     charts/cd_ari.pdf / .png  and  charts/cd_cmm.pdf / .png
 """
-import json
-import glob
 import os
 import numpy as np
 import pandas as pd
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from collections import defaultdict
 from autorank import autorank
+import style as S
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-RESULTS_DIR = os.path.join(HERE, '..', 'benchmark')
-CHARTS_DIR = os.path.join(HERE, 'charts')
+CHARTS_DIR = S.CHARTS_DIR
+# colors keyed by canonical display label (== canonical name)
+COLOR = {S.METHOD_NAME[m]: S.METHOD_COLOR[m] for m in S.METHODS}
 
-MODELS = ['AutoDSC', 'ConfStream', 'OnlineAutoClustEnsemble', 'RandomSearchStream',
-          'MOStream', 'CluStream', 'DenStream', 'DBSTREAM', 'STREAMKMeans']
-MLABELS = {
-    'AutoDSC': 'AutoDSC', 'ConfStream': 'ConfStream',
-    'OnlineAutoClustEnsemble': 'OAClEns', 'RandomSearchStream': 'RandSearch',
-    'MOStream': 'MOStream', 'CluStream': 'CluStream', 'DenStream': 'DenStream',
-    'DBSTREAM': 'DBSTREAM', 'STREAMKMeans': 'STREAMKMeans',
-}
-# colors identical to benchmark_stages chart (keyed by display label)
-COLOR = {
-    'AutoDSC': '#000000', 'ConfStream': '#0072B2', 'OAClEns': '#E69F00',
-    'RandSearch': '#009E73', 'MOStream': '#D55E00', 'CluStream': '#CC79A7',
-    'DenStream': '#56B4E9', 'DBSTREAM': '#F0E442', 'STREAMKMeans': '#999999',
-}
+
+# Nemenyi q_alpha (alpha=0.05, infinite df, studentized range / sqrt(2))
+_Q05 = {2: 1.960, 3: 2.343, 4: 2.569, 5: 2.728, 6: 2.850, 7: 2.949,
+        8: 3.031, 9: 3.102, 10: 3.164}
+
+
+def nemenyi_cd(k, n):
+    """Demsar critical difference: q * sqrt(k(k+1)/(6n))."""
+    return _Q05[k] * np.sqrt(k * (k + 1) / (6.0 * n))
 
 
 def build_frame(metric):
-    agg = defaultdict(lambda: defaultdict(list))
-    for f in glob.glob(os.path.join(RESULTS_DIR, '*.json')):
-        r = json.load(open(f))
-        if r.get('model') not in MODELS:
-            continue
-        agg[r['dataset']][r['model']].append(r.get(metric, 0))
-    datasets = sorted(agg)
-    data = {MLABELS[m]: [np.mean(agg[ds][m]) if agg[ds][m] else np.nan
-                         for ds in datasets] for m in MODELS}
-    return pd.DataFrame(data, index=datasets)
+    data = {S.METHOD_NAME[m]: [S.scalar(m, ds, metric) for ds in S.DATASETS]
+            for m in S.METHODS}
+    return pd.DataFrame(data, index=[S.DATASET_NAME[d] for d in S.DATASETS])
 
 
 def cd_diagram(ranks, cd, ax):
@@ -138,8 +124,11 @@ def make_cd(metric, out):
     df = build_frame(metric)
     res = autorank(df, alpha=0.05, verbose=False, order='descending')
     ranks = res.rankdf['meanrank'].to_dict()
-    cd = float(getattr(res, 'cd', np.nan))
-    plt.rcParams.update({'font.family': 'DejaVu Sans'})
+    cd = getattr(res, 'cd', None)
+    if cd is None or (isinstance(cd, float) and np.isnan(cd)):
+        cd = nemenyi_cd(k=df.shape[1], n=df.shape[0])   # manual fallback
+    cd = float(cd)
+    S.set_rc()
     fig, ax = plt.subplots(figsize=(9.0, 3.2))
     cd_diagram(ranks, cd, ax)
     plt.tight_layout()
