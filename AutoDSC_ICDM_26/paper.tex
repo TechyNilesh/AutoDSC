@@ -57,7 +57,7 @@ data stream clustering, AutoML, concept drift, hyperparameter optimization, onli
 
 Automated Machine Learning (AutoML) has significantly advanced the accuracy and efficiency of machine learning workflows by automating tasks such as algorithm selection, hyperparameter optimization, and pipeline synthesis~\cite{hutter2019automated}. While AutoML has seen widespread adoption in supervised learning, its application to clustering remains comparatively less explored, mainly due to the absence of a universally applicable objective function for evaluation~\cite{poulakis2024survey}. Recent AutoML solutions for clustering include AutoML4Clust~\cite{Tschechlov2021AutoML4Clust}, AutoCluster~\cite{Liu2021AutoCluster}, cSmartML~\cite{ElShawi2021cSmartML}, ML2DAC~\cite{TrederTschechlov2023ML2DAC}, TPE-AutoClust~\cite{ElShawi2025TPEAutoClust}, and PoAC~\cite{daSilva2024PoAC}. These approaches address clustering challenges using various automated methodologies such as meta-learning, pipeline composition, and problem-specific heuristics.
 
-However, with the increasing availability of streaming data from sources like Internet of Things (IoT) sensors, web traffic, and social media, traditional static AutoML approaches are insufficient~\cite{yang2022iot}. They cannot adapt to dynamic environments or process data in a single pass due to concept drift and memory limitations~\cite{bifet2018machine}. Existing online AutoML frameworks such as Online AutoML~\cite{celik2023online}, ASML~\cite{pmlr-v256-verma24a}, ChaCha~\cite{pmlr-v139-wu21d}, and Auto-Reg~\cite{verma2025auto-reg} primarily focus on supervised learning tasks. Meanwhile, unsupervised learning, particularly clustering, requires specialized AutoML solutions. At present, ConfStream~\cite{carnein2020confstream} and OnlineAutoClust~\cite{el2023onlineautoclust} represent the only established AutoML (CASH-style) solutions for stream clustering; the recent MOStream~\cite{wang2024mostream} also self-optimizes, but from a rule-based angle that reconfigures structural components rather than searching the joint algorithm--hyperparameter space. Nevertheless, the AutoML solutions suffer from significant limitations. ConfStream relies on single clustering evaluation metrics, and OnlineAutoClust uses computationally intensive offline search methods, which are inefficient for real-time streaming scenarios. These limitations highlight the critical need for tailored AutoML solutions designed specifically for data stream clustering~\cite{bahri2021data}. This paper introduces AutoDSC (Automated Data Stream Clustering), an AutoML framework that brings automated algorithm selection and hyperparameter optimization to unsupervised data streams and adapts continuously as the data distribution evolves. We make the following key contributions.
+However, with the increasing availability of streaming data from sources like Internet of Things (IoT) sensors, web traffic, and social media, traditional static AutoML approaches are insufficient~\cite{yang2022iot}. They cannot adapt to dynamic environments or process data in a single pass due to concept drift and memory limitations~\cite{bifet2018machine}. Existing online AutoML frameworks such as Online AutoML~\cite{celik2023online}, ASML~\cite{pmlr-v256-verma24a}, ChaCha~\cite{pmlr-v139-wu21d}, and Auto-Reg~\cite{verma2025auto-reg} primarily focus on supervised learning tasks. Meanwhile, unsupervised learning, particularly clustering, requires specialized AutoML solutions. At present, ConfStream~\cite{carnein2020confstream} and OnlineAutoClust~\cite{el2023onlineautoclust} represent the only established AutoML (CASH-style) solutions for stream clustering; the recent MOStream~\cite{wang2024mostream} also self-optimizes, but from a rule-based angle that reconfigures structural components rather than searching the joint algorithm--hyperparameter space. Nevertheless, the AutoML solutions suffer from significant limitations. ConfStream relies on single clustering evaluation metrics, and OnlineAutoClust uses computationally intensive offline search methods, which are inefficient for real-time streaming scenarios. These limitations highlight the critical need for tailored AutoML solutions designed specifically for data stream clustering~\cite{bahri2021data}. This paper introduces AutoDSC (Automated Data Stream Clustering), an AutoML framework that brings automated algorithm selection and hyperparameter optimization to unsupervised data streams and adapts continuously as the data distribution evolves. We formalize the streaming CASH problem and evaluate AutoDSC extensively against five baselines. We make the following key contributions.
 
 \begin{itemize}
 \item We cast online stream clustering as a streaming combined algorithm selection and hyperparameter optimization (CASH) problem that jointly chooses the clustering algorithm and tunes its hyperparameters while the data distribution drifts, and we present AutoDSC, a single-pass AutoML framework that solves it autonomously without manual tuning or labels.
@@ -69,13 +69,35 @@ However, with the increasing availability of streaming data from sources like In
 \item Across ten real and synthetic streams, we show that AutoDSC attains the best mean rank on both the Adjusted Rand Index (ARI)~\cite{hubert1985comparing} and CMM~\cite{kremer2011cmm} and the highest mean ARI among all methods while remaining the most computationally efficient automated approach.
 \end{itemize}
 
-\section{Related Work}\label{sec:related}
+\section{Background and Related Work}\label{sec:background}\label{sec:related}
 
-Data stream clustering addresses the challenges of processing continuous, high-velocity data with limited computational resources~\cite{bifet2018machine,aggarwal2013data}. CluStream~\cite{aggarwal2003framework} pioneered the micro-cluster approach using pyramidal time frames to maintain summary statistics for scalable analysis. DenStream~\cite{Cao2006} advanced density-based clustering by introducing core-micro-clusters, potential micro-clusters, and outlier micro-clusters. DBSTREAM~\cite{Hahsler2016} enhanced density estimation by incorporating shared density graphs that explicitly model inter-micro-cluster relationships. This provides better resilience to concept drift compared to DenStream. For k-means-based approaches~\cite{Sculley2010}, mini-batch optimization combined with sparse projections has been developed to enable web-scale clustering with significantly reduced latency for real-time streaming applications. StreamKMeans~\cite{montiel2021river} is an alternative version of the stream local search~\cite{OCallaghan2002} that replaces k-medians with incremental k-means.
+We first review the data stream clustering setting, its algorithms, and how clustering quality is measured online, and then survey automated machine learning and its existing realizations for stream clustering, which together motivate AutoDSC.
 
-In the batch setting, several AutoML systems automate clustering, such as AutoML4Clust~\cite{Tschechlov2021AutoML4Clust}, AutoCluster~\cite{Liu2021AutoCluster}, cSmartML~\cite{ElShawi2021cSmartML}, ML2DAC~\cite{TrederTschechlov2023ML2DAC}, TPE-AutoClust~\cite{ElShawi2025TPEAutoClust}, and PoAC~\cite{daSilva2024PoAC}, using meta-learning and pipeline composition. However, all of them assume repeated full-data access and therefore cannot operate under the single-pass, bounded-memory, drifting conditions of a data stream. Recent developments have focused on automated algorithm selection and hyperparameter optimization (CASH)~\cite{hutter2019automated} for stream clustering. ConfStream~\cite{carnein2020confstream} represents an early attempt at automated stream clustering configuration, using an ensemble of different clustering algorithms and configurations that dynamically adapt by evaluating clustering quality and sampling nearby new configurations proportionally to their performance using a normal distribution. However, ConfStream has significant limitations, including its reliance on a single Silhouette Width metric for quality assessment and limited parameter search capabilities. OnlineAutoClust~\cite{el2023onlineautoclust} developed an AutoML framework that combines Bayesian optimization with clustering ensembles, employing Tree-structured Parzen Estimators (TPE) for algorithm selection and hyperparameter tuning. However, OnlineAutoClust suffers from critical limitations, including dependence on offline tuning methods, high computational requirements, and sensitivity to allocated time budgets, which can lead to suboptimal pipeline selections during rapid concept drift. From a different, rule-based angle, MOStream~\cite{wang2024mostream} pursues self-optimization by decomposing a stream clustering algorithm into four design dimensions, namely the summarizing data structure, the window model, the outlier-detection mechanism, and the cluster-refinement strategy, and adaptively reconfiguring these components at runtime to balance clustering accuracy against processing throughput. Unlike the CASH-style frameworks above, MOStream tunes structural design choices rather than searching a joint algorithm--hyperparameter space. In contrast to all of these approaches, AutoDSC adapts to drift implicitly through continual per-window re-evaluation and an adaptive exploration rate, avoiding both single-metric evaluation and expensive offline optimization.
+\subsection{Data Stream Clustering}
 
-Because ground-truth labels are unavailable during streaming, configuration selection must instead rely on internal cluster validity indices (CVIs) such as the Silhouette, Davies--Bouldin, and Calinski--Harabasz scores; since no single CVI is reliable across varying cluster shapes, densities, and counts, combining complementary indices is more robust than depending on any one alone~\cite{arbelaitz2013extensive,liu2010understanding}, which is precisely the weakness of ConfStream's single-metric criterion. External evaluation, by contrast, requires measures that account for the evolving nature of the data, since classical external indices assume a static partition and cannot correctly attribute errors arising from emerging, splitting, or moving clusters~\cite{kremer2011cmm}. To address this, Kremer et al.~\cite{kremer2011cmm} introduced the Cluster Mapping Measure (CMM), a ground-truth measure that combines penalties for missed objects, misplaced objects, and noise inclusion, weighted by object connectivity, to robustly reflect the error types specific to evolving streams. We therefore adopt CMM, alongside the chance-corrected Adjusted Rand Index, to assess clustering quality (Section~\ref{sec:setup}).
+A data stream is an unbounded, high-velocity sequence of instances that a learner must process online rather than as a stored dataset. Following Bifet et al.~\cite{bifet2018machine}, a stream learner should satisfy five requirements: (\textbf{R1}) process one instance at a time and inspect it at most once; (\textbf{R2}) use a bounded amount of time per instance; (\textbf{R3}) use a bounded amount of memory; (\textbf{R4}) be ready to produce an answer, such as a prediction, clustering, or set of patterns, at any time; and (\textbf{R5}) adapt to temporal changes in the data. These constraints rule out the multi-pass, full-data access that batch clustering and offline AutoML assume. Because the data-generating process evolves, streams also exhibit concept drift, meaning the distribution of the data, and for clustering the number, shape, and location of the clusters, changes over time, whether abruptly, gradually, or incrementally~\cite{bifet2018machine,aggarwal2013data}. A method that fixes its model or configuration in advance therefore degrades as the stream moves away from the regime it was tuned for, which is exactly what makes requirement R5 hard.
+
+Classical stream clustering algorithms meet these requirements and fall into a few families distinguished by how they summarize the stream. Micro-cluster summarization, pioneered by CluStream~\cite{aggarwal2003framework}, maintains pyramidal time-frame statistics for scalable analysis; density-based methods such as DenStream~\cite{Cao2006} and DBSTREAM~\cite{Hahsler2016} discover arbitrarily shaped clusters through core, potential, and outlier micro-clusters and a shared-density graph; and k-means-based methods maintain centroids online, where mini-batch optimization enables web-scale clustering at low latency~\cite{Sculley2010} and StreamKMeans~\cite{montiel2021river} replaces the k-medians step of stream local search~\cite{OCallaghan2002} with incremental k-means. These algorithms are effective once configured, but each fixes its algorithm and hyperparameters in advance, which motivates automating their selection. Quality is measured online with the interleaved test-then-train, or prequential, protocol~\cite{bifet2018machine}, in which each instance is used to test the model before it updates on it. As labels are unavailable during the stream, configuration choices rely on internal cluster validity indices (CVIs) such as the Silhouette, Davies--Bouldin, and Calinski--Harabasz scores, and since no single CVI is reliable across cluster shapes, densities, and counts, combining complementary indices is more robust than any one alone~\cite{arbelaitz2013extensive,liu2010understanding}; for label-based scoring, Kremer et al.~\cite{kremer2011cmm} introduced the Cluster Mapping Measure (CMM), which unlike classical external indices accounts for emerging, splitting, and moving clusters, so we evaluate with CMM alongside the chance-corrected Adjusted Rand Index (Section~\ref{sec:setup}).
+
+\subsection{Automated Machine Learning}
+
+Automated Machine Learning removes the manual burden of algorithm selection and hyperparameter optimization, formalized as the combined algorithm selection and hyperparameter optimization (CASH) problem~\cite{hutter2019automated}. AutoML is mature for batch supervised learning, and the few streaming AutoML systems likewise target supervised tasks~\cite{celik2023online,pmlr-v256-verma24a}. For clustering, several batch AutoML systems automate the pipeline, such as AutoML4Clust~\cite{Tschechlov2021AutoML4Clust}, AutoCluster~\cite{Liu2021AutoCluster}, cSmartML~\cite{ElShawi2021cSmartML}, ML2DAC~\cite{TrederTschechlov2023ML2DAC}, TPE-AutoClust~\cite{ElShawi2025TPEAutoClust}, and PoAC~\cite{daSilva2024PoAC}, through meta-learning and pipeline composition, but all assume repeated full-data access and therefore cannot operate under the single-pass, bounded-memory, drifting conditions of a stream.
+
+For stream clustering specifically, ConfStream~\cite{carnein2020confstream} is an early attempt at automated configuration, using an ensemble of clustering algorithms and configurations that adapt by evaluating quality and sampling nearby configurations proportionally to their performance, but it relies on a single Silhouette Width metric and a limited search. OnlineAutoClust~\cite{el2023onlineautoclust} combines Bayesian optimization with clustering ensembles via Tree-structured Parzen Estimators, yet depends on offline tuning, is computationally heavy, and is sensitive to its time budget, which can yield suboptimal pipelines during rapid drift. From a different, rule-based angle, MOStream~\cite{wang2024mostream} self-optimizes by reconfiguring four structural design dimensions (the summarizing data structure, the window model, the outlier-detection mechanism, and the refinement strategy) at runtime rather than searching a joint algorithm--hyperparameter space. In contrast to all of these approaches, AutoDSC adapts to drift implicitly through continual per-window re-evaluation and an adaptive exploration rate, avoiding both single-metric evaluation and expensive offline optimization.
+
+\section{Problem Formulation}\label{sec:problem}
+
+A data stream is an unbounded sequence $\mathcal{S} = \{x_1, x_2, \ldots, x_t, \ldots\}$ in which each instance $x_t \in \mathbb{R}^d$ arrives one at a time and must be processed in a single pass under bounded memory. We consume the stream in consecutive windows of fixed size $w$, writing $W$ for the window currently being processed, and the data-generating distribution may change from one window to the next (concept drift), so the best way to cluster the data is itself time-varying. Given a window $W$, a clustering algorithm groups its points by similarity without access to labels. Centroid-based methods, for instance, summarize each group by a representative and seek a set $C$ of centroids that minimizes the average distance to the nearest centroid,
+\begin{equation}
+\mathrm{cost}(C, W) = \frac{1}{|W|}\sum_{x \in W} \min_{c \in C} d(x, c),
+\end{equation}
+where $d$ is a distance function, while density- and micro-cluster-based methods optimize related criteria. No single algorithm or objective suits all data, so the appropriate choice varies across datasets and, under drift, across time. Because ground-truth labels are unavailable online, the quality of a clustering produced on $W$ must be judged by an internal cluster-validity score $q(\cdot) \in [0,1]$ (higher is better) computed from the data and the assignments alone, whereas external indices such as ARI and CMM use labels and are reserved for offline evaluation (Section~\ref{sec:setup}).
+
+Let $\mathcal{A}$ be a portfolio of stream-clustering algorithms and $\Theta = \bigcup_{a \in \mathcal{A}} (\{a\} \times \Phi_a)$ the joint space of configurations $\theta = (a, \phi)$ that pair an algorithm $a$ with hyperparameters $\phi \in \Phi_a$. Running $\theta$ on the current window yields a clustering with label-free quality $q(\theta; W)$. The combined algorithm-selection-and-hyperparameter-optimization (CASH) problem for a stream is to track, at every window, the configuration
+\begin{equation}
+\theta^\star = \arg\max_{\theta \in \Theta}\; q(\theta; W),
+\end{equation}
+using only the data seen so far and bounded memory. As the distribution drifts, $\theta^\star$ changes over time, so a solver must continually re-evaluate and re-select configurations rather than commit to one. AutoDSC approximates this online optimum with a population-guided search and a label-free multi-objective instantiation of $q$, described next.
 
 \section{Automated Data Stream Clustering}\label{sec:methodology}
 
@@ -83,12 +105,12 @@ We introduce Automated Data Stream Clustering (AutoDSC), a novel AutoML framewor
 
 \begin{figure*}[t]
     \centering
-    \includegraphics[width=0.70\linewidth]{images/AutoDSC_Diagram.png}
-    \caption{AutoDSC Framework Overview}
+    \includegraphics[width=0.70\linewidth]{images/diagrams/AutoDSC_Diagram.png}
+    \caption{Overview of AutoDSC. Each window the population of clustering configurations is evaluated by the multi-objective criterion, the incumbent is re-selected, and PGSSO proposes new configurations from the recency-weighted elite archive under an adaptive exploration rate.}
     \label{fig:framework_overview}
 \end{figure*}
 
-AutoDSC processes an infinite data stream $\mathcal{S} = \{x_1, x_2, \ldots, x_t, \ldots\}$ where each instance $x_t \in \mathbb{R}^d$ arrives at timestamp $t$ through a fixed-size windowing mechanism $W_t = \{x_{t-w+1}, x_{t-w+2}, \ldots, x_t\}$ with capacity $w$. The framework maintains a configuration population $\mathcal{A}_t$ containing multiple clustering algorithms with different hyperparameter settings, continuously adapts these configurations based on performance feedback, and provides real-time predictions using the best-performing configuration. The configuration space $\Theta = \prod_{i=1}^{|\mathcal{A}|} \Theta_i$ encompasses parameter spaces across all algorithms in the portfolio $\mathcal{A}$, where each configuration $\theta = (a_i, \phi_i)$ specifies both algorithm selection $a_i \in \mathcal{A}$ and hyperparameter values $\phi_i \in \Theta_i$. As each new data point arrives, the system performs incremental updates across all configurations:
+To solve the online CASH problem of Section~\ref{sec:problem}, AutoDSC maintains a configuration population $\mathcal{A}_t \subseteq \Theta$ of clustering algorithms with different hyperparameter settings, fills the current window $W_t$ as instances arrive, and serves real-time predictions from the best-performing (incumbent) configuration. As each new data point arrives, the system performs incremental updates across all configurations:
 
 \begin{equation}
 \forall \theta_i \in \mathcal{A}_t: \quad M_i^{(t)} = \text{LearnOne}(M_i^{(t-1)}, x_t)
@@ -145,7 +167,7 @@ and $\mathcal{E}_t^{a_k} = \{(\theta,s) \in \mathcal{E}_t : a = a_k\}$ contains 
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\linewidth]{images/parameter_sampling_visualization.png}
+    \includegraphics[width=1\linewidth]{images/diagrams/parameter_sampling_visualization.png}
     \caption{Parameter Sampling Visualization.}
     \label{fig:parameter_sampling_visualization}
 \end{figure}
@@ -221,75 +243,11 @@ $\mathcal{C}_{\text{new}} \gets \emptyset$\;
 \Return $\mathcal{C}_{\text{new}}$\;
 \end{algorithm}
 
-\section{Theoretical Analysis}\label{sec:theory}
-
-We analyze AutoDSC using a phase-based approach where phases correspond to periods with fixed incumbent configurations. Let $j \in \{1,...,T/w\}$ index windows where $T/w$ represents the total number of windows given $T$ instances and window size $w$, and $t \in \{1,...,T\}$ index instances. We analyze AutoDSC's performance over $T/w$ windows divided into $M+1$ phases, where phase $m$ spans $N_m$ windows from window $j_m$ to $j_{m+1}-1$ with population $\mathcal{A}_{j_m}$ and incumbent configuration $\theta^*_{j_m}$. We track cumulative evaluations $n_{\theta,j}$ for each configuration $\theta$ across all windows up to window $j$. The expected clustering quality for configuration $\theta$ at window $j$ is defined as:
-
-\begin{equation}
-\mu_j(\theta) = \mathbb{E}[r_j(\theta)]
-\end{equation}
-
-where $r_j(\theta) \in [0,1]$ represents the instantaneous composite CVI score, and $\theta^{\text{opt}}_j = \arg\max_{\theta \in \Theta} \mu_j(\theta)$ denotes the optimal configuration at window $j$.
-
-\textbf{Definition 1:} Let $p \in (0,1)$ denote the sample complexity parameter where estimation error decreases as $O(n^{-p})$ with $n$ samples (typically $p = 1/2$ for clustering).
-
-\textbf{Definition 2:} Let $\text{comp}_\theta$ denote the computational complexity of evaluating configuration $\theta$ on one window.
-
-\textbf{Assumption 1:} Rewards are bounded: $r_j(\theta) \in [0,1]$.
-
-\textbf{Assumption 2:} Within stationary segments, $\mu_j(\theta)$ is $L$-Lipschitz in $\theta$.
-
-\textbf{Assumption 3:} The optimal configuration $\theta^{\text{opt}}_j$ enters the population within $O(\log|\Theta|)$ windows after each concept drift.
-
-Define confidence intervals:
-\begin{equation}
-\epsilon_{\theta,j} = O\left(\sqrt{\frac{\log(|\Theta|j/\delta)}{n_{\theta,j}}}\right)
-\end{equation}
-where $n_{\theta,j}$ is the number of evaluations of $\theta$ by window $j$ and $\delta \in (0,1)$ is a confidence parameter~\cite{auer2002finite}.
-
-\textbf{Lemma 1 (PGSSO Selection Properties):} With probability $\geq 1-\delta$~\cite{cesa2006prediction}:
-
-\emph{Claim 1:} If $\mu_j(\theta) - \mu_j(\theta^*_{j_m}) + 2\epsilon_{\theta,j} + 3\epsilon_{\theta^*_{j_m},j} > 0$, then PGSSO selects $\theta$ as the new incumbent $\theta^*_{j_{m+1}}$.
-
-\emph{Claim 2:} When the incumbent switches from $\theta^*_{j_m}$ to $\theta^*_{j_{m+1}}$, we have $\mu_{j_{m+1}}(\theta^*_{j_m}) - \mu_{j_{m+1}}(\theta^*_{j_{m+1}}) > \epsilon_{\theta^*_{j_m},j_{m+1}}$.
-
-\emph{Claim 3:} If $\mu_j(\theta) < \mu_j(\theta^*_{j_m})$, then $\theta$ will not replace $\theta^*_{j_m}$ as the incumbent.
-
-\textbf{Lemma 2 (Drift Recovery via Adaptive Exploration):} When a concept drift degrades incumbent quality ($\Delta\mu_j \leq 0$), the exploration rate increases (Eq.~4). Under Assumption~3, the post-drift optimal configuration re-enters the population within $O(\log|\Theta|)$ windows with probability $\geq 1-\delta$, driven solely by the adaptive exploration rate.
-
-\textbf{Lemma 3 (Adaptive Exploration):} The adaptive exploration mechanism in PGSSO, which adjusts $\alpha_j$ based on performance trends, improves the expected regret constants by a factor of $(1+\gamma)^{-1}$ compared to fixed exploration, where $\gamma$ is the bounded adaptation gain (the per-step exploration adjustment is capped at $\gamma=0.5$).
-
-\textbf{Proposition 1 (Window Regret):} With sample complexity parameter $p$ and properly set confidence intervals, AutoDSC achieves:
-
-\begin{align}
-&\sum_{m=0}^M \sum_{j=j_m}^{j_{m+1}-1} \left(\mu_j(\theta^{\text{opt}}_j) - \mu_j(\theta^*_{j_m})\right) \nonumber\\
-&= \tilde{O}\left(\frac{K \cdot \text{comp}_{\theta^{\text{opt}}} \cdot (T/w)^p}{p(1+\gamma)} + \text{comp}_{\theta^*} (T/w)^{\frac{1}{2-p}}\right)
-\end{align}
-
-where $K = \max_j |\mathcal{A}_j|$ is the maximum population size.
-
-\textbf{Proof Sketch:} The bound decomposes regret into two terms: (i) regret from suboptimal population sampling, bounded by PGSSO's exploration guarantee with adaptive exploration reducing the constant by $(1+\gamma)^{-1}$, and (ii) regret from incumbent updates. Lemma 1 ensures incumbent switches occur only when sufficiently beneficial, limiting the number of phases $M = O((T/w)^{\frac{1-p}{2-p}})$. The confidence intervals shrink as $O(n_{\theta,j}^{-1/2})$, yielding the stated bounds~\cite{auer2002finite}.
-
-\textbf{Theorem 1 (Total Regret):} Under the same conditions, AutoDSC achieves instance-level regret:
-\begin{align}
-&\sum_{t=1}^T \left(\mu_{\lceil t/w \rceil}(\theta^{\text{opt}}_{\lceil t/w \rceil}) - \mu_{\lceil t/w \rceil}(\theta^*_{\lceil t/w \rceil})\right) \nonumber\\
-&= \tilde{O}\left(\frac{K \cdot \text{comp}_{\theta^{\text{opt}}} \cdot T^p}{(1+\gamma)} + \text{comp}_{\theta^*} T^{\frac{1}{2-p}}\right)
-\end{align}
-
-\textbf{Proof Sketch:} Since clustering quality is constant within windows, summing over $T$ instances with window-level quality yields:
-\begin{equation}
-\sum_{t=1}^T (\cdot) = \sum_{j=1}^{T/w} w \cdot (\mu_j(\theta^{\text{opt}}_j) - \mu_j(\theta^*_j))
-\end{equation}
-Applying Proposition 1 and noting $w$ is constant gives the result.
-
-\textbf{Corollary 1 (Drift Recovery):} After concept drift, AutoDSC recovers $\epsilon$-optimal performance within $O(\log|\Theta|/\epsilon^2)$ windows.
-
-For $p = 1/2$, the regret bound becomes $\tilde{O}(\sqrt{T})$, matching optimal rates for non-stationary bandits with concept drift~\cite{besbes2014stochastic}.
-
 \section{Experimental Setup}\label{sec:setup}
 Our experimental design follows rigorous evaluation protocols to ensure reproducible and statistically valid results.\footnote{Datasets and code: \url{https://anonymous.4open.science/r/AutoDSC}}
 
-\textbf{Datasets:} We selected 10 datasets comprising 5 real-world and 5 synthetic streams with varying sizes, dimensionalities, and cluster counts, as summarized in Table~\ref{tab:dataset_summary}.
+\subsection{Datasets}
+We evaluate on 10 datasets comprising 5 real-world and 5 synthetic streams with varying sizes, dimensionalities, and cluster counts, as summarized in Table~\ref{tab:dataset_summary}.
 
 \begin{table}[t]
 \centering
@@ -324,14 +282,58 @@ Fast-RBF    & Synth & 100,000  & 5   & 5  \\
 }
 \end{table}
 
+The five real-world streams are public benchmarks with natural class structure and distribution change.
+\begin{itemize}
+\item \textbf{Insects}~\cite{souza2020challenges}: optical-sensor wing-beat features of flying insects, where the species labels and feature distribution shift with ambient temperature over the recording.
+\item \textbf{KDD99}~\cite{dua2019uci}: network-connection records from the KDD Cup 1999 intrusion-detection task, labelled as normal traffic or one of several attack types.
+\item \textbf{PenDigits}~\cite{dua2019uci}: pen-trajectory features of handwritten digits, with one cluster per digit $0$--$9$.
+\item \textbf{Shuttle}~\cite{dua2019uci}: NASA Space Shuttle radiator sensor readings (Statlog), with highly imbalanced operational-state classes.
+\item \textbf{Vehicle}~\cite{duarte2004vehicle}: high-dimensional acoustic and seismic features from a distributed wireless sensor network, labelled by vehicle type.
+\end{itemize}
 
-\textbf{Evaluation Protocol:} All experiments use prequential evaluation (test-then-train)~\cite{bifet2018machine} with 10 independent runs using random seeds 1-10 to account for stochastic variability. Clustering quality is measured using the Adjusted Rand Index (ARI) and CMM~\cite{kremer2011cmm}, where ground truth labels are used solely for evaluation, not training or model selection. ARI is the chance-corrected form~\cite{hubert1985comparing} of the Rand index~\cite{rand1971objective} that counts agreements between the predicted clustering and the ground-truth partition over all pairs of points and adjusts the count for the agreement expected at random, yielding $1$ for a perfect match, $0$ for random labelling, and negative values for worse-than-random partitions. We also record throughput (instances/s) and peak memory usage (MB) to assess computational efficiency. Statistical significance is assessed using the Friedman test followed by the Nemenyi post-hoc test~\cite{demvsar2006statistical} with $\alpha = 0.05$.
+The five synthetic streams are produced by our reproducible generators (released with the code) and let us control the drift mechanism while holding dimensionality and cluster count fixed. Four are five-cluster Gaussian-blob streams in $[0,1]^5$ that differ only in the injected drift, and one is a MOA-style RandomRBF stream~\cite{bifet2010moa}.
+\begin{itemize}
+\item \textbf{Expanding}: cluster centroids stay fixed while the within-cluster variance grows steadily over the stream.
+\item \textbf{Gradual}: centroids translate smoothly at constant speed along fixed random directions.
+\item \textbf{Merge-Split}: clusters converge toward the global mean at mid-stream and then re-separate.
+\item \textbf{Sudden}: centroids jump abruptly at three change points, holding stationary between them.
+\item \textbf{Fast-RBF}: a RandomRBF stream whose class centroids drift rapidly across the feature space.
+\end{itemize}
 
-\textbf{Baseline Methods:} We compare AutoDSC against five baselines spanning three categories. (i) \emph{AutoML stream-clustering methods}: \textit{ConfStream}~\cite{carnein2020confstream} and \textit{OnlineAutoClust} (OACE)~\cite{el2023onlineautoclust}, established frameworks that optimize hyperparameters online. (ii) The \emph{rule-based adaptive} method \textit{MOStream}~\cite{wang2024mostream}. (iii) Two \emph{baselines}: \textit{RandomSearch}~\cite{bergstra2012random}, which shares AutoDSC's framework structure but generates configurations by purely random sampling, a direct comparison to our guided optimization, and the \textit{Default(Best)} baseline of OnlineAutoClust~\cite{el2023onlineautoclust}, which captures that ``one of the most commonly-used approaches by non-expert users is to try all possible clustering algorithms with their default hyperparameters and then select the model with the best performance.'' Following this, we run the four River fixed algorithms (CluStream, DenStream, DBSTREAM, StreamKMeans) with their default settings and report the best-performing model per dataset.
+\subsection{Evaluation Protocol} All experiments use the prequential protocol (Section~\ref{sec:background}) with 10 independent runs using random seeds 1-10 to account for stochastic variability. Clustering quality is measured using the Adjusted Rand Index (ARI) and CMM~\cite{kremer2011cmm}, where ground truth labels are used solely for evaluation, not training or model selection. ARI is the chance-corrected form~\cite{hubert1985comparing} of the Rand index~\cite{rand1971objective} that counts agreements between the predicted clustering and the ground-truth partition over all pairs of points and adjusts the count for the agreement expected at random, yielding $1$ for a perfect match, $0$ for random labelling, and negative values for worse-than-random partitions. We also record throughput (instances/s) and peak memory usage (MB) to assess computational efficiency. Statistical significance is assessed using the Friedman test followed by the Nemenyi post-hoc test~\cite{demvsar2006statistical} with $\alpha = 0.05$.
 
-\textbf{Configuration:} Unless otherwise stated, AutoDSC uses its default configuration of population size $K=10$ and window size $w=1000$, with the exploration rate adapting automatically from an initial value of $0.5$ (Section~\ref{sec:sensitivity} analyzes sensitivity to $K$ and $w$). The AutoML baselines search over the same algorithm portfolio and hyperparameter ranges specified in Table~\ref{tab:hyperparameters}, where the window-dependent ranges (\texttt{time\_window} and \texttt{chunk\_size}) are listed for the default window size $w=1000$; the single fixed algorithms use their library defaults. Other baseline-specific parameters remain as reported in their original papers.
+\subsection{Baseline Methods}
+We compare AutoDSC against five baselines spanning three categories. (i) \emph{AutoML stream-clustering methods}: \textit{ConfStream}~\cite{carnein2020confstream} and \textit{OnlineAutoClust} (OACE)~\cite{el2023onlineautoclust}, established frameworks that optimize hyperparameters online. (ii) The \emph{rule-based adaptive} method \textit{MOStream}~\cite{wang2024mostream}. (iii) Two \emph{baselines}: \textit{RandomSearch}~\cite{bergstra2012random}, which shares AutoDSC's framework structure but generates configurations by purely random sampling, a direct comparison to our guided optimization, and the \textit{Default(Best)} baseline of OnlineAutoClust~\cite{el2023onlineautoclust}, which captures that ``one of the most commonly-used approaches by non-expert users is to try all possible clustering algorithms with their default hyperparameters and then select the model with the best performance.'' Following this, we run the four River fixed algorithms (CluStream, DenStream, DBSTREAM, StreamKMeans) with their default settings and report the best-performing model per dataset.
 
-All experiments were conducted on AMD EPYC 7702 64-core servers with 1TB RAM, utilizing parallelization for computational efficiency. All clustering algorithms were implemented using the River Python library~\cite{montiel2021river} for online machine learning.
+\subsection{Implementation and Configuration}
+Unless otherwise stated, AutoDSC uses its default configuration of population size $K=10$ and window size $w=1000$, with the exploration rate adapting automatically from an initial value of $0.5$ (Section~\ref{sec:sensitivity} analyzes sensitivity to $K$ and $w$). The AutoML baselines search over the same algorithm portfolio and hyperparameter ranges specified in Table~\ref{tab:hyperparameters}, where the window-dependent ranges (\texttt{time\_window} and \texttt{chunk\_size}) are listed for the default window size $w=1000$; the single fixed algorithms use their library defaults. To ensure a fair comparison, all AutoML baselines receive the same window size and per-window evaluation budget as AutoDSC, so differences reflect the search and selection strategy rather than the compute allotment; other baseline-specific parameters remain as reported in their original papers.
+
+All experiments were conducted on the server detailed in Table~\ref{tab:platform}, using parallelization across cores for efficiency. All clustering algorithms were implemented with the River online-learning library~\cite{montiel2021river}.
+
+\begin{table}[t]
+\centering
+\caption{Specification of our evaluation platform.}
+\label{tab:platform}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Component} & \textbf{Description} \\
+\hline
+Processor   & 2$\times$ AMD EPYC 7702 64-Core @ 2.0\,GHz (128 cores) \\
+\hline
+L3 Cache    & 512\,MiB \\
+\hline
+Memory      & 1\,TiB DDR4 RAM \\
+\hline
+OS          & Ubuntu 24.04.4 LTS \\
+\hline
+Kernel      & Linux 6.8.0-101-generic \\
+\hline
+Runtime     & Python 3.12.3, River~\cite{montiel2021river} \\
+\hline
+Compiler    & GCC 13.3.0 \\
+\hline
+\end{tabular}
+\end{table}
 
 \begin{table}[t]
 \centering
@@ -387,7 +389,7 @@ Table~\ref{tab:performance_comparison_highlighted} presents a comprehensive comp
 AutoDSC achieves the highest overall mean ARI of \textbf{0.622}, ahead of every baseline, surpassing the strongest AutoML competitor ConfStream (0.572) by 5.0 points, OnlineAutoClust (0.558) by 6.4 points, RandomSearch (0.534) by 8.8 points, and the Default(Best) baseline (0.517) by 10.5 points, and it attains the best mean rank on both ARI and CMM. AutoDSC ranks first on ARI for 7 of the 10 datasets, with the largest margins on the drifting synthetic streams (e.g.\ Fast-RBF, Gradual, Expanding all $\geq0.99$, where even the best default reaches only $0.76$--$0.82$) and on the harder real stream PenDigits ($0.510$ vs.\ $0.412$ for the best default). It is outranked on Shuttle and Vehicle, where a single default algorithm is already near-optimal, and on Merge-Split, where OACE leads narrowly ($0.985$ vs.\ $0.963$). Figure~\ref{fig:autodsc_combined} shows the prequential trajectories, where AutoDSC stays at or above all baselines throughout the stream on both a real (PenDigits) and a synthetic (Expanding) workload, reflecting rapid adaptation as the stream evolves.
 
 \begin{table*}[t]
-\caption{Clustering quality (ARI and CMM, $\uparrow$ higher is better) across datasets over 10 seeds, as mean$\pm$std. Best per metric per row in \textbf{bold}, second best \underline{underlined}.}
+\caption{Clustering quality (ARI and CMM, $\uparrow$ higher is better) across datasets over 10 seeds. Per-dataset cells report mean$\pm$std over seeds, while the Mean Score row reports the mean across datasets. Best per metric per row in \textbf{bold}, second best \underline{underlined}.}
 \label{tab:performance_comparison_highlighted}
 \centering
 \resizebox{\linewidth}{!}{
@@ -419,7 +421,7 @@ Sudden & \textbf{.921$\pm$.001} & \textbf{.956$\pm$.001} & \underline{.904$\pm$.
 \hline
 Fast-RBF & \textbf{.999$\pm$.001} & \textbf{1.000$\pm$.000} & .988$\pm$.001 & .989$\pm$.000 & \underline{.995$\pm$.008} & \underline{.999$\pm$.002} & .911$\pm$.109 & .938$\pm$.076 & .924$\pm$.009 & .963$\pm$.005 & .818$\pm$.096 & .896$\pm$.056 \\
 \hline
-\textbf{Mean Score} & \textbf{.622$\pm$.374} & \textbf{.955$\pm$.042} & \underline{.572$\pm$.391} & .910$\pm$.094 & .558$\pm$.399 & .910$\pm$.116 & .534$\pm$.392 & .858$\pm$.179 & .534$\pm$.367 & \underline{.927$\pm$.048} & .517$\pm$.287 & .894$\pm$.071 \\
+\textbf{Mean Score} & \textbf{.622} & \textbf{.955} & \underline{.572} & .910 & .558 & .910 & .534 & .858 & .534 & \underline{.927} & .517 & .894 \\
 \hline
 \textbf{Mean Rank} & \textbf{1.40} & \textbf{2.20} & \underline{3.60} & 4.30 & \underline{3.60} & \underline{2.90} & 4.10 & 3.80 & 4.50 & 3.50 & 3.80 & 4.30 \\
 \hline
@@ -429,17 +431,27 @@ Fast-RBF & \textbf{.999$\pm$.001} & \textbf{1.000$\pm$.000} & .988$\pm$.001 & .9
 
 \begin{figure*}[t]
     \centering
-    \includegraphics[width=\linewidth]{images/benchmark_stages.pdf}
-    \caption{Prequential clustering quality (ARI and CMM) across stream stages for all methods on a real (PenDigits) and a synthetic drifting (Expanding) stream, with AutoDSC drawn thick.}
+    \begin{minipage}{\linewidth}\centering
+        \includegraphics[width=0.8\linewidth]{images/charts/benchmark/legend.pdf}
+    \end{minipage}\\[2pt]
+    \subfloat[PenDigits, ARI]{\includegraphics[width=0.245\linewidth]{images/charts/benchmark/pendigits_ari.pdf}}\hfill
+    \subfloat[PenDigits, CMM]{\includegraphics[width=0.245\linewidth]{images/charts/benchmark/pendigits_cmm.pdf}}\hfill
+    \subfloat[Expanding, ARI]{\includegraphics[width=0.245\linewidth]{images/charts/benchmark/expanding_ari.pdf}}\hfill
+    \subfloat[Expanding, CMM]{\includegraphics[width=0.245\linewidth]{images/charts/benchmark/expanding_cmm.pdf}}
+    \caption{Prequential clustering quality across stream stages for all methods on a real (PenDigits) and a synthetic drifting (Expanding) stream, with AutoDSC drawn thick.}
     \label{fig:autodsc_combined}
 \end{figure*}
 
-Figure~\ref{fig:recovery} isolates AutoDSC's behaviour under drift on two synthetic streams. On \emph{Merge-Split} (a), which contains a discrete merge-then-split event mid-stream (shaded), every adaptive method incurs a temporary drop in ARI and recovers within roughly fifteen windows; AutoDSC sustains the highest stable quality (ARI~$\approx1.0$) on either side of the drift and recovers together with the strongest baselines, consistent with the adaptive-exploration recovery analysed in Lemma~2. On \emph{Expanding} (b), where within-cluster variance grows continuously throughout the stream (gradient), AutoDSC reaches near-perfect ARI almost immediately and holds it, whereas ConfStream converges more slowly and OACE and MOStream plateau visibly below it. AutoDSC thus both recovers from abrupt drift and sustains quality under gradual drift through its adaptive exploration alone.
+Figure~\ref{fig:recovery} isolates AutoDSC's behaviour under drift on two synthetic streams. On \emph{Merge-Split} (a), which contains a discrete merge-then-split event mid-stream (shaded), every adaptive method incurs a temporary drop in ARI and recovers within roughly fifteen windows; AutoDSC sustains the highest stable quality (ARI~$\approx1.0$) on either side of the drift and recovers together with the strongest baselines, consistent with its adaptive-exploration design. On \emph{Expanding} (b), where within-cluster variance grows continuously throughout the stream (gradient), AutoDSC reaches near-perfect ARI almost immediately and holds it, whereas ConfStream converges more slowly and OACE and MOStream plateau visibly below it. AutoDSC thus both recovers from abrupt drift and sustains quality under gradual drift through its adaptive exploration alone.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{images/recovery.pdf}
-\caption{Per-window ARI (seed-averaged) under drift. (a) \emph{Merge-Split}: a discrete drift event (shaded). (b) \emph{Expanding}: continuous drift (left-to-right gradient).}
+\begin{minipage}{\linewidth}\centering
+    \includegraphics[width=0.95\linewidth]{images/charts/recovery/legend.pdf}
+\end{minipage}\\[2pt]
+\subfloat[\emph{Merge-Split}: a discrete drift event (shaded)]{\includegraphics[width=\linewidth]{images/charts/recovery/merge_split.pdf}}\\
+\subfloat[\emph{Expanding}: continuous drift (left-to-right gradient)]{\includegraphics[width=\linewidth]{images/charts/recovery/expanding.pdf}}
+\caption{Per-window ARI (seed-averaged) under drift.}
 \label{fig:recovery}
 \end{figure}
 
@@ -447,8 +459,8 @@ To assess these performance gains statistically, the Critical Difference (CD) di
 
 \begin{figure}[t]
 \centering
-\subfloat[ARI\label{fig:cd_ari}]{\includegraphics[width=\linewidth]{images/cd_ari.pdf}}\\
-\subfloat[CMM\label{fig:cd_cmm}]{\includegraphics[width=\linewidth]{images/cd_cmm.pdf}}
+\subfloat[ARI\label{fig:cd_ari}]{\includegraphics[width=\linewidth]{images/charts/cd/cd_ari.pdf}}\\
+\subfloat[CMM\label{fig:cd_cmm}]{\includegraphics[width=\linewidth]{images/charts/cd/cd_cmm.pdf}}
 \caption{Critical Difference diagrams (Nemenyi, $\alpha=0.05$) for ARI and CMM; methods connected by a bar are not significantly different.}
 \label{fig:asc_rand_index_cd_comparison}
 \end{figure}
@@ -457,25 +469,31 @@ Beyond clustering quality, AutoDSC remains practical in throughput and memory. A
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{images/efficiency.pdf}
+\includegraphics[width=\linewidth]{images/charts/efficiency/efficiency.pdf}
 \caption{Throughput vs.\ memory trade-off (mean over all datasets, log--log axes); the shaded region marks the favorable high-throughput, low-memory area, where AutoDSC ($\star$) sits.}
 \label{fig:efficiency}
 \end{figure}
 
-To quantify the contribution of each component, we ran a leave-one-out ablation over all real-world datasets ($\times10$ seeds), disabling one mechanism at a time, namely recency-weighted elite ranking, the adaptive exploration rate, the multi-objective (3-CVI) score, and diversity-preserving pruning. (Replacing the guided PGSSO search by random configuration generation is already covered by the RandomSearch baseline.) Figure~\ref{fig:ablation_study} reports each variant's score relative to the full model. The multi-objective CVI score is the most impactful component on real-world data, since removing it lowers ARI by $\sim$2\% and CMM by $\sim$3\%, confirming that combining three complementary indices is more robust than any single index. Recency weighting and diversity pruning each give smaller but consistent gains, while the adaptive exploration rate has a negligible standalone effect on these streams. The full configuration is best overall, validating the integrated design.
+To quantify the contribution of each component, we ran a leave-one-out ablation over all real-world datasets ($\times10$ seeds), disabling one mechanism at a time, namely recency-weighted elite ranking, the adaptive exploration rate, the multi-objective (3-CVI) score, and diversity-preserving pruning. (Replacing the guided PGSSO search by random configuration generation is already covered by the RandomSearch baseline.) Figure~\ref{fig:ablation_study} reports each variant's score relative to the full model. The multi-objective CVI score is the most impactful component on real-world data, since removing it lowers ARI by $\sim$2\% and CMM by $\sim$3\%, confirming that combining three complementary indices is more robust than any single index. Recency weighting and diversity pruning each give smaller but consistent gains, while the adaptive exploration rate has a negligible standalone effect on these comparatively stable real-world streams; its contribution instead surfaces under strong drift, where it drives the rapid recovery seen on the synthetic streams (Figure~\ref{fig:recovery}). The full configuration is best overall, validating the integrated design.
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=\linewidth]{images/ablation_bar.pdf}
+    \begin{minipage}{\linewidth}\centering
+        \includegraphics[width=0.95\linewidth]{images/charts/ablation/legend.pdf}
+    \end{minipage}\\[2pt]
+    \includegraphics[width=\linewidth]{images/charts/ablation/ablation_bar.pdf}
     \caption{Leave-one-out ablation on real-world streams, reporting ARI and CMM of each variant relative to the full AutoDSC (dashed line $=1.0$).}
     \label{fig:ablation_study}
 \end{figure}
 
-Finally, AutoDSC adaptively reshapes its population of candidate algorithms as the stream evolves. Figure~\ref{fig:model_selection_evolution} shows the algorithm composition of the population across stream windows on the Insects dataset, where each cell is the base algorithm occupying a population slot at that window. AutoDSC continuously maintains a diverse mix and shifts the composition between CluStream, DenStream, DBSTREAM and StreamKMeans as the active concept changes, rather than committing to a single algorithm.
+Finally, AutoDSC adaptively reshapes its population of candidate algorithms as the stream evolves. Figure~\ref{fig:model_selection_evolution} shows the algorithm composition of the population across stream windows on the Insects dataset, chosen as a representative real-world stream with pronounced concept drift, where each cell is the base algorithm occupying a population slot at that window. AutoDSC continuously maintains a diverse mix and shifts the composition between CluStream, DenStream, DBSTREAM and StreamKMeans as the active concept changes, rather than committing to a single algorithm.
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1.0\linewidth]{images/evolution.pdf}
+    \begin{minipage}{\linewidth}\centering
+        \includegraphics[width=0.9\linewidth]{images/charts/evolution/legend.pdf}
+    \end{minipage}\\[2pt]
+    \includegraphics[width=1.0\linewidth]{images/charts/evolution/evolution.pdf}
     \caption{Evolution of the AutoDSC population composition over the Insects stream, where colors denote the selected base algorithm per population slot (rows) and stream stage (columns).}
     \label{fig:model_selection_evolution}
 \end{figure}
@@ -486,13 +504,19 @@ We analyze AutoDSC's sensitivity to its two free hyperparameters, window size $w
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=\linewidth]{images/sensitivity.pdf}
-    \caption{Sensitivity of AutoDSC to window size (left) and population size (right), reporting ARI (left axis) and throughput (right axis) averaged over all datasets.}
+    \begin{minipage}{\linewidth}\centering
+        \includegraphics[width=0.85\linewidth]{images/charts/sensitivity/legend.pdf}
+    \end{minipage}\\[2pt]
+    \subfloat[Window size]{\includegraphics[width=0.49\linewidth]{images/charts/sensitivity/window_size.pdf}}\hfill
+    \subfloat[Population size]{\includegraphics[width=0.49\linewidth]{images/charts/sensitivity/population_size.pdf}}
+    \caption{Sensitivity of AutoDSC to window size and population size, averaged over all datasets.}
     \label{fig:sensitivity_study}
 \end{figure}
 
-\section{Discussion}\label{sec:discussion}
-AutoDSC represents a significant advancement in AutoML for streaming environments through several key innovations. Our multi-objective evaluation strategy, combining three normalized clustering validation indices, provides robust performance assessment compared to single-metric approaches used in ConfStream (Silhouette Width only) and OnlineAutoClust's ensemble voting. This prevents optimization convergence to configurations that excel in one aspect while failing catastrophically in others~\cite{arbelaitz2013extensive,liu2010understanding}. The PGSSO outperforms existing methods by dynamically adjusting exploration rates based on performance trends, enabling rapid parameter space exploration after concept drift while efficiently exploiting successful configurations during stable periods, contrasting with ConfStream's fixed ensemble strategy and OnlineAutoClust's computationally intensive offline Bayesian optimization~\cite{hinder2020towards}. While our current evaluation focuses on tabular data streams with numerical and categorical features, extensions to high-dimensional sparse text streams, multi-modal event streams, or image-based data would require domain-specific clustering algorithms beyond this scope. These novel contributions collectively bridge the gap between traditional AutoML approaches and the dynamic requirements of deploying real-time streaming applications in IoT, sensor networks, and analytics platforms, where manual configuration is impractical~\cite{bahri2021data}.
+\section{Discussion and Limitations}\label{sec:discussion}
+AutoDSC represents a significant advancement in AutoML for streaming environments through several key innovations. Our multi-objective evaluation strategy, combining three normalized clustering validation indices, provides robust performance assessment compared to single-metric approaches used in ConfStream (Silhouette Width only) and OnlineAutoClust's ensemble voting. This prevents optimization convergence to configurations that excel in one aspect while failing catastrophically in others~\cite{arbelaitz2013extensive,liu2010understanding}. The PGSSO outperforms existing methods by dynamically adjusting exploration rates based on performance trends, enabling rapid parameter space exploration after concept drift while efficiently exploiting successful configurations during stable periods, contrasting with ConfStream's fixed ensemble strategy and OnlineAutoClust's computationally intensive offline Bayesian optimization~\cite{hinder2020towards}. While our current evaluation focuses on tabular data streams with numerical and categorical features, extensions to high-dimensional sparse text streams, multi-modal event streams, or image-based data would require domain-specific clustering algorithms beyond this scope. We emphasize that AutoDSC's clearest advantages are its full autonomy, requiring no manual tuning or labels, and its efficiency, together with statistically significant gains over untuned single algorithms and random search. Against the strongest AutoML competitors its clustering quality is on par or better but, with only ten datasets, not separated by a statistically significant margin (Figure~\ref{fig:asc_rand_index_cd_comparison}), so we frame its value as delivering competitive quality fully automatically and at lower cost rather than as a uniform quality win. These contributions collectively bridge the gap between traditional AutoML approaches and the dynamic requirements of deploying real-time streaming applications in IoT, sensor networks, and analytics platforms, where manual configuration is impractical~\cite{bahri2021data}.
+
+Several limitations bound the scope of our claims. First, with only ten datasets the quality advantage of AutoDSC over the strongest AutoML competitors (ConfStream and OACE) is not statistically significant, although AutoDSC attains the best mean rank and significantly outperforms untuned single algorithms and random search. Second, our evaluation targets tabular streams with numerical and categorical features, so extension to sparse text, multi-modal, or image streams would require domain-specific base clusterers. Third, AutoDSC still exposes two free hyperparameters, the window size and the population size, which require sensible defaults, although it remains stable across a broad range of both. Finally, configuration selection relies on internal validity indices computed without labels, so online clustering quality is estimated rather than observed, and a misleading internal score can temporarily mislead selection between ground-truth evaluations.
 
 \section{Conclusion and Future Work}\label{sec:conclusion_and_future}
 

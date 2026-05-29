@@ -73,10 +73,8 @@ def main():
                            zorder=0))
 
     plt.tight_layout()
-    for ext in ('pdf', 'png'):
-        plt.savefig(os.path.join(S.CHARTS_DIR, f'efficiency.{ext}'),
-                    dpi=300, bbox_inches='tight')
-    print('Saved charts/efficiency.pdf / .png')
+    S.save_fig(fig, 'efficiency', 'efficiency')
+    print('Saved charts/efficiency/efficiency.pdf / .png')
 
 
 if __name__ == '__main__':

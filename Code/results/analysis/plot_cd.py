@@ -119,6 +119,13 @@ def cd_diagram(ranks, cd, ax):
         ax.plot([rankpos(avg[i]) + 0.05, rankpos(avg[j]) - 0.05], [yy, yy],
                 'k-', lw=4.0, solid_capstyle='round')
 
+    # crop the y-range to the content actually drawn (no empty bottom band)
+    rows = (k + 1) // 2
+    y_low = top - 0.10 - (rows - 1) * 0.13
+    if filt:
+        y_low = min(y_low, ybar - (len(filt) - 1) * 0.045)
+    ax.set_ylim(y_low - 0.07, top + 0.22)
+
 
 def make_cd(metric, out):
     df = build_frame(metric)
@@ -129,18 +136,14 @@ def make_cd(metric, out):
         cd = nemenyi_cd(k=df.shape[1], n=df.shape[0])   # manual fallback
     cd = float(cd)
     S.set_rc()
-    fig, ax = plt.subplots(figsize=(9.0, 3.2))
+    fig, ax = plt.subplots(figsize=(9.0, 2.4))
     cd_diagram(ranks, cd, ax)
     plt.tight_layout()
-    for ext in ('pdf', 'png'):
-        plt.savefig(os.path.join(CHARTS_DIR, f'{out}.{ext}'),
-                    dpi=300, bbox_inches='tight')
-    plt.close(fig)
+    S.save_fig(fig, 'cd', out)
     print(f'[{metric}] CD={cd:.3f}  best={min(ranks, key=ranks.get)} ({min(ranks.values()):.2f})')
 
 
 def main():
-    os.makedirs(CHARTS_DIR, exist_ok=True)
     make_cd('ari', 'cd_ari')
     make_cd('cmm', 'cd_cmm')
 

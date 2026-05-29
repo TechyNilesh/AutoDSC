@@ -209,19 +209,26 @@ Y.~Liu, Z.~Li, H.~Xiong, X.~Gao, and J.~Wu, ``Understanding of internal
   clustering validation measures,'' in \emph{2010 IEEE International Conference
   on Data Mining}, 2010, pp. 911--916.
 
-\bibitem{auer2002finite}
-P.~Auer, N.~Cesa-Bianchi, and P.~Fischer, ``Finite-time analysis of the
-  multiarmed bandit problem,'' \emph{Machine learning}, vol.~47, no. 2-3, pp.
-  235--256, 2002.
+\bibitem{souza2020challenges}
+V.~M. Souza, D.~M. dos Reis, A.~G. Maletzke, and G.~E. Batista, ``Challenges in
+  benchmarking stream learning algorithms with real-world data,'' \emph{Data
+  Mining and Knowledge Discovery}, vol.~34, no.~6, pp. 1805--1858, 2020.
 
-\bibitem{cesa2006prediction}
-N.~Cesa-Bianchi and G.~Lugosi, \emph{Prediction, learning, and games}.\hskip
-  1em plus 0.5em minus 0.4em\relax Cambridge university press, 2006.
+\bibitem{dua2019uci}
+\BIBentryALTinterwordspacing
+D.~Dua and C.~Graff, ``Uci machine learning repository,'' 2019. [Online].
+  Available: \url{http://archive.ics.uci.edu/ml}
+\BIBentrySTDinterwordspacing
 
-\bibitem{besbes2014stochastic}
-O.~Besbes, Y.~Gur, and A.~Zeevi, ``Stochastic multi-armed-bandit problem with
-  non-stationary rewards,'' in \emph{Advances in neural information processing
-  systems}, 2014, pp. 199--207.
+\bibitem{duarte2004vehicle}
+M.~Duarte and Y.~H. Hu, ``Vehicle classification in distributed sensor
+  networks,'' \emph{Journal of Parallel and Distributed Computing}, vol.~64,
+  no.~7, pp. 826--838, 2004.
+
+\bibitem{bifet2010moa}
+A.~Bifet, G.~Holmes, R.~Kirkby, and B.~Pfahringer, ``Moa: Massive online
+  analysis,'' \emph{The Journal of Machine Learning Research}, vol.~11, pp.
+  1601--1604, 2010.
 
 \bibitem{rand1971objective}
 W.~M. Rand, ``Objective criteria for the evaluation of clustering methods,''

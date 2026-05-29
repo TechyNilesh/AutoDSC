@@ -92,18 +92,30 @@ def main():
     ax.tick_params(axis='y', labelsize=10)
     for lbl in ax.get_yticklabels():
         lbl.set_fontweight('bold')
-    ax.legend(frameon=False, ncol=len(VARIANTS), loc='lower center',
-              bbox_to_anchor=(0.5, 1.01), columnspacing=1.0, handletextpad=0.4,
-              prop={'weight': 'bold', 'size': 9})
     ax.grid(axis='y', alpha=0.3, linewidth=0.6)
     ax.spines['top'].set_visible(False); ax.spines['right'].set_visible(False)
     plt.tight_layout()
 
-    pdf = os.path.join(CHARTS_DIR, f'{args.out}.pdf')
-    png = os.path.join(CHARTS_DIR, f'{args.out}.png')
+    out_dir = os.path.join(CHARTS_DIR, 'ablation')
+    os.makedirs(out_dir, exist_ok=True)
+    pdf = os.path.join(out_dir, f'{args.out}.pdf')
+    png = os.path.join(out_dir, f'{args.out}.png')
     plt.savefig(pdf, bbox_inches='tight')
     plt.savefig(png, dpi=300, bbox_inches='tight')
+    plt.close(fig)
     print(f'Saved {pdf}\nSaved {png}')
+
+    # standalone shared legend (variants)
+    from matplotlib.patches import Patch
+    leg = [Patch(facecolor=COLORS[v], edgecolor='black', hatch=HATCHES[v],
+                 label=VLABELS[v]) for v in VARIANTS]
+    lf = plt.figure(figsize=(max(4.0, 1.7 * len(VARIANTS)), 0.5))
+    lf.legend(handles=leg, loc='center', ncol=len(VARIANTS), frameon=False,
+              columnspacing=1.0, handletextpad=0.4, prop={'weight': 'bold', 'size': 10})
+    for ext in ('pdf', 'png'):
+        lf.savefig(os.path.join(out_dir, f'legend.{ext}'), dpi=300, bbox_inches='tight')
+    plt.close(lf)
+    print(f'Saved {out_dir}/legend.pdf / .png')
 
 
 if __name__ == '__main__':

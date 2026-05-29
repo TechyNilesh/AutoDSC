@@ -75,15 +75,24 @@ def main():
 
     handles = [Patch(facecolor=COLORS[i], edgecolor='black', label=a)
                for i, a in enumerate(ALGOS)]
-    ax.legend(handles=handles, loc='lower center', bbox_to_anchor=(0.5, 1.01),
-              ncol=len(ALGOS), frameon=False, columnspacing=1.4,
-              handletextpad=0.5, prop={'weight': 'bold', 'size': 12})
 
     plt.tight_layout()
+    out_dir = os.path.join(CHARTS_DIR, 'evolution')
+    os.makedirs(out_dir, exist_ok=True)
     for ext in ('pdf', 'png'):
-        plt.savefig(os.path.join(CHARTS_DIR, f'{args.out}.{ext}'),
+        plt.savefig(os.path.join(out_dir, f'{args.out}.{ext}'),
                     dpi=300, bbox_inches='tight')
-    print(f'Saved charts/{args.out}.pdf / .png  ({maxrows} learners x {nwin} windows)')
+    plt.close(fig)
+    print(f'Saved charts/evolution/{args.out}.pdf / .png  ({maxrows} learners x {nwin} windows)')
+
+    # standalone shared legend (base algorithms)
+    lf = plt.figure(figsize=(max(4.0, 1.7 * len(ALGOS)), 0.5))
+    lf.legend(handles=handles, loc='center', ncol=len(ALGOS), frameon=False,
+              columnspacing=1.4, handletextpad=0.5, prop={'weight': 'bold', 'size': 12})
+    for ext in ('pdf', 'png'):
+        lf.savefig(os.path.join(out_dir, f'legend.{ext}'), dpi=300, bbox_inches='tight')
+    plt.close(lf)
+    print(f'Saved {out_dir}/legend.pdf / .png')
 
 
 if __name__ == '__main__':

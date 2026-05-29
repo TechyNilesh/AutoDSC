@@ -102,6 +102,47 @@ def ms(method):
     return 11 if method == EMPHASIS else 8
 
 # ----------------------------------------------------------------------------
+# Output organization + shared standalone legends (MOStream-style: one folder
+# per figure group, individual panel PDFs, and a separate legend.pdf reused
+# above the subfigures that share it).
+# ----------------------------------------------------------------------------
+def group_dir(group):
+    """charts/<group>/ ; created on demand."""
+    d = os.path.join(CHARTS_DIR, group)
+    os.makedirs(d, exist_ok=True)
+    return d
+
+def save_fig(fig, group, name):
+    """Save one panel as vector PDF + 300-dpi PNG into charts/<group>/."""
+    d = group_dir(group)
+    for ext in ('pdf', 'png'):
+        fig.savefig(os.path.join(d, f'{name}.{ext}'), dpi=300, bbox_inches='tight')
+    plt.close(fig)
+
+def method_handles(methods, linestyles=None):
+    """Proxy legend handles for canonical methods (independent of any axes)."""
+    from matplotlib.lines import Line2D
+    hs = []
+    for i, m in enumerate(methods):
+        ls = linestyles[i] if linestyles else '-'
+        hs.append(Line2D([0], [0], color=METHOD_COLOR[m], marker=METHOD_MARKER[m],
+                         linestyle=ls, linewidth=lw(m), markersize=ms(m) - 2,
+                         markeredgecolor='black', markeredgewidth=0.5,
+                         label=METHOD_NAME[m]))
+    return hs
+
+def save_legend(handles, group, name='legend', ncol=None, width=None):
+    """Save a standalone horizontal bold legend as its own vector PDF + PNG."""
+    labels = [h.get_label() for h in handles]
+    ncol = ncol or len(handles)
+    width = width or max(4.0, 1.7 * len(handles))
+    lf = plt.figure(figsize=(width, 0.5))
+    lf.legend(handles, labels, loc='center', ncol=ncol, frameon=False,
+              columnspacing=1.2, handletextpad=0.4,
+              prop={'weight': 'bold', 'size': 13})
+    save_fig(lf, group, name)
+
+# ----------------------------------------------------------------------------
 # Data access
 # ----------------------------------------------------------------------------
 def _files(prefix, dataset):

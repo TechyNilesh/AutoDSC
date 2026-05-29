@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Drift-behaviour chart: two representative synthetic streams.
+Drift-behaviour chart: two representative synthetic streams, as individual panels.
 
 (a) Merge-Split -- a single merge-then-split event mid-stream where every
     adaptive method's ARI dips and then recovers. AutoDSC holds the highest
@@ -9,13 +9,15 @@ Drift-behaviour chart: two representative synthetic streams.
     almost immediately and sustains it, while ConfStream converges slowly and
     OnlineAutoClust / MOStream plateau below.
 
-Per-window ARI, seed-averaged. Visualizes the recovery / sustained-adaptation
-behaviour predicted by the theory (Lemma 2 / Corollary 1) with no new runs.
+Per-window ARI, seed-averaged. Each panel is saved as its own vector PDF under
+charts/recovery/, with a single shared legend.pdf placed above them.
 
 Usage:
     python plot_recovery.py
 Output:
-    charts/recovery.pdf / .png
+    charts/recovery/merge_split.pdf / .png
+    charts/recovery/expanding.pdf / .png
+    charts/recovery/legend.pdf / .png   (shared legend)
 """
 import json
 import glob
@@ -24,30 +26,25 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import style as S
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RESULTS_DIR = os.path.join(HERE, '..', 'benchmark')
-CHARTS_DIR = os.path.join(HERE, 'charts')
+GROUP = 'recovery'
 
-# adaptive methods shown (canonical names/colors/markers from style.py);
-# fixed single algorithms never recover and are summarized by Default(Best)
-# elsewhere, so we show the 4 adaptive comparators here.
-import style as S
-METHODS = [
-    (m, S.METHOD_PREFIX[m], S.METHOD_COLOR[m], ls, S.METHOD_MARKER[m])
-    for m, ls in [('AutoDSC', '-'), ('ConfStream', '--'),
-                  ('OACE', '-.'), ('MOStream', ':')]
-]
+# adaptive methods shown (canonical names/colors/markers from style.py); fixed
+# single algorithms never recover and are summarized by Default(Best) elsewhere.
+ADAPTIVE = ['AutoDSC', 'ConfStream', 'OACE', 'MOStream']
+LINESTYLES = {'AutoDSC': '-', 'ConfStream': '--', 'OACE': '-.', 'MOStream': ':'}
 
-# panel: (dataset, title, drift descriptor, ylim)
-#   drift = ('region', lo, hi, label)        -> grey band (discrete drift event)
-#   drift = ('continuous', label)            -> left->right gradient (gradual drift)
+# panel: (dataset, title, drift descriptor, ylim, out-name)
 PANELS = [
     ('synth_blobs_merge_split', 'Merge-Split',
-     ('region', 46, 63, 'merge–split drift'), (0.60, 1.02)),
-    ('synth_blobs_expanding',   'Expanding',
-     ('continuous', 'within-cluster variance grows →'), (0.84, 1.01)),
+     ('region', 46, 63), (0.60, 1.02), 'merge_split'),
+    ('synth_blobs_expanding', 'Expanding',
+     ('continuous',), (0.84, 1.01), 'expanding'),
 ]
+STAGES = 20
 
 
 def mean_curve(prefix, dataset, metric='ari'):
@@ -62,22 +59,20 @@ def mean_curve(prefix, dataset, metric='ari'):
     return np.array([c[:n] for c in curves]).mean(axis=0)
 
 
+def to_stages(c):
+    return np.array([ch.mean() for ch in np.array_split(c, STAGES)])
+
+
+def win_to_stage(w):
+    return w / 100.0 * STAGES + 0.5
+
+
 def main():
-    os.makedirs(CHARTS_DIR, exist_ok=True)
-    plt.rcParams.update({'font.size': 13, 'font.family': 'DejaVu Sans'})
-    fig, axes = plt.subplots(2, 1, figsize=(7.0, 7.4))
-
-    STAGES = 20   # divide the stream into equal stages (like the benchmark chart)
-
-    def to_stages(c):
-        return np.array([ch.mean() for ch in np.array_split(c, STAGES)])
-
-    def win_to_stage(w):     # window index (out of 100) -> stage x-coordinate
-        return w / 100.0 * STAGES + 0.5
-
-    for idx, (ax, (dataset, title, drift, ylim)) in enumerate(zip(axes, PANELS)):
+    S.set_rc()
+    for dataset, title, drift, ylim, out in PANELS:
+        fig, ax = plt.subplots(figsize=(7.0, 3.7))
         if drift[0] == 'region':
-            _, lo, hi, _ = drift
+            _, lo, hi = drift
             ax.axvspan(win_to_stage(lo), win_to_stage(hi),
                        color='#cccccc', alpha=0.45, zorder=0)
         elif drift[0] == 'continuous':
@@ -86,41 +81,33 @@ def main():
                       aspect='auto', cmap='Greys', alpha=0.30, zorder=0,
                       vmin=-0.2, vmax=1.4)
 
-        for name, prefix, color, ls, mk in METHODS:
-            c = mean_curve(prefix, dataset)
+        for name in ADAPTIVE:
+            c = mean_curve(S.METHOD_PREFIX[name], dataset)
             if c is None:
                 continue
             y = to_stages(c)
             x = np.arange(1, STAGES + 1)
-            lw = 3.4 if name == 'AutoDSC' else 2.0
-            ms = 7 if name == 'AutoDSC' else 5
-            ax.plot(x, y, linestyle=ls, marker=mk, markersize=ms, linewidth=lw,
-                    color=color, markeredgecolor='black',
-                    markeredgewidth=0.4, label=name, zorder=3)
+            ax.plot(x, y, linestyle=LINESTYLES[name], marker=S.METHOD_MARKER[name],
+                    markersize=S.ms(name) - 2, linewidth=S.lw(name),
+                    color=S.METHOD_COLOR[name], markeredgecolor='black',
+                    markeredgewidth=0.4, zorder=3)
 
-        ax.set_xlabel(f'Stages of {title} Stream', fontsize=15, fontweight='bold')
+        ax.set_xlabel('Stages of Stream', fontsize=15, fontweight='bold')
+        ax.set_ylabel(r'ARI $\uparrow$', fontsize=15, fontweight='bold')
         ax.set_ylim(*ylim)
         ax.set_xlim(0.5, STAGES + 0.5)
         ax.set_xticks(np.arange(5, STAGES + 1, 5))
-        ax.set_ylabel(r'ARI $\uparrow$', fontsize=15, fontweight='bold')
         ax.tick_params(axis='both', labelsize=12)
-        for lbl in ax.get_xticklabels() + ax.get_yticklabels():
-            lbl.set_fontweight('bold')
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        ax.spines['left'].set_linewidth(1.2)
-        ax.spines['bottom'].set_linewidth(1.2)
+        S.bold_ticks(ax)
+        S.clean_spines(ax)
+        fig.tight_layout()
+        S.save_fig(fig, GROUP, out)
+        print(f'Saved charts/{GROUP}/{out}.pdf / .png')
 
-    handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc='upper center', ncol=len(METHODS),
-               frameon=False, bbox_to_anchor=(0.5, 1.03), columnspacing=1.4,
-               handletextpad=0.4, prop={'weight': 'bold', 'size': 12})
-    plt.tight_layout(rect=[0, 0, 1, 0.96])
-
-    for ext in ('pdf', 'png'):
-        plt.savefig(os.path.join(CHARTS_DIR, f'recovery.{ext}'),
-                    dpi=300, bbox_inches='tight')
-    print('Saved charts/recovery.pdf / .png')
+    # shared legend (line style matches the panels)
+    handles = S.method_handles(ADAPTIVE, linestyles=[LINESTYLES[m] for m in ADAPTIVE])
+    S.save_legend(handles, GROUP, 'legend', ncol=len(ADAPTIVE))
+    print(f'Saved charts/{GROUP}/legend.pdf / .png')
 
 
 if __name__ == '__main__':
