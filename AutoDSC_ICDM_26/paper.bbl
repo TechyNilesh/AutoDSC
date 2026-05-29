@@ -127,10 +127,30 @@ R.~El~Shawi and D.~Rozgonjuk, ``Onlineautoclust: A framework for online
   automated clustering,'' in \emph{Proceedings of the 32nd ACM International
   Conference on Information and Knowledge Management}, 2023, pp. 3870--3874.
 
+\bibitem{wang2024mostream}
+Z.~Wang, X.~Wang, and S.~Zhang, ``{MOStream}: A modular and self-optimizing
+  data stream clustering algorithm,'' in \emph{2024 IEEE International
+  Conference on Data Mining (ICDM)}, 2024, pp. 500--509.
+
 \bibitem{bahri2021data}
 M.~Bahri, A.~Bifet, J.~Gama, H.~M. Gomes, and S.~Maniu, ``Data stream analysis:
   Foundations, major tasks and tools,'' \emph{Wiley Interdisciplinary Reviews:
   Data Mining and Knowledge Discovery}, vol.~11, no.~3, p. e1405, 2021.
+
+\bibitem{hubert1985comparing}
+L.~Hubert and P.~Arabie, ``Comparing partitions,'' \emph{Journal of
+  Classification}, vol.~2, no.~1, pp. 193--218, 1985.
+
+\bibitem{kremer2011cmm}
+\BIBentryALTinterwordspacing
+H.~Kremer, P.~Kranen, T.~Jansen, T.~Seidl, A.~Bifet, G.~Holmes, and
+  B.~Pfahringer, ``An effective evaluation measure for clustering on evolving
+  data streams,'' in \emph{Proceedings of the 17th ACM SIGKDD International
+  Conference on Knowledge Discovery and Data Mining}, ser. KDD '11.\hskip 1em
+  plus 0.5em minus 0.4em\relax New York, NY, USA: Association for Computing
+  Machinery, 2011, pp. 868--876. [Online]. Available:
+  \url{https://doi.org/10.1145/2020408.2020555}
+\BIBentrySTDinterwordspacing
 
 \bibitem{aggarwal2013data}
 C.~C. Aggarwal, ``Data streams: models and algorithms,'' \emph{Springer Science
@@ -179,6 +199,16 @@ L.~O'Callaghan, N.~Mishra, A.~Meyerson, S.~Guha, and R.~Motwani,
   \url{http://www-db.stanford.edu/~loc/icde02.ps}
 \BIBentrySTDinterwordspacing
 
+\bibitem{arbelaitz2013extensive}
+O.~Arbelaitz, I.~Gurrutxaga, J.~Muguerza, J.~M. P{\'e}rez, and I.~Perona, ``An
+  extensive comparative study of cluster validity indices,'' \emph{Pattern
+  recognition}, vol.~46, no.~1, pp. 243--256, 2013.
+
+\bibitem{liu2010understanding}
+Y.~Liu, Z.~Li, H.~Xiong, X.~Gao, and J.~Wu, ``Understanding of internal
+  clustering validation measures,'' in \emph{2010 IEEE International Conference
+  on Data Mining}, 2010, pp. 911--916.
+
 \bibitem{auer2002finite}
 P.~Auer, N.~Cesa-Bianchi, and P.~Fischer, ``Finite-time analysis of the
   multiarmed bandit problem,'' \emph{Machine learning}, vol.~47, no. 2-3, pp.
@@ -198,41 +228,15 @@ W.~M. Rand, ``Objective criteria for the evaluation of clustering methods,''
   \emph{Journal of the American Statistical association}, vol.~66, no. 336, pp.
   846--850, 1971.
 
-\bibitem{kremer2011cmm}
-\BIBentryALTinterwordspacing
-H.~Kremer, P.~Kranen, T.~Jansen, T.~Seidl, A.~Bifet, G.~Holmes, and
-  B.~Pfahringer, ``An effective evaluation measure for clustering on evolving
-  data streams,'' in \emph{Proceedings of the 17th ACM SIGKDD International
-  Conference on Knowledge Discovery and Data Mining}, ser. KDD '11.\hskip 1em
-  plus 0.5em minus 0.4em\relax New York, NY, USA: Association for Computing
-  Machinery, 2011, pp. 868--876. [Online]. Available:
-  \url{https://doi.org/10.1145/2020408.2020555}
-\BIBentrySTDinterwordspacing
-
 \bibitem{demvsar2006statistical}
 J.~Dem{\v{s}}ar, ``Statistical comparisons of classifiers over multiple data
   sets,'' \emph{Journal of Machine learning research}, vol.~7, no. Jan, pp.
   1--30, 2006.
 
-\bibitem{wang2024mostream}
-Z.~Wang, X.~Wang, and S.~Zhang, ``{MOStream}: A modular and self-optimizing
-  data stream clustering algorithm,'' in \emph{2024 IEEE International
-  Conference on Data Mining (ICDM)}, 2024, pp. 500--509.
-
 \bibitem{bergstra2012random}
 J.~Bergstra and Y.~Bengio, ``Random search for hyper-parameter optimization,''
   \emph{The journal of machine learning research}, vol.~13, no.~1, pp.
   281--305, 2012.
-
-\bibitem{arbelaitz2013extensive}
-O.~Arbelaitz, I.~Gurrutxaga, J.~Muguerza, J.~M. P{\'e}rez, and I.~Perona, ``An
-  extensive comparative study of cluster validity indices,'' \emph{Pattern
-  recognition}, vol.~46, no.~1, pp. 243--256, 2013.
-
-\bibitem{liu2010understanding}
-Y.~Liu, Z.~Li, H.~Xiong, X.~Gao, and J.~Wu, ``Understanding of internal
-  clustering validation measures,'' in \emph{2010 IEEE International Conference
-  on Data Mining}, 2010, pp. 911--916.
 
 \bibitem{hinder2020towards}
 F.~Hinder, A.~Artelt, and B.~Hammer, ``Towards non-parametric drift detection
