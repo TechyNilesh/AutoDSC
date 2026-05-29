@@ -75,6 +75,7 @@ pub struct CluStreamMicroCluster {
     var_x: Vec<IncrementalVar>,
     var_time: IncrementalVar,
     n_features: usize,
+    cached_center: Vec<f64>,
 }
 
 #[pymethods]
@@ -84,26 +85,27 @@ impl CluStreamMicroCluster {
         let n_features = x.len();
         let mut var_x = Vec::with_capacity(n_features);
 
-        // Initialize variance calculators for each feature
         for &val in &x {
             let mut var = IncrementalVar::new();
             var.update(val, w);
             var_x.push(var);
         }
 
-        // Initialize time variance calculator
         let mut var_time = IncrementalVar::new();
         var_time.update(timestamp as f64, w);
+
+        let cached_center = x.clone();
 
         Self {
             var_x,
             var_time,
             n_features,
+            cached_center,
         }
     }
 
     fn center(&self) -> Vec<f64> {
-        self.var_x.iter().map(|var| var.get_mean()).collect()
+        self.cached_center.clone()
     }
 
     fn radius(&self, r_factor: f64) -> f64 {
@@ -134,6 +136,7 @@ impl CluStreamMicroCluster {
         for (i, &val) in x.iter().enumerate() {
             if i < self.var_x.len() {
                 self.var_x[i].update(val, w);
+                self.cached_center[i] = self.var_x[i].get_mean();
             }
         }
     }
@@ -179,6 +182,7 @@ impl CluStreamMicroCluster {
         for (i, other_var) in other.var_x.iter().enumerate() {
             if i < self.var_x.len() {
                 self.var_x[i] += other_var;
+                self.cached_center[i] = self.var_x[i].get_mean();
             }
         }
     }
@@ -193,6 +197,8 @@ pub struct CluStream {
     time_gap: i64,
     micro_clusters: Vec<Option<CluStreamMicroCluster>>,
     centers: Vec<Vec<f64>>,
+    macro_cluster_weights: Vec<f64>,
+    macro_cluster_scatter: Vec<f64>,
     timestamp: i64,
     initialized: bool,
     mc_centers: Vec<Vec<f64>>,
@@ -224,6 +230,8 @@ impl CluStream {
             time_gap,
             micro_clusters: vec![None; max_micro_clusters],
             centers: Vec::new(),
+            macro_cluster_weights: Vec::new(),
+            macro_cluster_scatter: Vec::new(),
             timestamp: -1,
             initialized: false,
             mc_centers: Vec::new(),
@@ -317,42 +325,46 @@ impl CluStream {
     fn get_centers(&self) -> Vec<Vec<f64>> {
         self.centers.clone()
     }
+
+    fn get_centroids(&self) -> Vec<(Vec<f64>, f64, f64)> {
+        self.centers.iter().enumerate().map(|(i, c)| {
+            let w = self.macro_cluster_weights.get(i).copied().unwrap_or(1.0);
+            let s = self.macro_cluster_scatter.get(i).copied().unwrap_or(0.0);
+            (c.clone(), w.max(1.0), s)
+        }).collect()
+    }
 }
 
 impl CluStream {
     fn get_closest_mc(&self, x: &[f64]) -> (usize, f64) {
-        let mut closest_dist = f64::INFINITY;
+        let mut closest_dist_sq = f64::INFINITY;
         let mut closest_idx = 0;
-        
+
         for (mc_idx, mc_opt) in self.micro_clusters.iter().enumerate() {
             if let Some(mc) = mc_opt {
-                let center = mc.center();
-                let distance = euclidean_distance(x, &center);
-                if distance < closest_dist {
-                    closest_dist = distance;
+                let dist_sq = euclidean_distance_sq(x, &mc.cached_center);
+                if dist_sq < closest_dist_sq {
+                    closest_dist_sq = dist_sq;
                     closest_idx = mc_idx;
                 }
             }
         }
-        
-        (closest_idx, closest_dist)
+
+        (closest_idx, closest_dist_sq.sqrt())
     }
     
     fn get_min_distance_to_other_mc(&self, exclude_id: usize, center: &[f64]) -> f64 {
-        let mut min_dist = f64::INFINITY;
-        
+        let mut min_dist_sq = f64::INFINITY;
+
         for (mc_id, mc_opt) in self.micro_clusters.iter().enumerate() {
-            if mc_id == exclude_id {
-                continue;
-            }
+            if mc_id == exclude_id { continue; }
             if let Some(mc) = mc_opt {
-                let other_center = mc.center();
-                let distance = euclidean_distance(center, &other_center);
-                min_dist = min_dist.min(distance);
+                let dist_sq = euclidean_distance_sq(center, &mc.cached_center);
+                if dist_sq < min_dist_sq { min_dist_sq = dist_sq; }
             }
         }
-        
-        min_dist
+
+        min_dist_sq.sqrt()
     }
     
     fn maintain_micro_clusters(&mut self, x: Vec<f64>, w: f64) {
@@ -393,29 +405,25 @@ impl CluStream {
     }
     
     fn find_closest_pair(&self) -> (usize, usize) {
-        let mut min_distance = f64::INFINITY;
+        let mut min_dist_sq = f64::INFINITY;
         let mut closest_a = 0;
         let mut closest_b = 0;
-        
+
         for i in 0..self.micro_clusters.len() {
-            for j in (i + 1)..self.micro_clusters.len() {
-                if let (Some(mc_a), Some(mc_b)) = (
-                    &self.micro_clusters[i],
-                    &self.micro_clusters[j],
-                ) {
-                    let center_a = mc_a.center();
-                    let center_b = mc_b.center();
-                    let dist = euclidean_distance(&center_a, &center_b);
-                    
-                    if dist < min_distance {
-                        min_distance = dist;
-                        closest_a = i;
-                        closest_b = j;
+            if let Some(mc_a) = &self.micro_clusters[i] {
+                for j in (i + 1)..self.micro_clusters.len() {
+                    if let Some(mc_b) = &self.micro_clusters[j] {
+                        let dist_sq = euclidean_distance_sq(&mc_a.cached_center, &mc_b.cached_center);
+                        if dist_sq < min_dist_sq {
+                            min_dist_sq = dist_sq;
+                            closest_a = i;
+                            closest_b = j;
+                        }
                     }
                 }
             }
         }
-        
+
         (closest_a, closest_b)
     }
     
@@ -431,6 +439,27 @@ impl CluStream {
             kmeans_with_init(&self.mc_centers, &self.centers)
         };
         self.centers = clustered;
+
+        // Compute weight and scatter of each macro-cluster from assigned micro-clusters
+        let active_mcs: Vec<&CluStreamMicroCluster> = self.micro_clusters.iter()
+            .filter_map(|mc_opt| mc_opt.as_ref())
+            .collect();
+        let mut weights = vec![0.0f64; self.centers.len()];
+        let mut scatter = vec![0.0f64; self.centers.len()];
+        let mut counts  = vec![0usize;  self.centers.len()];
+        for (mc_center, mc) in self.mc_centers.iter().zip(active_mcs.iter()) {
+            let closest = self.get_closest_macro_cluster(mc_center);
+            weights[closest] += mc.weight();
+            scatter[closest] += mc.deviation();
+            counts[closest]  += 1;
+        }
+        for k in 0..self.centers.len() {
+            if counts[k] > 0 {
+                scatter[k] /= counts[k] as f64;
+            }
+        }
+        self.macro_cluster_weights = weights;
+        self.macro_cluster_scatter = scatter;
     }
     
     fn get_closest_macro_cluster(&self, point: &[f64]) -> usize {
@@ -449,13 +478,12 @@ impl CluStream {
     }
 }
 
-// Distance function matching Python's utils.math.minkowski_distance with p=2 (Euclidean)
 fn euclidean_distance(a: &[f64], b: &[f64]) -> f64 {
-    a.iter()
-        .zip(b.iter())
-        .map(|(x, y)| (x - y).powi(2))
-        .sum::<f64>()
-        .sqrt()
+    euclidean_distance_sq(a, b).sqrt()
+}
+
+fn euclidean_distance_sq(a: &[f64], b: &[f64]) -> f64 {
+    a.iter().zip(b.iter()).map(|(x, y)| (x - y).powi(2)).sum()
 }
 
 fn kmeans(points: &[Vec<f64>], k: usize, rng: &mut StdRng) -> Vec<Vec<f64>> {

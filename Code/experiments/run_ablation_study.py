@@ -8,56 +8,59 @@ import sys
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # How to run this script
-# python run_ablation_study.py --dataset insects --ablation drift_detection
-# python run_ablation_study.py --dataset insects --ablation elite_guidance
-# python run_ablation_study.py --dataset insects --ablation adaptive_exploration_rate
-# python run_ablation_study.py --dataset insects --ablation diversity_maintenance
-# python run_ablation_study.py --dataset insects --ablation all
-# python run_ablation_study.py --dataset insects --ablation full_comparison
+# python run_ablation_study.py --dataset real_insects --ablation minimal_search
+# python run_ablation_study.py --dataset real_insects --ablation small_population
+# python run_ablation_study.py --dataset real_insects --ablation fast_window
+# python run_ablation_study.py --dataset real_insects --ablation all
+# python run_ablation_study.py --dataset real_insects --ablation full_comparison
 
 # Finalized suite (representative datasets for ablation)
 dataset_name_list = [
-    'real_forest_cover',
     'real_insects',
+    'real_kdd99',
     'real_pendigits',
     'real_shuttle',
     'real_vehicle',
+    'synth_blobs_expanding',
     'synth_blobs_gradual',
     'synth_blobs_merge_split',
     'synth_blobs_sudden',
-    'synth_moving_squares',
-    'synth_rbf_gradual',
+    'synth_rbf_fast',
 ]
 
-# Ablation configurations
-# Each ablation disables a specific component using proxy parameter settings,
-# since AutoDSC does not expose per-component disable flags via CLI.
+# Search-strategy ablation configurations.
+# AutoDSC now exposes only stream/search scale parameters. These ablations are
+# therefore runnable public-API variants rather than internal component toggles.
 ablation_configs = {
-    'drift_detection': {
-        'description': 'Ablate drift detection response: gamma=0.01 makes exploration rate '
-                       'nearly static so drift signals have no adaptive effect',
+    'minimal_search': {
+        'description': 'Minimal search pressure: keep only two configurations '
+                       '(incumbent plus one challenger).',
         'params': {
-            'gamma': 0.01
+            'population_size': 2,
         }
     },
-    'elite_guidance': {
-        'description': 'Ablate elite guidance (PGSSO): population_size=2 forces elite_size=1, '
-                       'collapsing the elite pool to a single entry so guidance is negligible',
+    'small_population': {
+        'description': 'Reduced search population: fewer challengers than baseline.',
         'params': {
-            'population_size': 2
+            'population_size': 10,
         }
     },
-    'adaptive_exploration_rate': {
-        'description': 'Ablate adaptive exploration rate: gamma=1.0 maximises the adjustment '
-                       'magnitude, effectively switching to a highly reactive (non-smooth) rate',
+    'large_population': {
+        'description': 'Larger search population: more challengers and higher cost.',
         'params': {
-            'gamma': 1.0
+            'population_size': 30,
         }
     },
-    'diversity_maintenance': {
-        'description': 'Disable diversity maintenance in population',
+    'fast_window': {
+        'description': 'Shorter search window: faster adaptation but noisier CVI scores.',
         'params': {
-            'diversity_threshold': 0.01  # Minimum allowed value (clamped by AutoDSC)
+            'window_size': 500,
+        }
+    },
+    'slow_window': {
+        'description': 'Longer search window: more stable CVI scores but slower adaptation.',
+        'params': {
+            'window_size': 1500,
         }
     }
 }
@@ -65,9 +68,7 @@ ablation_configs = {
 # Default AutoDSC parameters for baseline
 default_params = {
     'window_size': 1000,
-    'population_size': 20,
-    'gamma': 0.1,
-    'diversity_threshold': 0.1
+    'population_size': 15,
 }
 
 
@@ -226,12 +227,11 @@ def run_ablation_all_datasets(ablation_name, progress_interval=1000,
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Ablation study for AutoDSC components.")
+    parser = argparse.ArgumentParser(description="Ablation study for AutoDSC search-scale variants.")
     parser.add_argument('--ablation',
-                       choices=['drift_detection', 'elite_guidance', 'adaptive_exploration_rate',
-                               'diversity_maintenance', 'all', 'full_comparison'],
+                       choices=list(ablation_configs.keys()) + ['all', 'full_comparison'],
                        required=True,
-                       help="Choose which component to ablate")
+                       help="Choose which search-strategy variant to run")
     parser.add_argument('--dataset', help="Dataset name for analysis")
     parser.add_argument('--all_datasets', action='store_true',
                        help="Run ablation on all datasets")

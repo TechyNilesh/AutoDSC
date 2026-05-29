@@ -65,8 +65,7 @@ def load_streaming_dataset(dataset_name):
 
 def run_AutoDSC(dataset_name, run_count=None, seed=42, progress_interval=1000,
                         output_dir="results/benchmark", verbose=True,
-                        window_size=1000, population_size=20,
-                        gamma=0.1, diversity_threshold=0.1,
+                        window_size=1000, population_size=10,
                         model_name="AutoDSC"):
     """Run AutoDSC algorithm on a dataset."""
 
@@ -91,9 +90,7 @@ def run_AutoDSC(dataset_name, run_count=None, seed=42, progress_interval=1000,
         AutoDSC_params = {
             'window_size': window_size,                 # Window size for processing
             'population_size': population_size,         # Size of configuration archive
-            'gamma': gamma,
-            'diversity_threshold': diversity_threshold,
-            'random_seed': seed
+            'random_seed': seed,
         }
 
         # Initialize model
@@ -109,8 +106,7 @@ def run_AutoDSC(dataset_name, run_count=None, seed=42, progress_interval=1000,
             ev.update(y, pred, x_values)
 
         results = ev.finalize(model=model_name, dataset=dataset_name,
-                              params={"window_size": window_size, "population_size": population_size,
-                                      "gamma": gamma, "diversity_threshold": diversity_threshold},
+                              params={"window_size": window_size, "population_size": population_size},
                               run_count=run_count, seed=seed, verbose=verbose)
         try:
             results["AutoDSC_summary"] = model.get_performance_summary()
@@ -150,12 +146,8 @@ if __name__ == "__main__":
     # AutoDSC parameters
     parser.add_argument('--window_size', type=int, default=1000,
                        help='Window size for processing')
-    parser.add_argument('--population_size', type=int, default=20,
+    parser.add_argument('--population_size', type=int, default=10,
                        help='Size of configuration archive')
-    parser.add_argument('--gamma', type=float, default=0.1,
-                       help='Gamma parameter')
-    parser.add_argument('--diversity_threshold', type=float, default=0.1,
-                       help='Diversity threshold')
     parser.add_argument('--model_name', type=str, default="AutoDSC",
                        help='Custom model name for output files')
 
@@ -171,9 +163,7 @@ if __name__ == "__main__":
         verbose=not args.quiet,
         window_size=args.window_size,
         population_size=args.population_size,
-        gamma=args.gamma,
-        diversity_threshold=args.diversity_threshold,
-        model_name=args.model_name
+        model_name=args.model_name,
     )
 
     if result is None:

@@ -89,15 +89,19 @@ impl KMeans {
         
         let mut min_distance = f64::INFINITY;
         let mut closest_cluster = 0;
-        
-        for (&cluster_id, center) in &self.centers {
-            let distance = self.get_distance(center, &x);
-            if distance < min_distance {
-                min_distance = distance;
-                closest_cluster = cluster_id;
+
+        // Iterate cluster ids in fixed order so ties break deterministically
+        // (HashMap iteration order is not seeded and varies across runs).
+        for cluster_id in 0..self.n_clusters {
+            if let Some(center) = self.centers.get(&cluster_id) {
+                let distance = self.get_distance(center, &x);
+                if distance < min_distance {
+                    min_distance = distance;
+                    closest_cluster = cluster_id;
+                }
             }
         }
-        
+
         closest_cluster
     }
     

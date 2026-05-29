@@ -265,8 +265,12 @@ impl DenStream {
         let mut labels: HashMap<usize, Option<usize>> = self.p_micro_clusters.keys()
             .map(|&k| (k, None))
             .collect();
-        
-        for &pmc_key in self.p_micro_clusters.keys() {
+
+        // Visit seeds in sorted key order so macro-cluster ids are assigned
+        // deterministically (HashMap key order is otherwise randomized).
+        let mut pmc_keys: Vec<usize> = self.p_micro_clusters.keys().cloned().collect();
+        pmc_keys.sort_unstable();
+        for pmc_key in pmc_keys {
             if labels[&pmc_key].is_some() {
                 continue;
             }
@@ -307,6 +311,19 @@ impl DenStream {
             .map(|cluster| cluster.calc_center(self.timestamp))
             .collect()
     }
+
+    fn get_centroids(&self) -> Vec<(Vec<f64>, f64, f64)> {
+        let mut keys: Vec<usize> = self.clusters.keys().cloned().collect();
+        keys.sort_unstable();
+        keys.iter().map(|k| {
+            let c = &self.clusters[k];
+            (
+                c.calc_center(self.timestamp),
+                c.calc_weight(self.timestamp).max(1.0),
+                c.calc_radius(self.timestamp),
+            )
+        }).collect()
+    }
     
     fn get_p_micro_clusters(&self) -> Vec<DenStreamMicroCluster> {
         self.p_micro_clusters.values().cloned().collect()
@@ -325,16 +342,22 @@ impl DenStream {
     fn get_closest_cluster_key(&self, point: &[f64], clusters: &HashMap<usize, DenStreamMicroCluster>) -> usize {
         let mut min_distance = f64::INFINITY;
         let mut key = 0;
-        
-        for (&k, cluster) in clusters {
-            let center = cluster.calc_center(self.timestamp);
-            let distance = self.distance(&center, point);
-            if distance < min_distance {
-                min_distance = distance;
-                key = k;
+
+        // Iterate keys in sorted order so ties break deterministically; HashMap
+        // iteration order is not seeded and would otherwise vary across runs.
+        let mut keys: Vec<usize> = clusters.keys().cloned().collect();
+        keys.sort_unstable();
+        for k in keys {
+            if let Some(cluster) = clusters.get(&k) {
+                let center = cluster.calc_center(self.timestamp);
+                let distance = self.distance(&center, point);
+                if distance < min_distance {
+                    min_distance = distance;
+                    key = k;
+                }
             }
         }
-        
+
         key
     }
     
@@ -406,13 +429,16 @@ impl DenStream {
     
     fn query_neighbor(&self, cluster_key: usize) -> VecDeque<usize> {
         let mut neighbors = VecDeque::new();
-        
-        for &pmc_key in self.p_micro_clusters.keys() {
+
+        // Sorted key order keeps the BFS expansion order deterministic.
+        let mut pmc_keys: Vec<usize> = self.p_micro_clusters.keys().cloned().collect();
+        pmc_keys.sort_unstable();
+        for pmc_key in pmc_keys {
             if cluster_key != pmc_key && self.is_directly_density_reachable(cluster_key, pmc_key) {
                 neighbors.push_back(pmc_key);
             }
         }
-        
+
         neighbors
     }
     

@@ -422,30 +422,31 @@ Table~\ref{tab:performance_comparison_highlighted} presents a comprehensive comp
 AutoDSC achieves the highest overall average Rand Index of \textbf{61.321\%}, substantially outperforming all baseline methods. The framework surpasses Default(Best) by 4.356 percentage points, ConfStream by 4.381 points, RandomSearch by 4.281 points, and OnlineAutoClust by 12.793 points. This demonstrates the effectiveness of the optimization approach in discovering optimal clustering configurations. The framework achieves the highest performance on 9 out of 12 datasets, with particularly notable improvements on complex synthetic datasets with concept drift, such as Moving RBF (75.786\% vs. 66.393\% for Default(Best)) and Moving Squares (71.514\% vs. 64.806\%). Temporal performance analysis reveals enhanced drift adaptation capabilities through rapid recovery after drift detection, as demonstrated in the SEA (Mixed) dataset (Figure~\ref{fig:sea_mixed}), and consistent outperformance across multiple drift regions in the Forest Cover dataset (Figure~\ref{fig:forest_cover}). AutoDSC shows particularly effective performance on high-dimensional datasets like Forest Cover (54 attributes) and Vehicle (100 attributes) through multi-objective evaluation.
 
 \begin{table*}[!ht]
-\caption{Performance comparison across datasets with highlighted best (bold) and second best (underlined)}
+\caption{Clustering quality across datasets, averaged over 10 seeds. For each method, ARI and NMI are reported ($\uparrow$ higher is better). Best per metric per row in \textbf{bold}, second best \underline{underlined}. Methods grouped into AutoML, the rule-based adaptive method MOStream, and single (fixed) algorithms. ConfStr=ConfStream, RandS=RandomSearchStream, OAClE=OnlineAutoClustEnsemble, CluStr=CluStream, DenStr=DenStream.}
 \label{tab:performance_comparison_highlighted}
 \centering
 \resizebox{\linewidth}{!}{
-\begin{tabular}{|l|ccccc|ccccc|}
+\begin{tabular}{|l|cccccccc|cc|cccccccc|}
 \hline
-\multirow{2}{*}{\textbf{Dataset}} & \multicolumn{5}{c|}{\textbf{Rand Index (\%) - Higher is Better}} & \multicolumn{5}{c|}{\textbf{Runtime (minutes) - Lower is Better}} \\
-\cline{2-11}
- & \textbf{AutoDSC} & \textbf{Default(Best)} & \textbf{ConfStream} & \textbf{OnlineAutoClust} & \textbf{RandomSearch} & \textbf{AutoDSC} & \textbf{Default(Best)} & \textbf{ConfStream} & \textbf{OnlineAutoClust} & \textbf{RandomSearch} \\
+\multirow{3}{*}{\textbf{Dataset}} & \multicolumn{8}{c|}{\textbf{AutoML}} & \multicolumn{2}{c|}{\textbf{Rule-based}} & \multicolumn{8}{c|}{\textbf{Single algorithm}} \\
+\cline{2-19}
+  & \multicolumn{2}{c|}{\textbf{AutoDSC}} & \multicolumn{2}{c|}{\textbf{ConfStr}} & \multicolumn{2}{c|}{\textbf{RandS}} & \multicolumn{2}{c|}{\textbf{OAClE}} & \multicolumn{2}{c|}{\textbf{MOStr}} & \multicolumn{2}{c|}{\textbf{KMeans}} & \multicolumn{2}{c|}{\textbf{CluStr}} & \multicolumn{2}{c|}{\textbf{DBSTR}} & \multicolumn{2}{c|}{\textbf{DenStr}} \\
+\cline{2-19}
+  & ARI & NMI & ARI & NMI & ARI & NMI & ARI & NMI & ARI & NMI & ARI & NMI & ARI & NMI & ARI & NMI & ARI & NMI \\
 \hline
-Adult & \textbf{64.57$\pm$0.007} & 58.36$\pm$0.019 & \underline{60.77$\pm$0.182} & 35.29$\pm$0.000 & 54.40$\pm$0.684 & \underline{5.070} & \textbf{0.494} & 6.904 & 4.415 & 10.377 \\
-Electricity & 49.16$\pm$0.044 & 49.33$\pm$0.011 & \underline{49.49$\pm$0.140} & \textbf{51.14$\pm$0.000} & 49.40$\pm$0.067 & 9.344 & \textbf{0.253} & 9.140 & \underline{5.122} & 16.759 \\
-Forest Cover & \textbf{60.91$\pm$0.181} & 57.40$\pm$0.004 & 58.46$\pm$0.317 & 37.69$\pm$0.000 & \underline{58.98$\pm$0.168} & \underline{10.885} & \textbf{6.576} & 116.545 & 674.920 & 210.887 \\
-Insects & \textbf{83.09$\pm$0.071} & 69.78$\pm$0.024 & \underline{70.96$\pm$0.873} & 63.93$\pm$24.910 & 68.90$\pm$2.028 & 102.728 & \textbf{0.748} & \underline{7.289} & 75.150 & 11.486 \\
-Airlines & 49.71$\pm$0.021 & 49.65$\pm$0.000 & 49.52$\pm$0.004 & \textbf{50.24$\pm$0.393} & \underline{49.54$\pm$0.019} & \underline{3.963} & \textbf{3.554} & 340.069 & 545.024 & 185.534 \\
-Vehicle & 61.34$\pm$0.404 & 57.46$\pm$0.001 & \underline{61.36$\pm$0.026} & \textbf{65.46$\pm$0.449} & 59.39$\pm$0.280 & \underline{3.431} & \textbf{2.952} & 47.762 & 15.649 & 35.211 \\
-Hyperplane & \textbf{50.05$\pm$0.056} & 50.00$\pm$0.000 & 50.00$\pm$0.000 & \underline{50.04$\pm$0.001} & 50.00$\pm$0.001 & \underline{6.896} & \textbf{3.828} & 58.787 & 36.284 & 145.277 \\
-Moving (RBF) & \textbf{75.79$\pm$0.608} & 66.39$\pm$0.001 & 68.48$\pm$0.353 & 22.85$\pm$0.260 & \underline{70.76$\pm$0.326} & \underline{30.549} & \textbf{1.599} & 32.627 & 409.552 & 39.721 \\
-Moving Squares & \textbf{71.51$\pm$0.728} & \underline{64.81$\pm$0.019} & 52.68$\pm$0.974 & 45.07$\pm$8.728 & 63.83$\pm$1.028 & \underline{67.709} & \textbf{0.495} & 99.143 & 865.629 & 150.458 \\
-SEA (Abrupt) & \textbf{48.72$\pm$0.964} & 48.32$\pm$0.002 & 47.90$\pm$0.032 & \underline{48.43$\pm$2.579} & 47.18$\pm$0.014 & \underline{2.844} & \textbf{1.920} & 56.269 & 35.115 & 133.179 \\
-SEA (Mixed) & \textbf{49.38$\pm$0.583} & \underline{49.08$\pm$0.003} & 48.85$\pm$0.040 & 48.52$\pm$0.005 & 48.43$\pm$0.006 & \underline{2.695} & \textbf{1.959} & 56.364 & 15.103 & 128.334 \\
-Random (RBF) & \textbf{71.63$\pm$0.010} & 63.01$\pm$0.001 & \underline{64.80$\pm$0.209} & 63.67$\pm$12.962 & 63.65$\pm$0.905 & 93.165 & \textbf{0.387} & \underline{13.225} & 93.358 & 21.138 \\
+Insects & 0.066 & 0.107 & 0.016 & 0.035 & 0.054 & 0.113 & 0.048 & \underline{0.212} & \underline{0.090} & \textbf{0.217} & 0.032 & 0.061 & \textbf{0.101} & 0.150 & 0.000 & 0.007 & 0.000 & 0.000 \\
+KDD99 & \underline{0.037} & \underline{0.035} & 0.037 & 0.035 & 0.033 & 0.032 & 0.036 & 0.034 & 0.018 & 0.018 & \textbf{0.038} & \textbf{0.036} & 0.035 & 0.033 & 0.031 & 0.031 & 0.007 & 0.011 \\
+PenDigits & \textbf{0.446} & \textbf{0.615} & 0.271 & 0.421 & \underline{0.367} & \underline{0.586} & 0.311 & 0.544 & 0.363 & 0.557 & 0.269 & 0.420 & 0.318 & 0.508 & 0.344 & 0.512 & 0.000 & 0.000 \\
+Shuttle & \textbf{0.354} & \textbf{0.477} & \underline{0.341} & \underline{0.463} & 0.270 & 0.432 & 0.146 & 0.384 & 0.002 & 0.004 & 0.169 & 0.307 & 0.254 & 0.420 & 0.000 & 0.000 & 0.028 & 0.277 \\
+Vehicle & 0.314 & \underline{0.298} & 0.303 & 0.293 & 0.172 & 0.267 & 0.312 & \textbf{0.312} & \textbf{0.335} & 0.287 & 0.150 & 0.171 & \underline{0.331} & 0.254 & 0.168 & 0.187 & 0.000 & 0.000 \\
+Blobs-Exp & \textbf{0.986} & \textbf{0.988} & \underline{0.953} & \underline{0.965} & 0.844 & 0.899 & 0.895 & 0.893 & 0.938 & 0.964 & 0.855 & 0.894 & 0.817 & 0.902 & 0.000 & 0.000 & 0.228 & 0.630 \\
+Blobs-Grad & \underline{0.994} & \underline{0.996} & 0.956 & 0.974 & 0.921 & 0.948 & \textbf{0.995} & \textbf{0.997} & 0.978 & 0.989 & 0.902 & 0.921 & 0.761 & 0.882 & 0.000 & 0.000 & 0.721 & 0.834 \\
+Blobs-MS & 0.947 & \underline{0.973} & \underline{0.952} & 0.971 & 0.877 & 0.929 & \textbf{0.985} & \textbf{0.988} & 0.932 & 0.963 & 0.882 & 0.908 & 0.847 & 0.918 & 0.000 & 0.001 & 0.408 & 0.633 \\
+Blobs-Sud & \textbf{0.916} & \textbf{0.961} & \underline{0.904} & \underline{0.952} & 0.878 & 0.931 & 0.855 & 0.934 & 0.774 & 0.893 & 0.892 & 0.940 & 0.812 & 0.912 & 0.000 & 0.000 & 0.638 & 0.823 \\
+RBF-Fast & \underline{0.993} & \underline{0.996} & 0.988 & 0.987 & 0.924 & 0.954 & \textbf{0.995} & \textbf{0.996} & 0.911 & 0.958 & 0.795 & 0.888 & 0.811 & 0.908 & 0.000 & 0.001 & 0.735 & 0.840 \\
 \hline
-\textbf{Rank} & \textbf{1.800} & 3.967 & 3.300 & \underline{2.667} & 3.267 & \underline{2.400} & \textbf{1.133} & 3.333 & 4.000 & 4.133 \\
+\textbf{Mean Score} & \textbf{0.605} & \textbf{0.644} & \underline{0.572} & 0.610 & 0.534 & 0.609 & 0.558 & \underline{0.629} & 0.534 & 0.585 & 0.498 & 0.555 & 0.509 & 0.589 & 0.054 & 0.074 & 0.276 & 0.405 \\
+\textbf{Mean Rank} & \textbf{1.90} & \textbf{1.90} & \underline{3.70} & 3.60 & 4.60 & 4.50 & \underline{3.70} & \underline{3.00} & 4.40 & 4.50 & 5.40 & 5.80 & 5.00 & 5.30 & 8.10 & 8.10 & 8.20 & 8.30 \\
 \hline
 \end{tabular}
 }

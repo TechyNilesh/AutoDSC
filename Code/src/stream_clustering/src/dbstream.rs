@@ -122,6 +122,19 @@ impl DBStream {
         self.recluster();
         self.centers.clone()
     }
+
+    fn get_centroids(&mut self) -> Vec<(Vec<f64>, f64, f64)> {
+        self.recluster();
+        let mut keys: Vec<usize> = self.clusters.keys().cloned().collect();
+        keys.sort_unstable();
+        keys.iter()
+            .filter(|k| self.clusters[k].weight >= self.minimum_weight * 2.0)
+            .map(|k| {
+                let c = &self.clusters[k];
+                (c.center.clone(), c.weight.max(1.0), self.clustering_threshold)
+            })
+            .collect()
+    }
     
     fn get_micro_clusters(&self) -> Vec<DBStreamMicroCluster> {
         self.micro_clusters.values().cloned().collect()
@@ -169,7 +182,10 @@ impl DBStream {
         } else {
             // Update existing micro clusters
             let mut current_centers = HashMap::new();
-            let neighbor_keys: Vec<usize> = neighbor_clusters.keys().cloned().collect();
+            // Sorted so the collapse-prevention revert pass below is order-independent
+            // (HashMap key order is not seeded and varies across runs).
+            let mut neighbor_keys: Vec<usize> = neighbor_clusters.keys().cloned().collect();
+            neighbor_keys.sort_unstable();
              for &i in &neighbor_keys {
                 if let Some(micro_cluster) = self.micro_clusters.get_mut(&i) {
                     current_centers.insert(i, micro_cluster.center.clone());

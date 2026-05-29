@@ -17,6 +17,7 @@ pub struct StreamKMeans {
     kmeans: KMeansInternal,
     temp_chunk: HashMap<usize, Vec<f64>>,
     centers: HashMap<usize, Vec<f64>>,
+    cluster_scatter: HashMap<usize, f64>,
     n_features: usize,
     initialized: bool,
 }
@@ -48,6 +49,7 @@ impl StreamKMeans {
             kmeans,
             temp_chunk: HashMap::new(),
             centers: HashMap::new(),
+            cluster_scatter: HashMap::new(),
             n_features: 0,
             initialized: false,
         }
@@ -60,7 +62,17 @@ impl StreamKMeans {
             self.kmeans.initialize_centers(self.n_features);
             self.initialized = true;
         }
-        
+
+        // Update EMA scatter for closest cluster
+        if !self.centers.is_empty() {
+            let closest = self.kmeans.predict_one(x.clone());
+            if let Some(center) = self.centers.get(&closest) {
+                let dist = euclidean_distance(&x, center);
+                let prev = self.cluster_scatter.get(&closest).copied().unwrap_or(dist);
+                self.cluster_scatter.insert(closest, prev + self.halflife * (dist - prev));
+            }
+        }
+
         self.time_stamp += 1;
         let index = self.time_stamp % self.chunk_size;
         
@@ -85,12 +97,21 @@ impl StreamKMeans {
             );
             kmeans_i.initialize_centers(self.n_features);
 
+            // Collect chunk points in stable index order. temp_chunk is a HashMap,
+            // so .values() iteration order is not deterministic across runs; sorting
+            // by the stored index restores the original arrival order.
+            let mut chunk_indices: Vec<usize> = self.temp_chunk.keys().cloned().collect();
+            chunk_indices.sort_unstable();
+            let chunk_points: Vec<Vec<f64>> = chunk_indices
+                .iter()
+                .map(|i| self.temp_chunk[i].clone())
+                .collect();
+
             // Initialize chunk k-means from evenly spaced chunk points
-            let chunk_points: Vec<Vec<f64>> = self.temp_chunk.values().cloned().collect();
             kmeans_i.initialize_centers_from_points(&chunk_points);
 
-            // Learn from all points in the temporary chunk
-            for point in self.temp_chunk.values() {
+            // Learn from all points in the temporary chunk (arrival order)
+            for point in &chunk_points {
                 kmeans_i.learn_one(point.clone());
             }
 
@@ -111,18 +132,22 @@ impl StreamKMeans {
         
         let mut min_distance = f64::INFINITY;
         let mut closest_cluster = 0;
-        
-        for (&cluster_id, center) in &self.centers {
-            let distance = euclidean_distance(center, &x);
-            if distance < min_distance {
-                min_distance = distance;
-                closest_cluster = cluster_id;
+
+        // Iterate cluster ids in fixed order so ties break deterministically
+        // (HashMap iteration order is not seeded and varies across runs).
+        for cluster_id in 0..self.n_clusters {
+            if let Some(center) = self.centers.get(&cluster_id) {
+                let distance = euclidean_distance(center, &x);
+                if distance < min_distance {
+                    min_distance = distance;
+                    closest_cluster = cluster_id;
+                }
             }
         }
-        
+
         closest_cluster
     }
-    
+
     fn get_centers(&self) -> Vec<Vec<f64>> {
         let mut centers = Vec::new();
         for i in 0..self.n_clusters {
@@ -134,11 +159,20 @@ impl StreamKMeans {
         }
         centers
     }
-    
+
     fn get_n_clusters(&self) -> usize {
         self.n_clusters
     }
     
+    fn get_centroids(&self) -> Vec<(Vec<f64>, f64, f64)> {
+        (0..self.n_clusters).filter_map(|i| {
+            self.centers.get(&i).map(|c| {
+                let s = self.cluster_scatter.get(&i).copied().unwrap_or(0.0);
+                (c.clone(), 1.0f64, s)
+            })
+        }).collect()
+    }
+
     fn get_chunk_size(&self) -> usize {
         self.chunk_size
     }
@@ -236,15 +270,18 @@ impl KMeansInternal {
         
         let mut min_distance = f64::INFINITY;
         let mut closest_cluster = 0;
-        
-        for (&cluster_id, center) in &self.centers {
-            let distance = self.get_distance(center, &x);
-            if distance < min_distance {
-                min_distance = distance;
-                closest_cluster = cluster_id;
+
+        // Deterministic tie-breaking: visit cluster ids in order, not HashMap order.
+        for cluster_id in 0..self.n_clusters {
+            if let Some(center) = self.centers.get(&cluster_id) {
+                let distance = self.get_distance(center, &x);
+                if distance < min_distance {
+                    min_distance = distance;
+                    closest_cluster = cluster_id;
+                }
             }
         }
-        
+
         closest_cluster
     }
     
