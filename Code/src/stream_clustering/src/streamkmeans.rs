@@ -25,7 +25,7 @@ pub struct StreamKMeans {
 #[pymethods]
 impl StreamKMeans {
     #[new]
-    #[pyo3(signature = (chunk_size=200, n_clusters=8, halflife=0.5, mu=0.0, sigma=1.0, p=2.0, seed=None))]
+    #[pyo3(signature = (chunk_size=10, n_clusters=2, halflife=0.5, mu=0.0, sigma=1.0, p=2.0, seed=None))]
     fn new(
         chunk_size: usize,
         n_clusters: usize,

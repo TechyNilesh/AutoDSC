@@ -59,7 +59,7 @@ pub struct DBStream {
 #[pymethods]
 impl DBStream {
     #[new]
-    #[pyo3(signature = (clustering_threshold=1.0, fading_factor=0.01, cleanup_interval=1000.0, intersection_factor=0.3, minimum_weight=1.0))]
+    #[pyo3(signature = (clustering_threshold=1.0, fading_factor=0.01, cleanup_interval=2.0, intersection_factor=0.3, minimum_weight=1.0))]
     fn new(
         clustering_threshold: f64,
         fading_factor: f64,

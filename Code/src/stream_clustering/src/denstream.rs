@@ -159,7 +159,7 @@ pub struct DenStream {
 #[pymethods]
 impl DenStream {
     #[new]
-    #[pyo3(signature = (decaying_factor=0.01, beta=0.5, mu=3.0, epsilon=0.1, n_samples_init=100, stream_speed=1))]
+    #[pyo3(signature = (decaying_factor=0.25, beta=0.75, mu=2.0, epsilon=0.02, n_samples_init=1000, stream_speed=100))]
     fn new(
         decaying_factor: f64,
         beta: f64,

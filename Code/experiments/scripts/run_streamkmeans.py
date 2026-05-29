@@ -70,10 +70,10 @@ def run_STREAMKMeans(dataset_name, run_count=None, seed=42, progress_interval=10
             print(f"Failed to load dataset {dataset_name}")
             return None
                 
-        # Set STREAMKMeans parameters (matching Rust implementation)
+        # River library defaults (https://riverml.xyz/dev/api/cluster/STREAMKMeans/)
         streamkmeans_params = {
-            "chunk_size": 200,
-            "n_clusters": 8,
+            "chunk_size": 10,
+            "n_clusters": 2,
             "halflife": 0.5,
             "mu": 0.0,
             "sigma": 1.0,

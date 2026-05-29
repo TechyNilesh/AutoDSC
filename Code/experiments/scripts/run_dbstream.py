@@ -70,11 +70,11 @@ def run_DBSTREAM(dataset_name, run_count=None, seed=42, progress_interval=1000,
             print(f"Failed to load dataset {dataset_name}")
             return None
                 
-        # Set DBSTREAM parameters (matching Rust implementation)
+        # River library defaults (https://riverml.xyz/dev/api/cluster/DBSTREAM/)
         dbstream_params = {
             "clustering_threshold": 1.0,
             "fading_factor": 0.01,
-            "cleanup_interval": 1000.0,
+            "cleanup_interval": 2.0,
             "intersection_factor": 0.3,
             "minimum_weight": 1.0
         }

@@ -69,11 +69,13 @@ def run_CluStream(dataset_name, run_count=None, seed=42, progress_interval=1000,
             print(f"Failed to load dataset {dataset_name}")
             return None
                 
-        # Set CluStream parameters
+        # River library defaults (https://riverml.xyz/dev/api/cluster/CluStream/)
         clustream_params = {
             "n_macro_clusters": 5,
             "max_micro_clusters": 100,
-            "time_gap": 3,
+            "micro_cluster_r_factor": 2,
+            "time_window": 1000,
+            "time_gap": 100,
             "seed": seed,
         }
         
