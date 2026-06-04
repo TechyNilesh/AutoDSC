@@ -66,7 +66,7 @@ def to_stages(c):
 def main():
     S.set_rc()
     for dataset, title, drift, ylim, out in PANELS:
-        fig, ax = plt.subplots(figsize=(7.0, 3.7))
+        fig, ax = plt.subplots(figsize=(4.0, 3.7))   # square-ish: two fit in one column
         # x positions in #instances (thousands); same staged shape as before.
         x = S.stage_thousands(dataset, STAGES)
         total = x[-1]                       # full stream length (thousands)
