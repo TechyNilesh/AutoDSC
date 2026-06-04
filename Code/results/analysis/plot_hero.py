@@ -39,20 +39,35 @@ GROUP = 'hero'
 COMPETITORS = ['AutoDSC', 'ConfStream', 'OACE', 'MOStream']
 
 
-def panel_quality(dataset, metric='ari', methods=None):
-    """Per-window quality metric over the stream; AutoDSC emphasized on top."""
+def panel_quality(dataset, metric='ari', methods=None, xstart_k=3.0):
+    """Per-window quality metric over the stream; AutoDSC emphasized on top.
+
+    `xstart_k` drops the warm-up windows before that many thousand instances and
+    the y-axis is zoomed to the remaining data range (MOStream-style zoom) so the
+    separation between methods is clear rather than crushed against [0,1]."""
     methods = methods or S.METHODS
     fig, ax = plt.subplots(figsize=(4.0, 3.4))
     ws = S.window_size(dataset)
+    shown = []
     for m in methods:
         c = S.curve(m, dataset, metric)
         if c is None:
             continue
         x = np.arange(1, len(c) + 1) * ws / 1000.0
-        ax.plot(x, c, '-', marker=S.METHOD_MARKER[m], markersize=S.ms(m),
+        keep = x >= xstart_k
+        if not keep.any():
+            continue
+        xv, yv = x[keep], np.asarray(c)[keep]
+        shown.append(yv)
+        ax.plot(xv, yv, '-', marker=S.METHOD_MARKER[m], markersize=S.ms(m),
                 linewidth=S.lw(m), color=S.METHOD_COLOR[m],
                 label=S.METHOD_NAME[m], markeredgecolor='black',
                 markeredgewidth=0.6, zorder=(6 if m == S.EMPHASIS else 3))
+    if shown:
+        allv = np.concatenate(shown)
+        lo, hi = float(np.nanmin(allv)), float(np.nanmax(allv))
+        pad = (hi - lo) * 0.08 + 1e-3
+        ax.set_ylim(max(0.0, lo - pad), min(1.005, hi + pad))
     ax.set_xlabel(S.STREAM_XLABEL, fontsize=14, fontweight='bold')
     ax.set_ylabel(S.METRIC_LABEL[metric] + r' $\uparrow$', fontsize=15, fontweight='bold')
     ax.tick_params(axis='both', labelsize=12)
