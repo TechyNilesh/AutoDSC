@@ -39,12 +39,13 @@ GROUP = 'hero'
 COMPETITORS = ['AutoDSC', 'ConfStream', 'OACE', 'MOStream']
 
 
-def panel_quality(dataset, methods=COMPETITORS):
-    """Per-window ARI over the stream; AutoDSC emphasized on top."""
+def panel_quality(dataset, metric='ari', methods=None):
+    """Per-window quality metric over the stream; AutoDSC emphasized on top."""
+    methods = methods or S.METHODS
     fig, ax = plt.subplots(figsize=(4.0, 3.4))
     ws = S.window_size(dataset)
     for m in methods:
-        c = S.curve(m, dataset, 'ari')
+        c = S.curve(m, dataset, metric)
         if c is None:
             continue
         x = np.arange(1, len(c) + 1) * ws / 1000.0
@@ -53,13 +54,13 @@ def panel_quality(dataset, methods=COMPETITORS):
                 label=S.METHOD_NAME[m], markeredgecolor='black',
                 markeredgewidth=0.6, zorder=(6 if m == S.EMPHASIS else 3))
     ax.set_xlabel(S.STREAM_XLABEL, fontsize=14, fontweight='bold')
-    ax.set_ylabel(r'ARI $\uparrow$', fontsize=15, fontweight='bold')
+    ax.set_ylabel(S.METRIC_LABEL[metric] + r' $\uparrow$', fontsize=15, fontweight='bold')
     ax.tick_params(axis='both', labelsize=12)
     S.bold_ticks(ax)
     S.clean_spines(ax)
     fig.tight_layout()
-    S.save_fig(fig, GROUP, 'quality')
-    print(f'Saved charts/{GROUP}/quality.pdf / .png')
+    S.save_fig(fig, GROUP, f'quality_{metric}')
+    print(f'Saved charts/{GROUP}/quality_{metric}.pdf / .png')
 
 
 def panel_efficiency(dataset):
@@ -260,19 +261,19 @@ def main():
     ap.add_argument('--dataset', default='real_pendigits')
     args = ap.parse_args()
     S.set_rc()
-    panel_quality(args.dataset)
+    # Figure 1: ARI + CMM over the stream, all six methods.
+    panel_quality(args.dataset, 'ari')
+    panel_quality(args.dataset, 'cmm')
+    # extra efficiency views (not used in Fig 1, kept for the results section).
     panel_efficiency(args.dataset)
     panel_line(args.dataset, 'throughput')
     panel_line(args.dataset, 'memory')
     panel_efficiency_box('throughput_ips', 'efficiency_box_tp')
     panel_efficiency_box('memory_mb', 'efficiency_box_mem')
-    # full-method legend (for the quality panel, which shows all six)
+    # full-method legend (all six, shared by both Fig 1 panels), 3 columns x 2 rows
     S.save_legend(S.method_handles(S.METHODS), GROUP, 'legend',
-                  ncol=len(S.METHODS))
-    # competitor-only legend (for the efficiency panel)
-    S.save_legend(S.method_handles(COMPETITORS), GROUP, 'legend_compete',
-                  ncol=len(COMPETITORS))
-    print(f'Saved charts/{GROUP}/legend.pdf / legend_compete.pdf')
+                  ncol=3, width=6.4)
+    print(f'Saved charts/{GROUP}/legend.pdf / .png')
 
 
 if __name__ == '__main__':

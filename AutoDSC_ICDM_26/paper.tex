@@ -72,11 +72,11 @@ Existing online AutoML frameworks~\cite{celik2023online,pmlr-v256-verma24a,pmlr-
 \begin{figure}[t]
 \centering
 \begin{minipage}{\linewidth}\centering
-    \includegraphics[width=0.8\linewidth]{images/charts/hero/legend_compete.pdf}
+    \includegraphics[width=0.9\linewidth]{images/charts/hero/legend.pdf}
 \end{minipage}\\[2pt]
-\subfloat[Clustering quality]{\includegraphics[width=0.49\linewidth]{images/charts/hero/quality.pdf}}\hfill
-\subfloat[Memory footprint]{\includegraphics[width=0.49\linewidth]{images/charts/hero/memory_line.pdf}}
-\caption{AutoDSC wins on both quality and efficiency, here on the PenDigits stream (seed-averaged), against the competing AutoML (ConfStream, OACE) and rule-based (MOStream) stream clusterers. (a)~Per-window ARI: AutoDSC (thick red) stays well above every competitor throughout the stream. (b)~Per-window peak memory: AutoDSC holds the lowest, bounded footprint as the stream grows, while OACE and MOStream use markedly more, all at competitive throughput (Section~\ref{sec:results}).}
+\subfloat[ARI over the stream]{\includegraphics[width=0.49\linewidth]{images/charts/hero/quality_ari.pdf}}\hfill
+\subfloat[CMM over the stream]{\includegraphics[width=0.49\linewidth]{images/charts/hero/quality_cmm.pdf}}
+\caption{AutoDSC leads on clustering quality, here on the PenDigits stream (seed-averaged), across both complementary measures and against all baselines. (a)~The chance-corrected Adjusted Rand Index and (b)~the stream-aware Cluster Mapping Measure: AutoDSC (thick red) stays at or above every method throughout the stream, attaining the highest mean on both. It does so while remaining computationally efficient at a low, bounded memory footprint (Section~\ref{sec:results}).}
 \label{fig:hero}
 \end{figure}
 
