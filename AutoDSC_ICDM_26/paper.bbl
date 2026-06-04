@@ -31,41 +31,13 @@ Y.~Poulakis, C.~Doulkeridis, and D.~Kyriazis, ``A survey on automl methods and
   systems for clustering,'' \emph{ACM Transactions on Knowledge Discovery from
   Data}, vol.~18, no.~5, pp. 1--30, 2024.
 
-\bibitem{Tschechlov2021AutoML4Clust}
-D.~Tschechlov, M.~Fritz, and H.~Schwarz, ``Automl4clust: Efficient automl for
-  clustering analyses,'' in \emph{Proceedings of the 24th International
-  Conference on Extending Database Technology (EDBT)}.\hskip 1em plus 0.5em
-  minus 0.4em\relax OpenProceedings.org, 2021, pp. 343--348.
-
-\bibitem{Liu2021AutoCluster}
-Y.~Liu, S.~Li, and W.~Tian, ``Autocluster: Meta-learning based ensemble method
-  for automated unsupervised clustering,'' in \emph{Advances in Knowledge
-  Discovery and Data Mining (PAKDD 2021)}.\hskip 1em plus 0.5em minus
-  0.4em\relax Springer, 2021, pp. 246--258.
-
-\bibitem{ElShawi2021cSmartML}
-R.~ElShawi, H.~Lekunze, and S.~Sakr, ``csmartml: A meta learning-based
-  framework for automated selection and hyperparameter tuning for clustering,''
-  in \emph{2021 IEEE International Conference on Big Data (Big Data)}.\hskip
-  1em plus 0.5em minus 0.4em\relax IEEE, 2021, pp. 1119--1126.
-
-\bibitem{TrederTschechlov2023ML2DAC}
+\bibitem{bifet2018machine}
 \BIBentryALTinterwordspacing
-D.~Treder-Tschechlov, M.~Fritz, H.~Schwarz, and B.~Mitschang, ``Ml2dac:
-  Meta-learning to democratize automl for clustering analysis,'' \emph{Proc.
-  ACM Manag. Data}, vol.~1, no.~2, Jun. 2023. [Online]. Available:
-  \url{https://doi.org/10.1145/3589289}
+A.~Bifet, R.~Gavaldà, G.~Holmes, and B.~Pfahringer, \emph{Machine Learning for
+  Data Streams with Practical Examples in MOA}.\hskip 1em plus 0.5em minus
+  0.4em\relax MIT Press, 2018. [Online]. Available:
+  \url{https://moa.cms.waikato.ac.nz/book/}
 \BIBentrySTDinterwordspacing
-
-\bibitem{ElShawi2025TPEAutoClust}
-R.~ElShawi and S.~Sakr, ``Tpe-autoclust: A tree-based pipline ensemble
-  framework for automated clustering,'' in \emph{2022 IEEE International
-  Conference on Data Mining Workshops (ICDMW)}, 2022, pp. 1144--1153.
-
-\bibitem{daSilva2024PoAC}
-M.~C. da~Silva, G.~M. Tavares, E.~Medvet, and S.~B. Junior, ``Problem-oriented
-  automl in clustering,'' \emph{arXiv preprint arXiv:2409.16218}, 2024,
-  arXiv:2409.16218.
 
 \bibitem{yang2022iot}
 \BIBentryALTinterwordspacing
@@ -73,14 +45,6 @@ L.~Yang and A.~Shami, ``Iot data analytics in dynamic environments: From an
   automated machine learning perspective,'' \emph{Engineering Applications of
   Artificial Intelligence}, vol. 116, p. 105366, 2022. [Online]. Available:
   \url{https://www.sciencedirect.com/science/article/pii/S0952197622003803}
-\BIBentrySTDinterwordspacing
-
-\bibitem{bifet2018machine}
-\BIBentryALTinterwordspacing
-A.~Bifet, R.~Gavaldà, G.~Holmes, and B.~Pfahringer, \emph{Machine Learning for
-  Data Streams with Practical Examples in MOA}.\hskip 1em plus 0.5em minus
-  0.4em\relax MIT Press, 2018. [Online]. Available:
-  \url{https://moa.cms.waikato.ac.nz/book/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{celik2023online}
@@ -213,6 +177,42 @@ O.~Arbelaitz, I.~Gurrutxaga, J.~Muguerza, J.~M. P{\'e}rez, and I.~Perona, ``An
 Y.~Liu, Z.~Li, H.~Xiong, X.~Gao, and J.~Wu, ``Understanding of internal
   clustering validation measures,'' in \emph{2010 IEEE International Conference
   on Data Mining}, 2010, pp. 911--916.
+
+\bibitem{Tschechlov2021AutoML4Clust}
+D.~Tschechlov, M.~Fritz, and H.~Schwarz, ``Automl4clust: Efficient automl for
+  clustering analyses,'' in \emph{Proceedings of the 24th International
+  Conference on Extending Database Technology (EDBT)}.\hskip 1em plus 0.5em
+  minus 0.4em\relax OpenProceedings.org, 2021, pp. 343--348.
+
+\bibitem{Liu2021AutoCluster}
+Y.~Liu, S.~Li, and W.~Tian, ``Autocluster: Meta-learning based ensemble method
+  for automated unsupervised clustering,'' in \emph{Advances in Knowledge
+  Discovery and Data Mining (PAKDD 2021)}.\hskip 1em plus 0.5em minus
+  0.4em\relax Springer, 2021, pp. 246--258.
+
+\bibitem{ElShawi2021cSmartML}
+R.~ElShawi, H.~Lekunze, and S.~Sakr, ``csmartml: A meta learning-based
+  framework for automated selection and hyperparameter tuning for clustering,''
+  in \emph{2021 IEEE International Conference on Big Data (Big Data)}.\hskip
+  1em plus 0.5em minus 0.4em\relax IEEE, 2021, pp. 1119--1126.
+
+\bibitem{TrederTschechlov2023ML2DAC}
+\BIBentryALTinterwordspacing
+D.~Treder-Tschechlov, M.~Fritz, H.~Schwarz, and B.~Mitschang, ``Ml2dac:
+  Meta-learning to democratize automl for clustering analysis,'' \emph{Proc.
+  ACM Manag. Data}, vol.~1, no.~2, Jun. 2023. [Online]. Available:
+  \url{https://doi.org/10.1145/3589289}
+\BIBentrySTDinterwordspacing
+
+\bibitem{ElShawi2025TPEAutoClust}
+R.~ElShawi and S.~Sakr, ``Tpe-autoclust: A tree-based pipline ensemble
+  framework for automated clustering,'' in \emph{2022 IEEE International
+  Conference on Data Mining Workshops (ICDMW)}, 2022, pp. 1144--1153.
+
+\bibitem{daSilva2024PoAC}
+M.~C. da~Silva, G.~M. Tavares, E.~Medvet, and S.~B. Junior, ``Problem-oriented
+  automl in clustering,'' \emph{arXiv preprint arXiv:2409.16218}, 2024,
+  arXiv:2409.16218.
 
 \bibitem{wang2023sesame}
 X.~Wang, Z.~Wang, Z.~Wu, S.~Zhang, X.~Shi, and L.~Lu, ``Data stream clustering:
