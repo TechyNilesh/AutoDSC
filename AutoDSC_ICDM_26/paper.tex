@@ -55,7 +55,7 @@ data stream clustering, AutoML, concept drift, hyperparameter optimization, onli
 
 \section{Introduction}
 
-On a data stream the data-generating distribution drifts over time, so no single clustering algorithm or hyperparameter setting stays optimal from start to finish; the right choice must itself change as the stream evolves. Automated machine learning (AutoML) was built to make exactly this kind of algorithm and hyperparameter choice automatically~\cite{hutter2019automated}, but almost entirely for batch supervised learning: clustering has no universally applicable objective to optimize~\cite{poulakis2024survey}, and streaming adds single-pass, bounded-memory, and concept-drift constraints that batch AutoML cannot meet~\cite{bifet2018machine}. We introduce AutoDSC (Automated Data Stream Clustering), an AutoML framework that selects the clustering algorithm and tunes its hyperparameters online, in a single pass over IoT, network, and sensor streams~\cite{yang2022iot}, and adapts continuously as the distribution drifts, all without labels (Figure~\ref{fig:hero}).
+On a data stream the data-generating distribution drifts over time, so no single clustering algorithm or hyperparameter setting stays optimal from start to finish; the right choice must itself change as the stream evolves. Automated machine learning (AutoML) was built to make exactly this kind of algorithm and hyperparameter choice automatically~\cite{hutter2019automated}, but almost entirely for batch supervised learning: clustering has no universally applicable objective to optimize~\cite{poulakis2024survey}, and streaming adds single-pass, bounded-memory, and concept-drift constraints that batch AutoML cannot meet~\cite{bifet2018machine}. We introduce AutoDSC (Automated Data Stream Clustering), an AutoML framework that selects the clustering algorithm and tunes its hyperparameters online, in a single pass over IoT, network, and sensor streams~\cite{yang2022iot}, and adapts continuously as the distribution drifts, all without labels.
 
 Existing online AutoML frameworks~\cite{celik2023online,pmlr-v256-verma24a,pmlr-v139-wu21d,verma2025auto-reg} target supervised tasks, leaving unsupervised streaming clustering underserved. At present, ConfStream~\cite{carnein2020confstream} and OnlineAutoClust~\cite{el2023onlineautoclust} are the only established AutoML (CASH-style) solutions for stream clustering, and the recent MOStream~\cite{wang2024mostream} self-optimizes from a rule-based angle that reconfigures structural components rather than searching the joint algorithm--hyperparameter space. These solutions are limited: ConfStream relies on a single clustering metric, while OnlineAutoClust uses computationally intensive offline search, both ill-suited to real-time drifting streams~\cite{bahri2021data}. AutoDSC instead formalizes the streaming CASH problem and solves it with a single-pass guided search and a label-free multi-objective criterion, adapting to drift through continual per-window re-evaluation. As evidence we report ranks and quality across ten streams and an efficiency comparison; we do not claim a universally best clusterer, only the best automated selection among the algorithms in our portfolio. We evaluate AutoDSC against five baselines and make the following key contributions.
 
@@ -68,17 +68,6 @@ Existing online AutoML frameworks~\cite{celik2023online,pmlr-v256-verma24a,pmlr-
 
 \item Across ten real and synthetic streams, we show that AutoDSC attains the best mean rank on both the Adjusted Rand Index (ARI)~\cite{hubert1985comparing} and CMM~\cite{kremer2011cmm} and the highest mean ARI among all methods while being the most efficient of the AutoML stream clusterers.
 \end{itemize}
-
-\begin{figure}[t]
-\centering
-\begin{minipage}{\linewidth}\centering
-    \includegraphics[width=0.9\linewidth]{images/charts/hero/legend.pdf}
-\end{minipage}\\[2pt]
-\subfloat[ARI over the stream]{\includegraphics[width=0.49\linewidth]{images/charts/hero/quality_ari.pdf}}\hfill
-\subfloat[CMM over the stream]{\includegraphics[width=0.49\linewidth]{images/charts/hero/quality_cmm.pdf}}
-\caption{AutoDSC leads on clustering quality, here on the PenDigits stream (seed-averaged), across both complementary measures and against all baselines. (a)~The chance-corrected Adjusted Rand Index and (b)~the stream-aware Cluster Mapping Measure: AutoDSC (thick red) stays at or above every method throughout the stream, attaining the highest mean on both. It does so while remaining computationally efficient at a low, bounded memory footprint (Section~\ref{sec:results}). Axes are zoomed to the post-warm-up range for readability.}
-\label{fig:hero}
-\end{figure}
 
 \section{Background and Related Work}\label{sec:background}\label{sec:related}
 
