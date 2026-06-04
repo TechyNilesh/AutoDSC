@@ -37,12 +37,12 @@ GROUP = 'recovery'
 ADAPTIVE = ['AutoDSC', 'ConfStream', 'OACE', 'MOStream']
 LINESTYLES = {'AutoDSC': '-', 'ConfStream': '--', 'OACE': '-.', 'MOStream': ':'}
 
-# panel: (dataset, title, drift descriptor, ylim, out-name)
+# panel: (dataset, title, drift descriptor, ylim, xstart_k, yticks, out-name)
 PANELS = [
     ('synth_blobs_merge_split', 'Merge-Split',
-     ('region', 46, 63), (0.60, 1.02), 'merge_split'),
+     ('region', 46, 63), (0.74, 1.02), 25, [0.8, 0.9, 1.0], 'merge_split'),
     ('synth_blobs_expanding', 'Expanding',
-     ('continuous',), (0.84, 1.01), 'expanding'),
+     ('continuous',), (0.84, 1.005), 25, [0.9, 1.0], 'expanding'),
 ]
 STAGES = 20
 
@@ -65,7 +65,7 @@ def to_stages(c):
 
 def main():
     S.set_rc()
-    for dataset, title, drift, ylim, out in PANELS:
+    for dataset, title, drift, ylim, xstart, yticks, out in PANELS:
         fig, ax = plt.subplots(figsize=(4.0, 3.7))   # square-ish: two fit in one column
         # x positions in #instances (thousands); same staged shape as before.
         x = S.stage_thousands(dataset, STAGES)
@@ -94,7 +94,9 @@ def main():
         ax.set_xlabel(S.STREAM_XLABEL, fontsize=15, fontweight='bold')
         ax.set_ylabel(r'ARI $\uparrow$', fontsize=15, fontweight='bold')
         ax.set_ylim(*ylim)
-        ax.set_xlim(0.0, total)
+        ax.set_xlim(xstart, total)             # trim warm-up so the zoom is tight
+        ax.set_yticks(yticks)                   # 1-decimal labels at 0.1 spacing
+        ax.yaxis.set_major_formatter(plt.matplotlib.ticker.FormatStrFormatter('%.1f'))
         ax.tick_params(axis='both', labelsize=12)
         S.bold_ticks(ax)
         S.clean_spines(ax)
