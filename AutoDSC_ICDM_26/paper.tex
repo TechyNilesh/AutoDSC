@@ -55,7 +55,7 @@ data stream clustering, AutoML, concept drift, hyperparameter optimization, onli
 
 \section{Introduction}
 
-On a data stream the data-generating distribution drifts over time, so no single clustering algorithm or hyperparameter setting stays optimal from start to finish; the right choice must itself change as the stream evolves. Automated machine learning (AutoML) was built to make exactly this kind of algorithm and hyperparameter choice automatically~\cite{hutter2019automated}, but almost entirely for batch supervised learning: clustering has no universally applicable objective to optimize~\cite{poulakis2024survey}, and streaming adds single-pass, bounded-memory, and concept-drift constraints that batch AutoML cannot meet~\cite{bifet2018machine}. We introduce AutoDSC (Automated Data Stream Clustering), an AutoML framework that selects the clustering algorithm and tunes its hyperparameters online, in a single pass over IoT, network, and sensor streams~\cite{yang2022iot}, and adapts continuously as the distribution drifts, all without labels (Figure~\ref{fig:recovery}).
+On a data stream the data-generating distribution drifts over time, so no single clustering algorithm or hyperparameter setting stays optimal from start to finish; the right choice must itself change as the stream evolves. Automated machine learning (AutoML) was built to make exactly this kind of algorithm and hyperparameter choice automatically~\cite{hutter2019automated}, but almost entirely for batch supervised learning: clustering has no universally applicable objective to optimize~\cite{poulakis2024survey}, and streaming adds single-pass, bounded-memory, and concept-drift constraints that batch AutoML cannot meet~\cite{bifet2018machine}. We introduce AutoDSC (Automated Data Stream Clustering), an AutoML framework that selects the clustering algorithm and tunes its hyperparameters online, in a single pass over IoT, network, and sensor streams~\cite{yang2022iot}, and adapts continuously as the distribution drifts, all without labels (Figure~\ref{fig:hero}).
 
 Existing online AutoML frameworks~\cite{celik2023online,pmlr-v256-verma24a,pmlr-v139-wu21d,verma2025auto-reg} target supervised tasks, leaving unsupervised streaming clustering underserved. At present, ConfStream~\cite{carnein2020confstream} and OnlineAutoClust~\cite{el2023onlineautoclust} are the only established AutoML (CASH-style) solutions for stream clustering, and the recent MOStream~\cite{wang2024mostream} self-optimizes from a rule-based angle that reconfigures structural components rather than searching the joint algorithm--hyperparameter space. These solutions are limited: ConfStream relies on a single clustering metric, while OnlineAutoClust uses computationally intensive offline search, both ill-suited to real-time drifting streams~\cite{bahri2021data}. AutoDSC instead formalizes the streaming CASH problem and solves it with a single-pass guided search and a label-free multi-objective criterion, adapting to drift through continual per-window re-evaluation. As evidence we report ranks and quality across ten streams and an efficiency comparison; we do not claim a universally best clusterer, only the best automated selection among the algorithms in our portfolio. We evaluate AutoDSC against five baselines and make the following key contributions.
 
@@ -72,12 +72,12 @@ Existing online AutoML frameworks~\cite{celik2023online,pmlr-v256-verma24a,pmlr-
 \begin{figure}[t]
 \centering
 \begin{minipage}{\linewidth}\centering
-    \includegraphics[width=0.95\linewidth]{images/charts/recovery/legend.pdf}
+    \includegraphics[width=0.95\linewidth]{images/charts/hero/legend.pdf}
 \end{minipage}\\[2pt]
-\subfloat[\emph{Merge-Split}: a discrete drift event (shaded)]{\includegraphics[width=\linewidth]{images/charts/recovery/merge_split.pdf}}\\
-\subfloat[\emph{Expanding}: continuous drift (left-to-right gradient)]{\includegraphics[width=\linewidth]{images/charts/recovery/expanding.pdf}}
-\caption{AutoDSC adapts to concept drift without labels. Per-window ARI (seed-averaged) on two synthetic streams: under a discrete merge-then-split event (a, shaded) and under continuously growing within-cluster variance (b, gradient). AutoDSC (thick red line) sustains the highest clustering quality and recovers fastest, while the fixed and competing adaptive baselines degrade or plateau below it.}
-\label{fig:recovery}
+\subfloat[Quality over the stream]{\includegraphics[width=0.49\linewidth]{images/charts/hero/quality.pdf}}\hfill
+\subfloat[Efficiency (size $\propto$ ARI)]{\includegraphics[width=0.49\linewidth]{images/charts/hero/efficiency.pdf}}
+\caption{AutoDSC wins on both quality and efficiency, here on the PenDigits stream (seed-averaged). (a)~Per-window ARI: AutoDSC (thick red) stays above every baseline throughout the stream. (b)~Throughput--memory plane with marker size proportional to ARI: AutoDSC is the highest-quality method (largest marker) while remaining in the low-memory region (shaded) at competitive throughput, whereas the only faster methods reach it with markedly lower quality.}
+\label{fig:hero}
 \end{figure}
 
 \section{Background and Related Work}\label{sec:background}\label{sec:related}
@@ -456,6 +456,17 @@ Fast-RBF & \textbf{.999$\pm$.001} & \textbf{1.000$\pm$.000} & .988$\pm$.001 & .9
 \end{figure*}
 
 Figure~\ref{fig:recovery} isolates AutoDSC's behaviour under drift on two synthetic streams. On \emph{Merge-Split} (a), which contains a discrete merge-then-split event mid-stream (shaded), every adaptive method incurs a temporary drop in ARI and recovers within roughly fifteen windows; AutoDSC sustains the highest stable quality (ARI~$\approx1.0$) on either side of the drift and recovers together with the strongest baselines, consistent with its adaptive-exploration design. On \emph{Expanding} (b), where within-cluster variance grows continuously throughout the stream (gradient), AutoDSC reaches near-perfect ARI almost immediately and holds it, whereas ConfStream converges more slowly and OACE and MOStream plateau visibly below it. AutoDSC thus both recovers from abrupt drift and sustains quality under gradual drift through its adaptive exploration alone.
+
+\begin{figure}[t]
+\centering
+\begin{minipage}{\linewidth}\centering
+    \includegraphics[width=0.95\linewidth]{images/charts/recovery/legend.pdf}
+\end{minipage}\\[2pt]
+\subfloat[\emph{Merge-Split}: a discrete drift event (shaded)]{\includegraphics[width=\linewidth]{images/charts/recovery/merge_split.pdf}}\\
+\subfloat[\emph{Expanding}: continuous drift (left-to-right gradient)]{\includegraphics[width=\linewidth]{images/charts/recovery/expanding.pdf}}
+\caption{Per-window ARI (seed-averaged) under drift.}
+\label{fig:recovery}
+\end{figure}
 
 To assess these performance gains statistically, the Critical Difference (CD) diagrams in Figure~\ref{fig:asc_rand_index_cd_comparison} rank all methods using the Friedman test with the Nemenyi post-hoc procedure ($\alpha = 0.05$, CD$=2.38$). AutoDSC attains the best (lowest) mean rank on both ARI ($1.40$) and CMM ($2.20$), ahead of every baseline. On ARI, AutoDSC is significantly better than RandomSearch, MOStream, and the Default(Best) baseline; its advantage over the strongest AutoML competitors (ConfStream and OACE, both at rank $3.60$) falls just inside the critical difference, so with only ten datasets these are not separated by a statistically significant margin. AutoDSC nonetheless ranks first on both metrics.
 
