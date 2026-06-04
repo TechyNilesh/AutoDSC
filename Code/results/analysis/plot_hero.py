@@ -84,23 +84,18 @@ def panel_efficiency(dataset):
     def size(ari):
         # map ARI -> marker area; keep a visible floor so low-ARI points still show
         t = 0.0 if amax == amin else (ari - amin) / (amax - amin)
-        return 110 + 760 * t
+        return 80 + 430 * t
 
     # draw smaller (lower-ARI) markers LAST so they are never hidden behind the
-    # large AutoDSC marker when two methods share an efficiency region.
+    # large AutoDSC marker when two methods share an efficiency region. A white
+    # halo around each marker keeps coincident points (AutoDSC/ConfStream) legible.
     for m, tp, mem, ari in sorted(pts, key=lambda p: p[3], reverse=True):
         is_auto = m == S.EMPHASIS
         z = 5 if is_auto else 6  # small markers on top of the big AutoDSC one
-        ax.scatter(tp, mem, s=size(ari) * (1.18 if is_auto else 1.0),
+        ax.scatter(tp, mem, s=size(ari) * (1.12 if is_auto else 1.0),
                    marker=S.METHOD_MARKER[m], color=S.METHOD_COLOR[m],
-                   alpha=0.92, edgecolor='black',
-                   linewidth=1.8 if is_auto else 0.8, zorder=z)
-        dx, dy, ha = OFFSET.get(m, (0, 12, 'center'))
-        txt = f'ARI {ari:.2f}' if is_auto else f'{ari:.2f}'
-        ax.annotate(txt, (tp, mem), textcoords='offset points',
-                    xytext=(dx, dy), ha=ha,
-                    fontsize=11 if is_auto else 10,
-                    fontweight='bold', color=S.METHOD_COLOR[m], zorder=8)
+                   alpha=0.95, edgecolor='white',
+                   linewidth=2.0 if is_auto else 1.6, zorder=z)
 
     ax.set_xscale('log')
     ax.set_yscale('log')
