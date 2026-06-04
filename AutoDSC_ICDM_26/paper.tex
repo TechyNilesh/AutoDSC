@@ -168,7 +168,7 @@ and $\mathcal{E}_t^{a_k} = \{(\theta,s) \in \mathcal{E}_t : a = a_k\}$ contains 
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\linewidth]{images/diagrams/parameter_sampling_visualization.png}
-    \caption{Parameter Sampling Visualization.}
+    \caption{Hierarchical Parameter Sampling in PGSSO. An algorithm is first drawn from the elite frequencies, then its hyperparameters are sampled from the elite distributions of that algorithm.}
     \label{fig:parameter_sampling_visualization}
 \end{figure}
 
@@ -391,7 +391,7 @@ Table~\ref{tab:performance_comparison_highlighted} presents a comprehensive comp
 AutoDSC achieves the highest overall mean ARI of \textbf{0.622}, ahead of every baseline, surpassing the strongest AutoML competitor ConfStream (0.572) by 5.0 points, OnlineAutoClust (0.558) by 6.4 points, RandomSearch (0.534) by 8.8 points, and the Default(Best) baseline (0.517) by 10.5 points, and it attains the best mean rank on both ARI and CMM. AutoDSC ranks first on ARI for 7 of the 10 datasets, with the largest margins on the drifting synthetic streams (e.g.\ Fast-RBF, Gradual, Expanding all $\geq0.99$, where even the best default reaches only $0.76$--$0.82$) and on the harder real stream PenDigits ($0.510$ vs.\ $0.412$ for the best default). It is outranked on Shuttle and Vehicle, where a single default algorithm is already near-optimal, and on Merge-Split, where OACE leads narrowly ($0.985$ vs.\ $0.963$). Figure~\ref{fig:autodsc_combined} shows the prequential trajectories, where AutoDSC stays at or above all baselines throughout the stream on both a real (PenDigits) and a synthetic (Expanding) workload, reflecting rapid adaptation as the stream evolves.
 
 \begin{table*}[t]
-\caption{Clustering quality (ARI and CMM, $\uparrow$ higher is better) across datasets over 10 seeds. Per-dataset cells report mean$\pm$std over seeds, while the Mean Score row reports the mean across datasets. Best per metric per row in \textbf{bold}, second best \underline{underlined}.}
+\caption{Clustering Quality Across Datasets. \textmd{ARI and CMM ($\uparrow$ higher is better) over 10 seeds; per-dataset cells report mean$\pm$std and the Mean Score row reports the mean across datasets. Best per metric per row in \textbf{bold}, second best \underline{underlined}.}}
 \label{tab:performance_comparison_highlighted}
 \centering
 \resizebox{\linewidth}{!}{
@@ -436,24 +436,24 @@ Fast-RBF & \textbf{.999$\pm$.001} & \textbf{1.000$\pm$.000} & .988$\pm$.001 & .9
     \begin{minipage}{\linewidth}\centering
         \includegraphics[width=0.8\linewidth]{images/charts/benchmark/legend.pdf}
     \end{minipage}\\[2pt]
-    \subfloat[PenDigits, ARI]{\includegraphics[width=0.245\linewidth]{images/charts/benchmark/pendigits_ari.pdf}}\hfill
-    \subfloat[PenDigits, CMM]{\includegraphics[width=0.245\linewidth]{images/charts/benchmark/pendigits_cmm.pdf}}\hfill
-    \subfloat[Expanding, ARI]{\includegraphics[width=0.245\linewidth]{images/charts/benchmark/expanding_ari.pdf}}\hfill
-    \subfloat[Expanding, CMM]{\includegraphics[width=0.245\linewidth]{images/charts/benchmark/expanding_cmm.pdf}}
-    \caption{Prequential clustering quality across stream stages for all methods on a real (PenDigits) and a synthetic drifting (Expanding) stream, with AutoDSC drawn thick.}
+    \subfloat[PenDigits ARI]{\includegraphics[width=0.245\linewidth]{images/charts/benchmark/pendigits_ari.pdf}}\hfill
+    \subfloat[PenDigits CMM]{\includegraphics[width=0.245\linewidth]{images/charts/benchmark/pendigits_cmm.pdf}}\hfill
+    \subfloat[Expanding ARI]{\includegraphics[width=0.245\linewidth]{images/charts/benchmark/expanding_ari.pdf}}\hfill
+    \subfloat[Expanding CMM]{\includegraphics[width=0.245\linewidth]{images/charts/benchmark/expanding_cmm.pdf}}
+    \caption{Prequential Clustering Quality Across Stream Stages. Results for all methods on a real (PenDigits) and a synthetic drifting (Expanding) stream; AutoDSC is drawn thick.}
     \label{fig:autodsc_combined}
 \end{figure*}
 
-Figure~\ref{fig:recovery} isolates AutoDSC's behaviour under drift on two synthetic streams. On \emph{Merge-Split} (a), which contains a discrete merge-then-split event mid-stream (shaded), every adaptive method incurs a temporary drop in ARI and recovers within roughly fifteen windows; AutoDSC sustains the highest stable quality (ARI~$\approx1.0$) on either side of the drift and recovers together with the strongest baselines, consistent with its adaptive-exploration design. On \emph{Expanding} (b), where within-cluster variance grows continuously throughout the stream (gradient), AutoDSC reaches near-perfect ARI almost immediately and holds it, whereas ConfStream converges more slowly and OACE and MOStream plateau visibly below it. AutoDSC thus both recovers from abrupt drift and sustains quality under gradual drift through its adaptive exploration alone.
+Figure~\ref{fig:recovery} isolates AutoDSC's behaviour under drift on two synthetic streams. On \emph{Merge-Split} (a), which contains a discrete merge-then-split event mid-stream (shaded), every adaptive method incurs a temporary drop in ARI and recovers within roughly fifteen windows; AutoDSC sustains the highest stable quality (ARI~$\approx1.0$) on either side of the drift and recovers together with the strongest baselines, consistent with its adaptive-exploration design. On \emph{Expanding} (b), where within-cluster variance grows continuously throughout the stream (gradient), AutoDSC holds near-perfect ARI for almost the entire stream and degrades the least as the drift intensifies, whereas ConfStream tracks it early but destabilizes sharply late in the stream, and OACE and MOStream sit and steadily decline well below it. AutoDSC thus both recovers from abrupt drift and best sustains quality under continuous drift through its adaptive exploration alone.
 
 \begin{figure}[t]
 \centering
 \begin{minipage}{\linewidth}\centering
     \includegraphics[width=0.95\linewidth]{images/charts/recovery/legend.pdf}
 \end{minipage}\\[2pt]
-\subfloat[\emph{Merge-Split}: a discrete drift event (shaded)]{\includegraphics[width=0.49\linewidth]{images/charts/recovery/merge_split.pdf}}\hfill
-\subfloat[\emph{Expanding}: continuous drift (left-to-right gradient)]{\includegraphics[width=0.49\linewidth]{images/charts/recovery/expanding.pdf}}
-\caption{Per-window ARI (seed-averaged) under drift.}
+\subfloat[\emph{Merge-Split} (abrupt)]{\includegraphics[width=0.49\linewidth]{images/charts/recovery/merge_split.pdf}}\hfill
+\subfloat[\emph{Expanding} (continuous)]{\includegraphics[width=0.49\linewidth]{images/charts/recovery/expanding.pdf}}
+\caption{Drift Behaviour on Two Synthetic Streams. Per-window ARI (seed-averaged); AutoDSC sustains the highest quality and recovers under both an abrupt event (a) and continuous drift (b), with the y-axes zoomed to the post-warm-up range.}
 \label{fig:recovery}
 \end{figure}
 
@@ -463,7 +463,7 @@ To assess these performance gains statistically, the Critical Difference (CD) di
 \centering
 \subfloat[ARI\label{fig:cd_ari}]{\includegraphics[width=\linewidth]{images/charts/cd/cd_ari.pdf}}\\
 \subfloat[CMM\label{fig:cd_cmm}]{\includegraphics[width=\linewidth]{images/charts/cd/cd_cmm.pdf}}
-\caption{Critical Difference diagrams (Nemenyi, $\alpha=0.05$) for ARI and CMM; methods connected by a bar are not significantly different.}
+\caption{Critical Difference Diagrams for ARI and CMM. Ranks from the Friedman test with the Nemenyi post-hoc procedure ($\alpha=0.05$); methods connected by a bar are not significantly different.}
 \label{fig:asc_rand_index_cd_comparison}
 \end{figure}
 
@@ -472,7 +472,7 @@ Beyond clustering quality, AutoDSC remains practical in throughput and memory. A
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{images/charts/efficiency/efficiency.pdf}
-\caption{Throughput vs.\ memory trade-off (mean over all datasets, log--log axes); the shaded region marks the favorable high-throughput, low-memory area, where AutoDSC ($\star$) sits.}
+\caption{Throughput--Memory Trade-off. Mean over all datasets on log--log axes; the shaded region marks the favorable high-throughput, low-memory area, where AutoDSC ($\star$) sits.}
 \label{fig:efficiency}
 \end{figure}
 
@@ -484,7 +484,7 @@ To quantify the contribution of each component, we ran a leave-one-out ablation 
         \includegraphics[width=0.95\linewidth]{images/charts/ablation/legend.pdf}
     \end{minipage}\\[2pt]
     \includegraphics[width=\linewidth]{images/charts/ablation/ablation_bar.pdf}
-    \caption{Leave-one-out ablation on real-world streams, reporting ARI and CMM of each variant relative to the full AutoDSC (dashed line $=1.0$).}
+    \caption{Leave-One-Out Ablation on Real-world Streams. ARI and CMM of each variant relative to the full AutoDSC (dashed line $=1.0$).}
     \label{fig:ablation_study}
 \end{figure}
 
@@ -496,7 +496,7 @@ Finally, AutoDSC adaptively reshapes its population of candidate algorithms as t
         \includegraphics[width=0.9\linewidth]{images/charts/evolution/legend.pdf}
     \end{minipage}\\[2pt]
     \includegraphics[width=1.0\linewidth]{images/charts/evolution/evolution.pdf}
-    \caption{Evolution of the AutoDSC population composition over the Insects stream, where colors denote the selected base algorithm per population slot (rows) and stream stage (columns).}
+    \caption{Population Composition over the Insects Stream. Colors denote the selected base algorithm per population slot (rows) and stream stage (columns).}
     \label{fig:model_selection_evolution}
 \end{figure}
 
@@ -510,7 +510,7 @@ Finally, AutoDSC adaptively reshapes its population of candidate algorithms as t
 
 \begin{table}[t]
 \centering
-\caption{Supplementary analyses on a real (PenDigits) and a drifting synthetic (Sudden) stream (mean over 10 seeds). AutoDSC never observes labels or the cluster count $k$ during the stream.}
+\caption{Supplementary Analyses on PenDigits and Sudden. \textmd{Mean over 10 seeds; AutoDSC never observes labels or the cluster count $k$ during the stream.}}
 \label{tab:supplementary}
 \begin{tabular}{l c c}
 \hline
@@ -532,7 +532,7 @@ PGSSO search share (\%) & 0.08 & 0.06 \\
 
 \begin{table}[t]
 \centering
-\caption{Dimensionality scalability of AutoDSC on a controlled five-cluster blob stream (mean over 10 seeds): quality is stable while throughput degrades only gracefully as the feature count grows.}
+\caption{Dimensionality Scalability of AutoDSC. \textmd{Controlled five-cluster blob stream (mean over 10 seeds); quality stays stable while throughput degrades only gracefully as the feature count grows.}}
 \label{tab:dimscaling}
 \resizebox{\linewidth}{!}{%
 \begin{tabular}{l c c c c c}
@@ -555,9 +555,9 @@ We analyze AutoDSC's sensitivity to its two free hyperparameters, window size $w
     \begin{minipage}{\linewidth}\centering
         \includegraphics[width=0.85\linewidth]{images/charts/sensitivity/legend.pdf}
     \end{minipage}\\[2pt]
-    \subfloat[Window size]{\includegraphics[width=0.49\linewidth]{images/charts/sensitivity/window_size.pdf}}\hfill
-    \subfloat[Population size]{\includegraphics[width=0.49\linewidth]{images/charts/sensitivity/population_size.pdf}}
-    \caption{Sensitivity of AutoDSC to window size and population size, averaged over all datasets.}
+    \subfloat[Window Size]{\includegraphics[width=0.49\linewidth]{images/charts/sensitivity/window_size.pdf}}\hfill
+    \subfloat[Population Size]{\includegraphics[width=0.49\linewidth]{images/charts/sensitivity/population_size.pdf}}
+    \caption{Sensitivity to Window Size and Population Size. Averaged over all datasets.}
     \label{fig:sensitivity_study}
 \end{figure}
 
