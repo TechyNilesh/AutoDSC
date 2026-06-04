@@ -72,11 +72,11 @@ Existing online AutoML frameworks~\cite{celik2023online,pmlr-v256-verma24a,pmlr-
 \begin{figure}[t]
 \centering
 \begin{minipage}{\linewidth}\centering
-    \includegraphics[width=0.95\linewidth]{images/charts/hero/legend.pdf}
+    \includegraphics[width=0.8\linewidth]{images/charts/hero/legend_compete.pdf}
 \end{minipage}\\[2pt]
-\subfloat[Quality over the stream]{\includegraphics[width=0.49\linewidth]{images/charts/hero/quality.pdf}}\hfill
-\subfloat[Efficiency (size $\propto$ ARI)]{\includegraphics[width=0.49\linewidth]{images/charts/hero/efficiency.pdf}}
-\caption{AutoDSC wins on both quality and efficiency, here on the PenDigits stream (seed-averaged). (a)~Per-window ARI: AutoDSC (thick red) stays above every baseline throughout the stream. (b)~Throughput--memory plane with marker size proportional to ARI: AutoDSC is the highest-quality method (largest marker) while remaining in the low-memory region (shaded) at competitive throughput, whereas the only faster methods reach it with markedly lower quality.}
+\subfloat[Clustering quality]{\includegraphics[width=0.49\linewidth]{images/charts/hero/quality.pdf}}\hfill
+\subfloat[Memory footprint]{\includegraphics[width=0.49\linewidth]{images/charts/hero/memory_line.pdf}}
+\caption{AutoDSC wins on both quality and efficiency, here on the PenDigits stream (seed-averaged), against the competing AutoML (ConfStream, OACE) and rule-based (MOStream) stream clusterers. (a)~Per-window ARI: AutoDSC (thick red) stays well above every competitor throughout the stream. (b)~Per-window peak memory: AutoDSC holds the lowest, bounded footprint as the stream grows, while OACE and MOStream use markedly more, all at competitive throughput (Section~\ref{sec:results}).}
 \label{fig:hero}
 \end{figure}
 

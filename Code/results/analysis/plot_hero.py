@@ -33,12 +33,17 @@ import style as S
 
 GROUP = 'hero'
 
+# The actual competitors for the hero panels: AutoML (AutoDSC, ConfStream, OACE)
+# plus the rule-based MOStream. RandomSearch and Default(Best) are benchmarking
+# references only, so they are excluded from Figure 1's efficiency view.
+COMPETITORS = ['AutoDSC', 'ConfStream', 'OACE', 'MOStream']
 
-def panel_quality(dataset):
+
+def panel_quality(dataset, methods=COMPETITORS):
     """Per-window ARI over the stream; AutoDSC emphasized on top."""
     fig, ax = plt.subplots(figsize=(4.0, 3.4))
     ws = S.window_size(dataset)
-    for m in S.METHODS:
+    for m in methods:
         c = S.curve(m, dataset, 'ari')
         if c is None:
             continue
@@ -70,7 +75,7 @@ def panel_efficiency(dataset):
     }
     fig, ax = plt.subplots(figsize=(4.6, 3.5))
     pts = []
-    for m in S.METHODS:
+    for m in COMPETITORS:
         tp = S.scalar(m, dataset, 'throughput_ips')
         mem = S.scalar(m, dataset, 'memory_mb')
         ari = S.scalar(m, dataset, 'ari')
@@ -125,6 +130,74 @@ def panel_efficiency(dataset):
     fig.tight_layout()
     S.save_fig(fig, GROUP, 'efficiency')
     print(f'Saved charts/{GROUP}/efficiency.pdf / .png')
+
+
+def _wm_seed_mean(method, dataset, builder):
+    """Seed-mean per-window curve built from each seed's window_metric dict."""
+    import glob, json, os
+    p = S.best_default_prefix(dataset) if method == S.DEFAULT_BEST else S.METHOD_PREFIX[method]
+    if not p:
+        return None
+    curves = []
+    for f in glob.glob(os.path.join(S.RESULTS_DIR, f'{p}_{dataset}_*.json')):
+        wm = json.load(open(f)).get('window_metric', {})
+        c = builder(wm)
+        if c is not None and len(c):
+            curves.append(np.asarray(c, dtype=float))
+    if not curves:
+        return None
+    n = min(len(c) for c in curves)
+    return np.vstack([c[:n] for c in curves]).mean(axis=0)
+
+
+def memory_curve(method, dataset):
+    return _wm_seed_mean(method, dataset, lambda wm: wm.get('memory_usages'))
+
+
+def throughput_curve(method, dataset):
+    """Per-window instantaneous throughput (instances/s) from cumulative runtimes."""
+    def build(wm):
+        rt = wm.get('runtimes')
+        ws = wm.get('window_size', 1000)
+        if not rt:
+            return None
+        rt = np.asarray(rt, dtype=float)
+        dt = np.diff(rt, prepend=0.0)
+        dt[dt <= 0] = np.nan
+        return ws / dt
+    return _wm_seed_mean(method, dataset, build)
+
+
+def panel_line(dataset, kind, methods=COMPETITORS):
+    """Line chart over the stream: kind in {'throughput','memory'}."""
+    fig, ax = plt.subplots(figsize=(4.2, 3.4))
+    ws = S.window_size(dataset)
+    getter = throughput_curve if kind == 'throughput' else memory_curve
+    for m in methods:
+        c = getter(m, dataset)
+        if c is None:
+            continue
+        x = np.arange(1, len(c) + 1) * ws / 1000.0
+        ax.plot(x, c, '-', marker=S.METHOD_MARKER[m], markersize=S.ms(m) - 1,
+                linewidth=S.lw(m), color=S.METHOD_COLOR[m],
+                markeredgecolor='black', markeredgewidth=0.5,
+                zorder=(6 if m == S.EMPHASIS else 3))
+    if kind == 'throughput':
+        ax.set_yscale('log')        # throughput spans orders of magnitude
+    else:
+        ax.set_ylim(bottom=0)       # memory: linear from 0 reads more honestly
+    ax.set_xlabel(S.STREAM_XLABEL, fontsize=14, fontweight='bold')
+    ylabel = (r'Throughput (instances/s) $\uparrow$' if kind == 'throughput'
+              else r'Memory (MB) $\downarrow$')
+    ax.set_ylabel(ylabel, fontsize=13, fontweight='bold')
+    ax.tick_params(axis='both', labelsize=11)
+    S.bold_ticks(ax)
+    S.clean_spines(ax)
+    ax.grid(axis='y', which='major', alpha=0.16, linewidth=0.6)
+    fig.tight_layout()
+    name = 'throughput_line' if kind == 'throughput' else 'memory_line'
+    S.save_fig(fig, GROUP, name)
+    print(f'Saved charts/{GROUP}/{name}.pdf / .png')
 
 
 def _seed_values(method, dataset, key):
@@ -189,11 +262,17 @@ def main():
     S.set_rc()
     panel_quality(args.dataset)
     panel_efficiency(args.dataset)
+    panel_line(args.dataset, 'throughput')
+    panel_line(args.dataset, 'memory')
     panel_efficiency_box('throughput_ips', 'efficiency_box_tp')
     panel_efficiency_box('memory_mb', 'efficiency_box_mem')
+    # full-method legend (for the quality panel, which shows all six)
     S.save_legend(S.method_handles(S.METHODS), GROUP, 'legend',
                   ncol=len(S.METHODS))
-    print(f'Saved charts/{GROUP}/legend.pdf / .png')
+    # competitor-only legend (for the efficiency panel)
+    S.save_legend(S.method_handles(COMPETITORS), GROUP, 'legend_compete',
+                  ncol=len(COMPETITORS))
+    print(f'Saved charts/{GROUP}/legend.pdf / legend_compete.pdf')
 
 
 if __name__ == '__main__':
