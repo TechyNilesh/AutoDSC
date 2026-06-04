@@ -184,6 +184,31 @@ def curve(method, dataset, metric, select_metric='ari'):
         return _seed_mean_curve(p, dataset, metric) if p else None
     return _seed_mean_curve(METHOD_PREFIX[method], dataset, metric)
 
+# Canonical x-axis label for all staged stream charts (instance count, thousands).
+STREAM_XLABEL = '#Instances (in thousands)'
+
+def window_size(dataset):
+    """Per-window instance count used in the benchmark runs (default 1000)."""
+    for m in METHODS:
+        p = METHOD_PREFIX.get(m)
+        if not p:
+            continue
+        for f in _files(p, dataset):
+            ws = json.load(open(f)).get('window_metric', {}).get('window_size')
+            if ws:
+                return int(ws)
+    return 1000
+
+def stage_thousands(dataset, stages, method='AutoDSC', metric='ari'):
+    """Cumulative #instances (in thousands) at the END of each of `stages` equal
+    -window bins, matching np.array_split binning of the seed-mean curve. Use as
+    the x positions for staged stream charts so the axis reads in instances
+    processed rather than abstract stage index, while keeping the staged shape."""
+    c = curve(method, dataset, metric)
+    nwin = len(c) if c is not None else stages
+    sizes = [len(ch) for ch in np.array_split(np.arange(nwin), stages)]
+    return np.cumsum(sizes) * window_size(dataset) / 1000.0
+
 def scalar_overall(method, key, select_metric='ari'):
     """Mean over all datasets of the per-dataset seed-mean scalar."""
     vals = [scalar(method, d, key, select_metric) for d in DATASETS]

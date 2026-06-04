@@ -156,6 +156,11 @@ H.~Kremer, P.~Kranen, T.~Jansen, T.~Seidl, A.~Bifet, G.~Holmes, and
 C.~C. Aggarwal, ``Data streams: models and algorithms,'' \emph{Springer Science
   \& Business Media}, 2013.
 
+\bibitem{zhang1996birch}
+T.~Zhang, R.~Ramakrishnan, and M.~Livny, ``{BIRCH}: An efficient data
+  clustering method for very large databases,'' \emph{SIGMOD Rec.}, vol.~25,
+  no.~2, pp. 103--114, 1996.
+
 \bibitem{aggarwal2003framework}
 C.~C. Aggarwal, S.~Y. Philip, J.~Han, and J.~Wang, ``A framework for clustering
   evolving data streams,'' in \emph{Proceedings 2003 VLDB conference}.\hskip
@@ -208,6 +213,11 @@ O.~Arbelaitz, I.~Gurrutxaga, J.~Muguerza, J.~M. P{\'e}rez, and I.~Perona, ``An
 Y.~Liu, Z.~Li, H.~Xiong, X.~Gao, and J.~Wu, ``Understanding of internal
   clustering validation measures,'' in \emph{2010 IEEE International Conference
   on Data Mining}, 2010, pp. 911--916.
+
+\bibitem{wang2023sesame}
+X.~Wang, Z.~Wang, Z.~Wu, S.~Zhang, X.~Shi, and L.~Lu, ``Data stream clustering:
+  An in-depth empirical study,'' \emph{Proc. ACM Manag. Data}, vol.~1, no.~2,
+  2023.
 
 \bibitem{souza2020challenges}
 V.~M. Souza, D.~M. dos Reis, A.~G. Maletzke, and G.~E. Batista, ``Challenges in

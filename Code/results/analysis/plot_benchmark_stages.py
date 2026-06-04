@@ -47,10 +47,10 @@ def main():
     S.set_rc()
 
     panels = [(ds, m) for ds in args.datasets for m in args.metrics]
-    x = np.arange(1, args.stages + 1)
 
     for ds, metric in panels:
         fig, ax = plt.subplots(figsize=(3.8, 3.4))
+        x = S.stage_thousands(ds, args.stages)   # cumulative #instances (thousands)
         panel_vals = []
         for m in S.METHODS:
             y = stage_means(m, ds, metric, args.stages)
@@ -61,9 +61,8 @@ def main():
                     linewidth=S.lw(m), color=S.METHOD_COLOR[m],
                     label=S.METHOD_NAME[m], markeredgecolor='black',
                     markeredgewidth=0.6, zorder=(6 if m == S.EMPHASIS else 3))
-        ax.set_xlabel('Stages of Stream', fontsize=14, fontweight='bold')
+        ax.set_xlabel(S.STREAM_XLABEL, fontsize=14, fontweight='bold')
         ax.set_ylabel(S.METRIC_LABEL[metric], fontsize=15, fontweight='bold')
-        ax.set_xticks(x)
         if not args.full and panel_vals:
             allv = np.concatenate(panel_vals)
             lo, hi = allv.min(), allv.max()

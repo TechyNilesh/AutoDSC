@@ -14,6 +14,7 @@ candidate each window becomes the incumbent for the next window.
 import numpy as np
 import random
 import copy
+import time
 import warnings
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
@@ -250,6 +251,16 @@ class AutoDSC:
         self.incumbent = None
         self._previous_score = -float('inf')
 
+        # --- optional instrumentation (additive; does not change behaviour) ---
+        # Per-window trace of the incumbent's internal CVI scores, the number of
+        # clusters it predicted on the window, and a cumulative split of where
+        # per-window wall-clock is spent. Used only by offline analysis scripts.
+        self.trace = {
+            'window_idx': [], 'composite': [], 'silhouette': [], 'calinski': [],
+            'davies': [], 'pred_k': [],
+        }
+        self.timing = {'learn': 0.0, 'score': 0.0, 'search': 0.0}
+
         self._initialize_population()
 
     def __str__(self):
@@ -415,6 +426,7 @@ class AutoDSC:
             return
 
         entry = {'x': x_array.copy(), 'preds': {}}
+        _t0 = time.perf_counter()
         for candidate in self.population:
             if candidate.model_instance is None:
                 continue
@@ -423,6 +435,7 @@ class AutoDSC:
                 candidate.model_instance.learn_one(x_array)
             except Exception:
                 entry['preds'][id(candidate)] = None
+        self.timing['learn'] += time.perf_counter() - _t0
         self.window_buffer.append(entry)
 
         if len(self.window_buffer) == self.window_size:
@@ -479,6 +492,7 @@ class AutoDSC:
 
             best_candidate, best_score = None, -float('inf')
             config_dicts, scores = [], []
+            _t0 = time.perf_counter()
             for candidate in self.population:
                 if candidate.model_instance is None:
                     continue
@@ -492,7 +506,9 @@ class AutoDSC:
                 composite = cvi.composite_score()
                 if composite > best_score:
                     best_score, best_candidate = composite, candidate
+            self.timing['score'] += time.perf_counter() - _t0
 
+            _t1 = time.perf_counter()
             if config_dicts:
                 self.optimizer.update_elite(config_dicts, scores)
 
@@ -504,10 +520,30 @@ class AutoDSC:
             n_challengers = self._num_challengers()
             self._prune_population(max(1, self.population_size - n_challengers))
             self._generate_challengers(n_challengers)
+            self.timing['search'] += time.perf_counter() - _t1
+
+            self._record_trace(best_candidate)
         except Exception:
             pass
         finally:
             self.window_buffer.clear()
+
+    def _record_trace(self, incumbent):
+        """Append this window's incumbent internal scores + predicted-k (additive
+        instrumentation; safe no-op on error)."""
+        try:
+            if incumbent is None:
+                return
+            cvi = incumbent.cvi_scores
+            self.trace['window_idx'].append(int(self.windows_processed))
+            self.trace['composite'].append(float(cvi.composite_score()))
+            self.trace['silhouette'].append(float(cvi.silhouette))
+            self.trace['calinski'].append(float(cvi.calinski))
+            self.trace['davies'].append(float(cvi.davies))
+            preds = [e['preds'].get(id(incumbent)) for e in self.window_buffer]
+            self.trace['pred_k'].append(len({p for p in preds if p is not None and p >= 0}))
+        except Exception:
+            pass
 
     def _num_challengers(self) -> int:
         return max(1, min(max(3, self.elite_size // 2), self.population_size - 1))

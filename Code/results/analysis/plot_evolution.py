@@ -55,18 +55,24 @@ def main():
             M[row, w] = c
     M = np.ma.masked_less(M, 0)
 
+    # x edges in #instances (thousands): the per-window 'instances' field is the
+    # cumulative count at each window's right edge, so use it directly.
+    cum_inst = np.array([r.get('instances', (w + 1) * 1000)
+                         for w, r in enumerate(rec)], dtype=float)
+    xedges = np.concatenate([[0.0], cum_inst]) / 1000.0
+
     cmap = ListedColormap(COLORS)
     plt.rcParams.update({'font.size': 13, 'font.family': 'DejaVu Sans'})
     fig, ax = plt.subplots(figsize=(9.5, 3.6))
-    ax.pcolormesh(np.arange(nwin + 1), np.arange(maxrows + 1), M,
+    ax.pcolormesh(xedges, np.arange(maxrows + 1), M,
                   cmap=cmap, vmin=0, vmax=len(ALGOS) - 1,
                   edgecolors='white', linewidth=0.4)
 
-    ax.set_xlabel('Stages of Stream', fontsize=15, fontweight='bold')
+    ax.set_xlabel('#Instances (in thousands)', fontsize=15, fontweight='bold')
     ax.set_ylabel('Population', fontsize=15, fontweight='bold')
-    xt = np.arange(0, nwin + 1, 10)
+    xt = np.arange(0, xedges[-1] + 1, 10)
     ax.set_xticks(xt)
-    ax.set_xticklabels([str(t) for t in xt])
+    ax.set_xticklabels([str(int(t)) for t in xt])
     ax.set_yticks(np.arange(maxrows) + 0.5)
     ax.set_yticklabels([str(i + 1) for i in range(maxrows)], fontsize=10)
     ax.tick_params(axis='both', labelsize=11)

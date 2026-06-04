@@ -63,21 +63,21 @@ def to_stages(c):
     return np.array([ch.mean() for ch in np.array_split(c, STAGES)])
 
 
-def win_to_stage(w):
-    return w / 100.0 * STAGES + 0.5
-
-
 def main():
     S.set_rc()
     for dataset, title, drift, ylim, out in PANELS:
         fig, ax = plt.subplots(figsize=(7.0, 3.7))
+        # x positions in #instances (thousands); same staged shape as before.
+        x = S.stage_thousands(dataset, STAGES)
+        total = x[-1]                       # full stream length (thousands)
+        win_to_x = lambda w: w / 100.0 * total   # percent-of-stream -> thousands
         if drift[0] == 'region':
             _, lo, hi = drift
-            ax.axvspan(win_to_stage(lo), win_to_stage(hi),
+            ax.axvspan(win_to_x(lo), win_to_x(hi),
                        color='#cccccc', alpha=0.45, zorder=0)
         elif drift[0] == 'continuous':
             grad = np.linspace(0, 1, 256).reshape(1, -1)
-            ax.imshow(grad, extent=[0.5, STAGES + 0.5, ylim[0], ylim[1]],
+            ax.imshow(grad, extent=[0.0, total, ylim[0], ylim[1]],
                       aspect='auto', cmap='Greys', alpha=0.30, zorder=0,
                       vmin=-0.2, vmax=1.4)
 
@@ -86,17 +86,15 @@ def main():
             if c is None:
                 continue
             y = to_stages(c)
-            x = np.arange(1, STAGES + 1)
             ax.plot(x, y, linestyle=LINESTYLES[name], marker=S.METHOD_MARKER[name],
                     markersize=S.ms(name) - 2, linewidth=S.lw(name),
                     color=S.METHOD_COLOR[name], markeredgecolor='black',
                     markeredgewidth=0.4, zorder=3)
 
-        ax.set_xlabel('Stages of Stream', fontsize=15, fontweight='bold')
+        ax.set_xlabel(S.STREAM_XLABEL, fontsize=15, fontweight='bold')
         ax.set_ylabel(r'ARI $\uparrow$', fontsize=15, fontweight='bold')
         ax.set_ylim(*ylim)
-        ax.set_xlim(0.5, STAGES + 0.5)
-        ax.set_xticks(np.arange(5, STAGES + 1, 5))
+        ax.set_xlim(0.0, total)
         ax.tick_params(axis='both', labelsize=12)
         S.bold_ticks(ax)
         S.clean_spines(ax)

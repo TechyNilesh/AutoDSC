@@ -22,8 +22,11 @@ from autorank import autorank
 import style as S
 
 CHARTS_DIR = S.CHARTS_DIR
-# colors keyed by canonical display label (== canonical name)
+# colors / markers keyed by canonical display label (== canonical name)
 COLOR = {S.METHOD_NAME[m]: S.METHOD_COLOR[m] for m in S.METHODS}
+MARKER = {S.METHOD_NAME[m]: S.METHOD_MARKER[m] for m in S.METHODS}
+# line width per method: AutoDSC emphasized (thick), others normal (CLAUDE.md)
+LW = {S.METHOD_NAME[m]: (3.4 if m == S.EMPHASIS else 2.2) for m in S.METHODS}
 
 
 # Nemenyi q_alpha (alpha=0.05, infinite df, studentized range / sqrt(2))
@@ -77,18 +80,15 @@ def cd_diagram(ranks, cd, ax):
             m = methods[i]
             rp = rankpos(avg[i])
             col = COLOR.get(m, '#333333')
+            mw = LW.get(m, 2.2)
+            y = top - 0.10 - j * 0.13
+            xend = (textspace * 2 + scale - 0.2) if side == 'right' else 0.2
+            ax.plot([rp, rp], [top, y], color=col, lw=mw, zorder=3)
+            ax.plot([rp, xend], [y, y], color=col, lw=mw, zorder=3)
             if side == 'right':
-                y = top - 0.10 - j * 0.13
-                xend = textspace * 2 + scale - 0.2
-                ax.plot([rp, rp], [top, y], color=col, lw=2.4)
-                ax.plot([rp, xend], [y, y], color=col, lw=2.4)
                 ax.text(xend + 0.1, y, m, ha='left', va='center',
                         fontsize=14, fontweight="bold", color=col)
             else:
-                y = top - 0.10 - j * 0.13
-                xend = 0.2
-                ax.plot([rp, rp], [top, y], color=col, lw=2.4)
-                ax.plot([rp, xend], [y, y], color=col, lw=2.4)
                 ax.text(xend - 0.1, y, m, ha='right', va='center',
                         fontsize=14, fontweight="bold", color=col)
 
