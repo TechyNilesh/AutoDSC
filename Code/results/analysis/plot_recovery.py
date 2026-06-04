@@ -40,9 +40,9 @@ LINESTYLES = {'AutoDSC': '-', 'ConfStream': '--', 'OACE': '-.', 'MOStream': ':'}
 # panel: (dataset, title, drift descriptor, ylim, xstart_k, yticks, out-name)
 PANELS = [
     ('synth_blobs_merge_split', 'Merge-Split',
-     ('region', 46, 63), (0.74, 1.02), 25, [0.8, 0.9, 1.0], 'merge_split'),
+     ('region', 46, 63), (0.74, 1.02), 30, [0.8, 0.9, 1.0], 'merge_split'),
     ('synth_blobs_expanding', 'Expanding',
-     ('continuous',), (0.84, 1.005), 25, [0.9, 1.0], 'expanding'),
+     ('continuous',), (0.84, 1.005), 30, [0.9, 1.0], 'expanding'),
 ]
 STAGES = 20
 
@@ -95,6 +95,7 @@ def main():
         ax.set_ylabel(r'ARI $\uparrow$', fontsize=15, fontweight='bold')
         ax.set_ylim(*ylim)
         ax.set_xlim(xstart, total)             # trim warm-up so the zoom is tight
+        ax.set_xticks([40, 60, 80, 100])        # clean, evenly spaced x ticks
         ax.set_yticks(yticks)                   # 1-decimal labels at 0.1 spacing
         ax.yaxis.set_major_formatter(plt.matplotlib.ticker.FormatStrFormatter('%.1f'))
         ax.tick_params(axis='both', labelsize=12)
