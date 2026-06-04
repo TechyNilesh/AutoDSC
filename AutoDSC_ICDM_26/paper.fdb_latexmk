@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex paper"] 1780614294.94192 "paper.aux" "paper.bbl" "paper" 1780614295.79256 0
+["bibtex paper"] 1780615109.35103 "paper.aux" "paper.bbl" "paper" 1780615109.96579 0
   "./IEEEtran.bst" 1779679185.16891 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
   "./references.bib" 1780607549.68045 25310 7f3f95337ea64dec223b60979fb236fe ""
-  "paper.aux" 1780614295.66985 15328 e613b95b45c57270d9a876608ca65afc "pdflatex"
+  "paper.aux" 1780615109.83916 14784 7e34bd2bf66e18f2924f55a5ea704453 "pdflatex"
   (generated)
   "paper.bbl"
   "paper.blg"
   (rewritten before read)
-["pdflatex"] 1780614294.97139 "paper.tex" "paper.pdf" "paper" 1780614295.79271 0
+["pdflatex"] 1780615109.39483 "paper.tex" "paper.pdf" "paper" 1780615109.96593 0
   "/usr/local/texlive/2025basic/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1136768653 960 379cc0019370a9e0208a0a3f949f847a ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/courier/pcrr8r.tfm" 1136768653 1292 bd42be2f344128bff6d35d98474adfe3 ""
@@ -156,11 +156,10 @@
   "images/charts/sensitivity/population_size.pdf" 1780093572.42176 14634 2d83a7cd705722ed050c642df6695c26 ""
   "images/charts/sensitivity/window_size.pdf" 1780093572.42204 14113 b450cd44a2b5644e89d3edeab19d73e2 ""
   "images/diagrams/AutoDSC_Diagram.png" 1779680420.20453 1089824 9259ced684fbfb0759f1d0494a2f1d82 ""
-  "images/diagrams/parameter_sampling_visualization.png" 1780051657.33488 183732 95ae72b962fc318920f9d278d95f2e23 ""
-  "paper.aux" 1780614295.66985 15328 e613b95b45c57270d9a876608ca65afc "pdflatex"
-  "paper.bbl" 1780614294.96909 11810 fb35b26ae9cf84965687504b95e6b487 "bibtex paper"
-  "paper.out" 1780614295.67108 2860 0e2a87c5acd0f8a4ba87815faee6053a "pdflatex"
-  "paper.tex" 1780614282.53312 58352 0c5e0dab62a5d71113509bc60b9f9b1f ""
+  "paper.aux" 1780615109.83916 14784 7e34bd2bf66e18f2924f55a5ea704453 "pdflatex"
+  "paper.bbl" 1780615109.38838 11810 fb35b26ae9cf84965687504b95e6b487 "bibtex paper"
+  "paper.out" 1780615109.84036 2860 0e2a87c5acd0f8a4ba87815faee6053a "pdflatex"
+  "paper.tex" 1780615098.527 57867 a651009eb4946fa72776136294c97490 ""
   (generated)
   "paper.aux"
   "paper.log"

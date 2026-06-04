@@ -163,14 +163,7 @@ where $a_k \in \mathcal{A}$ represents available algorithms. Given selected algo
 \phi_j \sim \mathcal{N}(\mu_j, \sigma_j^2) \text{ where } \mu_j = \frac{1}{|\mathcal{E}_t^{a_k}|}\sum_{(\theta,s) \in \mathcal{E}_t^{a_k}} \phi_j
 \end{equation}
 
-and $\mathcal{E}_t^{a_k} = \{(\theta,s) \in \mathcal{E}_t : a = a_k\}$ contains elite configurations using algorithm $a_k$. Categorical hyperparameters similarly use frequency-based sampling within algorithm-specific elites. Figure~\ref{fig:parameter_sampling_visualization} illustrates this hierarchical sampling process.
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\linewidth]{images/diagrams/parameter_sampling_visualization.png}
-    \caption{Hierarchical Parameter Sampling in PGSSO. An algorithm is first drawn from the elite frequencies, then its hyperparameters are sampled from the elite distributions of that algorithm.}
-    \label{fig:parameter_sampling_visualization}
-\end{figure}
+and $\mathcal{E}_t^{a_k} = \{(\theta,s) \in \mathcal{E}_t : a = a_k\}$ contains elite configurations using algorithm $a_k$. Categorical hyperparameters similarly use frequency-based sampling within algorithm-specific elites.
 
 Population diversity is maintained by computing configuration distances:
 
