@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex paper"] 1780617825.4759 "paper.aux" "paper.bbl" "paper" 1780617826.10315 0
+["bibtex paper"] 1780620575.92332 "paper.aux" "paper.bbl" "paper" 1780620576.49205 0
   "./IEEEtran.bst" 1779679185.16891 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
   "./references.bib" 1780607549.68045 25310 7f3f95337ea64dec223b60979fb236fe ""
-  "paper.aux" 1780617825.97203 15133 a6bf30160cfb73b141a25c0a2c59779f "pdflatex"
+  "paper.aux" 1780620576.36999 15230 a2b460587b168ed50a93c1ee78f4734c "pdflatex"
   (generated)
   "paper.bbl"
   "paper.blg"
   (rewritten before read)
-["pdflatex"] 1780617825.50784 "paper.tex" "paper.pdf" "paper" 1780617826.1033 0
+["pdflatex"] 1780620575.95161 "paper.tex" "paper.pdf" "paper" 1780620576.4922 0
   "/usr/local/texlive/2025basic/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1136768653 960 379cc0019370a9e0208a0a3f949f847a ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/courier/pcrr8r.tfm" 1136768653 1292 bd42be2f344128bff6d35d98474adfe3 ""
@@ -54,6 +54,7 @@
   "/usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb" 1248133631 32587 1788b0c1c5b39540c96f5e42ccd6dae8 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb" 1248133631 32716 08e384dc442464e7285e891af9f45947 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb" 1248133631 32626 4f5c1b83753b1dd3a97d1b399a005b4b ""
+  "/usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb" 1248133631 31764 459c573c03a4949a528c2cc7f557e217 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb" 1248133631 34694 ad62b13721ee8eda1dcc8993c8bd7041 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb" 1136849748 45758 19968a0990191524e34e1994d4a31cb6 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/type1/urw/times/utmb8a.pfb" 1136849748 44729 811d6c62865936705a31c797a1d5dada ""
@@ -156,10 +157,10 @@
   "images/charts/sensitivity/population_size.pdf" 1780093572.42176 14634 2d83a7cd705722ed050c642df6695c26 ""
   "images/charts/sensitivity/window_size.pdf" 1780093572.42204 14113 b450cd44a2b5644e89d3edeab19d73e2 ""
   "images/diagrams/AutoDSC_Diagram.png" 1779680420.20453 1089824 9259ced684fbfb0759f1d0494a2f1d82 ""
-  "paper.aux" 1780617825.97203 15133 a6bf30160cfb73b141a25c0a2c59779f "pdflatex"
-  "paper.bbl" 1780617825.50522 12053 97d0f4e576320d46db53142f7de3d465 "bibtex paper"
-  "paper.out" 1780617825.97329 2718 b9fed4bd5578b29e3af2ac6544b6c03f "pdflatex"
-  "paper.tex" 1780617817.57284 56440 7901440190495656aa51c8d4143abb5c ""
+  "paper.aux" 1780620576.36999 15230 a2b460587b168ed50a93c1ee78f4734c "pdflatex"
+  "paper.bbl" 1780620575.94942 12274 a5927e50c2064a1d9f2f49ce5346357f "bibtex paper"
+  "paper.out" 1780620576.37098 2769 730a78ebc65fc5fee2bc38b124ae65df "pdflatex"
+  "paper.tex" 1780620567.11354 58575 d0ed108d6317fb68079416509ac453a2 ""
   (generated)
   "paper.aux"
   "paper.log"

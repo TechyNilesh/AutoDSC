@@ -97,7 +97,11 @@ Let $\mathcal{A}$ be a portfolio of stream-clustering algorithms and $\Theta = \
 \begin{equation}
 \theta^\star = \arg\max_{\theta \in \Theta}\; q(\theta; W),
 \end{equation}
-using only the data seen so far and bounded memory. As the distribution drifts, $\theta^\star$ changes over time, so a solver must continually re-evaluate and re-select configurations rather than commit to one. AutoDSC approximates this online optimum with a population-guided search and a label-free multi-objective instantiation of $q$, described next.
+using only the data seen so far and bounded memory. As the distribution drifts, $\theta^\star_t$ changes over time, so a solver cannot commit to one configuration; its goal is to minimize the \emph{dynamic regret} against the per-window optimum,
+\begin{equation}
+R_T = \sum_{t=1}^{T} \big[\, q(\theta^\star_t; W_t) - q(\theta_t; W_t)\,\big],
+\end{equation}
+which, under bounded distribution drift (a variation budget), is the appropriate objective for non-stationary selection~\cite{besbes2014stochastic}. AutoDSC approximates this online optimum with a population-guided search and a label-free multi-objective instantiation of $q$, described next.
 
 \section{Automated Data Stream Clustering}\label{sec:methodology}
 
@@ -183,9 +187,17 @@ Throughout the process, AutoDSC emits a clustering for each instance using the i
 
 All remaining constants are held fixed across every experiment. The exploration rate is clipped to $[0.1, 1.0]$ with a per-step cap $\gamma = 0.5$, the elite archive holds $e_{\max} = \lfloor K/2 \rfloor$ configurations, and each window PGSSO proposes $n_{\text{gen}} = \max(3, \lfloor K/4 \rfloor)$ new candidates (three at the default $K=10$) that replace the lowest-ranked members so the population size stays at $K$. The Calinski--Harabasz score is rescaled by a fixed factor of $10$ to bound NCHI to $[0,1]$. The sensitivity study (Section~\ref{sec:sensitivity}) varies only $K$ and $w$ and holds all other constants at these defaults.
 
-\subsection{Computational Complexity}
+\subsection{Complexity and Recovery Guarantee}
 
 The framework's computational complexity scales efficiently with population size and window parameters. Per-instance processing requires $O(K \cdot C)$ operations where $K = |\mathcal{A}_t|$ and $C$ denotes average algorithm complexity. Window-end evaluation involves $O(K \cdot w \cdot d)$ operations to score each configuration on the full window. Total per-window complexity is $O(K \cdot w \cdot d + K^2)$, where $K^2$ accounts for diversity-based population management. Crucially, $K$ is fixed, so per-point cost does not grow with stream length. Space complexity is $O((K + e_{\max}) \cdot p + w \cdot d)$, where $p$ is the number of parameters stored per configuration.
+
+We further give a worst-case guarantee that the exploration floor and recency weighting together prevent permanent lock-in under drift.
+
+\smallskip\noindent\textbf{Proposition 1 (No lock-in; bounded recovery).}\ \emph{Assume a finite (discretized) configuration space $\Theta$, an exploration rate $\alpha_t \ge \alpha_{\min} > 0$ with uniform-random proposals over $\Theta$, and that the recency-weighted score ranks a freshly scored configuration above any stale incumbent of lower current quality. After any window in which the optimum $\theta^\star_t$ changes, PGSSO re-discovers the new optimum within $|\Theta|/\alpha_{\min}$ windows in expectation, independent of stream length. Hence if $\theta^\star_t$ changes at $S$ of the $T$ windows, the dynamic regret obeys $R_T \le S\,|\Theta|/\alpha_{\min}$, which is sublinear in $T$ whenever $S = o(T)$.}
+
+\smallskip\noindent\textit{Proof sketch.} Each window proposes a uniform-random configuration with probability at least $\alpha_t \ge \alpha_{\min}$, so any fixed target is proposed with probability at least $\alpha_{\min}/|\Theta|$ per window; its first-hit time is geometric with mean at most $|\Theta|/\alpha_{\min}$. Once scored, recency weighting ranks it above the stale incumbent, so it becomes the incumbent. Between change points the incumbent is optimal and contributes zero regret, while each change contributes at most $q_{\max}\le 1$ per window of recovery. $\square$
+
+\smallskip\noindent This is a distribution-free \emph{coverage} guarantee rather than an optimality bound; for continuous hyperparameters $|\Theta|$ is replaced by an $\varepsilon$-covering number. It formally motivates AutoDSC's two design choices: the exploration floor prevents permanent lock-in under drift, and recency weighting lets a rediscovered optimum displace a stale incumbent.
 
 \begin{algorithm}[t]
 \caption{AutoDSC}
