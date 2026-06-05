@@ -502,7 +502,7 @@ We analyze AutoDSC's sensitivity to its two free hyperparameters, window size $w
     \label{fig:sensitivity_study}
 \end{figure}
 
-\section{Related Work}\label{sec:relatedwork}
+\section{Prior Work}\label{sec:relatedwork}
 
 \textbf{AutoML for clustering.} Batch AutoML systems---AutoML4Clust, AutoCluster, cSmartML, ML2DAC, TPE-AutoClust, and PoAC~\cite{Tschechlov2021AutoML4Clust,Liu2021AutoCluster,ElShawi2021cSmartML,TrederTschechlov2023ML2DAC,ElShawi2025TPEAutoClust,daSilva2024PoAC}---automate clustering-pipeline design through meta-learning, Bayesian optimization, and pipeline composition, but all assume repeated full-data access and an offline tuning budget, so none meets the single-pass, bounded-memory, drifting constraints of a stream.
 
