@@ -68,7 +68,7 @@ def main():
     dsets = [d for d in PANEL if d in data]
 
     S.set_rc()
-    fig, ax = plt.subplots(figsize=(6.2, 4.4))
+    fig, ax = plt.subplots(figsize=(4.4, 3.9))
     x = np.arange(len(COMPONENTS))
     nb = len(dsets)
     width = 0.8 / nb

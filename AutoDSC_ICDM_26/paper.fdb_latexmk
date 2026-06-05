@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex paper"] 1780638320.72485 "paper.aux" "paper.bbl" "paper" 1780638321.31619 0
+["bibtex paper"] 1780690881.86752 "paper.aux" "paper.bbl" "paper" 1780690882.47794 0
   "./IEEEtran.bst" 1779679185.16891 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
   "./references.bib" 1780607549.68045 25310 7f3f95337ea64dec223b60979fb236fe ""
-  "paper.aux" 1780638321.19359 15204 47f6c5eae620eb2d2f8dc363b30bc01a "pdflatex"
+  "paper.aux" 1780690882.3504 15998 5ea8a6f5324a7bdb4198daf91c3cec54 "pdflatex"
   (generated)
   "paper.bbl"
   "paper.blg"
   (rewritten before read)
-["pdflatex"] 1780638320.77009 "paper.tex" "paper.pdf" "paper" 1780638321.31635 0
+["pdflatex"] 1780690881.89929 "paper.tex" "paper.pdf" "paper" 1780690882.47807 0
   "/usr/local/texlive/2025basic/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1136768653 960 379cc0019370a9e0208a0a3f949f847a ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/courier/pcrr8r.tfm" 1136768653 1292 bd42be2f344128bff6d35d98474adfe3 ""
@@ -144,17 +144,20 @@
   "images/charts/efficiency/efficiency.pdf" 1780060182.47054 19107 a21a9cf60b93ed41b27eff14f2f3b2e5 ""
   "images/charts/evolution/evolution.pdf" 1780487278.7788 19386 695a93165477a571d07a3ad700b65cd9 ""
   "images/charts/evolution/legend.pdf" 1780487278.77921 8853 8f8ade3110b8dba6be3556c3b87a528a ""
+  "images/charts/overhead/legend.pdf" 1780690753.73225 7810 9b68e5d830a7cd3a021c96d1c59d6bc9 ""
+  "images/charts/overhead/overhead.pdf" 1780690753.73314 17900 8a6ab17ca68e87a323ebe855c10fd598 ""
   "images/charts/recovery/expanding.pdf" 1780613869.2585 22873 98ed2c8b03fab9e2f89de3925814cd42 ""
   "images/charts/recovery/legend.pdf" 1780487278.77293 8389 5c71ce36e60a7333d4e1cedc3fa6475d ""
   "images/charts/recovery/merge_split.pdf" 1780613869.25512 15093 38001344c165bdc7b56e0ae5a00179bb ""
   "images/charts/sensitivity/legend.pdf" 1780093572.42144 8988 1b860b7471d14bbe2fd7492b4f3d76ca ""
   "images/charts/sensitivity/population_size.pdf" 1780093572.42176 14634 2d83a7cd705722ed050c642df6695c26 ""
   "images/charts/sensitivity/window_size.pdf" 1780093572.42204 14113 b450cd44a2b5644e89d3edeab19d73e2 ""
+  "images/charts/validity/selection.pdf" 1780690753.7306 21890 1338a61336be8123b1caf2f2903a5485 ""
   "images/diagrams/AutoDSC_Diagram.png" 1779680420.20453 1089824 9259ced684fbfb0759f1d0494a2f1d82 ""
-  "paper.aux" 1780638321.19359 15204 47f6c5eae620eb2d2f8dc363b30bc01a "pdflatex"
-  "paper.bbl" 1780638320.76754 12053 97d0f4e576320d46db53142f7de3d465 "bibtex paper"
-  "paper.out" 1780638321.1949 2718 b9fed4bd5578b29e3af2ac6544b6c03f "pdflatex"
-  "paper.tex" 1780638311.12172 55110 f987956d1fa8230c7fe9c23efa03307b ""
+  "paper.aux" 1780690882.3504 15998 5ea8a6f5324a7bdb4198daf91c3cec54 "pdflatex"
+  "paper.bbl" 1780690881.89695 12053 97d0f4e576320d46db53142f7de3d465 "bibtex paper"
+  "paper.out" 1780690882.35187 2718 b9fed4bd5578b29e3af2ac6544b6c03f "pdflatex"
+  "paper.tex" 1780690869.00457 55228 ef06963c19ea832f48019e45ed47871c ""
   (generated)
   "paper.aux"
   "paper.log"

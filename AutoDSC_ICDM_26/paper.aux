@@ -109,21 +109,21 @@
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {CMM}}}{7}{subfigure.4.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Supplementary Analyses}{7}{subsection.6.1}\protected@file@percent }
 \newlabel{sec:supplementary}{{\mbox  {VI-A}}{7}{Supplementary Analyses}{subsection.6.1}{}}
-\citation{arbelaitz2013extensive,liu2010understanding}
-\citation{hinder2020towards}
-\citation{bahri2021data}
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Throughput--Memory Trade-off. Mean over all datasets on log--log axes; the shaded region marks the favorable high-throughput, low-memory area, where AutoDSC ($\star $) sits.}}{8}{figure.5}\protected@file@percent }
 \newlabel{fig:efficiency}{{5}{8}{Throughput--Memory Trade-off. Mean over all datasets on log--log axes; the shaded region marks the favorable high-throughput, low-memory area, where AutoDSC ($\star $) sits}{figure.5}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Leave-One-Out Ablation on Real-world Streams. ARI and CMM of each variant relative to the full AutoDSC (dashed line $=1.0$).}}{8}{figure.6}\protected@file@percent }
 \newlabel{fig:ablation_study}{{6}{8}{Leave-One-Out Ablation on Real-world Streams. ARI and CMM of each variant relative to the full AutoDSC (dashed line $=1.0$)}{figure.6}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Population Composition over the Insects Stream. Colors denote the selected base algorithm per population slot (rows) and stream stage (columns).}}{8}{figure.7}\protected@file@percent }
 \newlabel{fig:model_selection_evolution}{{7}{8}{Population Composition over the Insects Stream. Colors denote the selected base algorithm per population slot (rows) and stream stage (columns)}{figure.7}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {V}{\ignorespaces Supplementary Analyses on PenDigits and Sudden. \textmd  {Mean over 10 seeds; AutoDSC never observes labels or the cluster count $k$ during the stream.}}}{8}{table.5}\protected@file@percent }
-\newlabel{tab:supplementary}{{V}{8}{Supplementary Analyses on PenDigits and Sudden. \textmd {Mean over 10 seeds; AutoDSC never observes labels or the cluster count $k$ during the stream.}}{table.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Supplementary Analyses on PenDigits and Sudden. \textmd  {Mean over 10 seeds; AutoDSC never observes labels or the cluster count $k$. (a)~External ARI rises with the incumbent's internal multi-CVI score (Spearman $\rho $ shown), so label-free selection is sound. (b)~Per-window runtime (log scale): the PGSSO search is three orders of magnitude below base-clusterer training, i.e.\ negligible.}}}{8}{figure.8}\protected@file@percent }
+\newlabel{fig:supplementary}{{8}{8}{Supplementary Analyses on PenDigits and Sudden. \textmd {Mean over 10 seeds; AutoDSC never observes labels or the cluster count $k$. (a)~External ARI rises with the incumbent's internal multi-CVI score (Spearman $\rho $ shown), so label-free selection is sound. (b)~Per-window runtime (log scale): the PGSSO search is three orders of magnitude below base-clusterer training, i.e.\ negligible.}}{figure.8}{}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Label-free selection validity}}}{8}{subfigure.8.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Per-window runtime breakdown}}}{8}{subfigure.8.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}Sensitivity Analysis}{8}{subsection.6.2}\protected@file@percent }
 \newlabel{sec:sensitivity}{{\mbox  {VI-B}}{8}{Sensitivity Analysis}{subsection.6.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {VII}Discussion and Limitations}{8}{section.7}\protected@file@percent }
-\newlabel{sec:discussion}{{VII}{8}{Discussion and Limitations}{section.7}{}}
+\citation{arbelaitz2013extensive,liu2010understanding}
+\citation{hinder2020towards}
+\citation{bahri2021data}
 \bibstyle{IEEEtran}
 \bibdata{references}
 \bibcite{hutter2019automated}{1}
@@ -132,16 +132,18 @@
 \bibcite{yang2022iot}{4}
 \bibcite{celik2023online}{5}
 \bibcite{pmlr-v256-verma24a}{6}
-\bibcite{pmlr-v139-wu21d}{7}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Dimensionality Scalability of AutoDSC. \textmd  {Controlled five-cluster blob stream (mean over 10 seeds, shaded $\pm $std); clustering quality (ARI) stays stable while throughput degrades only gracefully as the feature count grows.}}}{9}{figure.8}\protected@file@percent }
-\newlabel{fig:dimscaling}{{8}{9}{Dimensionality Scalability of AutoDSC. \textmd {Controlled five-cluster blob stream (mean over 10 seeds, shaded $\pm $std); clustering quality (ARI) stays stable while throughput degrades only gracefully as the feature count grows.}}{figure.8}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Sensitivity to Window Size and Population Size. Averaged over all datasets.}}{9}{figure.9}\protected@file@percent }
-\newlabel{fig:sensitivity_study}{{9}{9}{Sensitivity to Window Size and Population Size. Averaged over all datasets}{figure.9}{}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Window Size}}}{9}{subfigure.9.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Population Size}}}{9}{subfigure.9.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Dimensionality Scalability of AutoDSC. \textmd  {Controlled five-cluster blob stream (mean over 10 seeds, shaded $\pm $std); clustering quality (ARI) stays stable while throughput degrades only gracefully as the feature count grows.}}}{9}{figure.9}\protected@file@percent }
+\newlabel{fig:dimscaling}{{9}{9}{Dimensionality Scalability of AutoDSC. \textmd {Controlled five-cluster blob stream (mean over 10 seeds, shaded $\pm $std); clustering quality (ARI) stays stable while throughput degrades only gracefully as the feature count grows.}}{figure.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Sensitivity to Window Size and Population Size. Averaged over all datasets.}}{9}{figure.10}\protected@file@percent }
+\newlabel{fig:sensitivity_study}{{10}{9}{Sensitivity to Window Size and Population Size. Averaged over all datasets}{figure.10}{}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Window Size}}}{9}{subfigure.10.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Population Size}}}{9}{subfigure.10.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Discussion and Limitations}{9}{section.7}\protected@file@percent }
+\newlabel{sec:discussion}{{VII}{9}{Discussion and Limitations}{section.7}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {VIII}Conclusion and Future Work}{9}{section.8}\protected@file@percent }
 \newlabel{sec:conclusion_and_future}{{VIII}{9}{Conclusion and Future Work}{section.8}{}}
 \@writefile{toc}{\contentsline {section}{References}{9}{section*.1}\protected@file@percent }
+\bibcite{pmlr-v139-wu21d}{7}
 \bibcite{verma2025auto-reg}{8}
 \bibcite{carnein2020confstream}{9}
 \bibcite{el2023onlineautoclust}{10}

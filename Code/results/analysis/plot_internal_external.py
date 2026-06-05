@@ -71,7 +71,7 @@ def selection_panel(data):
     S.set_rc()
     dsets = [d for d in PANEL if d in data]
     buckets = ['Low', 'Med', 'High']
-    fig, ax = plt.subplots(figsize=(5.4, 4.4))
+    fig, ax = plt.subplots(figsize=(4.4, 3.9))
     x = np.arange(len(buckets))
     nb = len(dsets)
     width = 0.8 / nb
@@ -109,7 +109,7 @@ def pred_k_panel(data):
     S.set_rc()
     dsets = [d for d in PANEL if d in data]
     cats = ['AutoDSC pred.', 'True k']
-    fig, ax = plt.subplots(figsize=(5.4, 4.4))
+    fig, ax = plt.subplots(figsize=(4.4, 3.9))
     x = np.arange(len(cats))
     nb = len(dsets)
     width = 0.8 / nb

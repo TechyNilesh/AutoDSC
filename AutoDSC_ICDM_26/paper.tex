@@ -463,33 +463,22 @@ Finally, AutoDSC adaptively reshapes its population of candidate algorithms as t
 
 \subsection{Supplementary Analyses}\label{sec:supplementary}
 
-\textbf{Label-free selection is sound.} AutoDSC selects the incumbent each window with a label-free internal criterion, so its value hinges on that criterion tracking the unobserved external quality. On a real (PenDigits) and a drifting synthetic (Sudden) stream we bucket each window into terciles of the incumbent's internal multi-CVI score and measure the mean external ARI per bucket (Table~\ref{tab:supplementary}). On PenDigits, ARI rises monotonically with the internal score, from $0.33$ in the lowest tercile to $0.48$ in the highest (Spearman $\rho=0.43$); on Sudden nearly every window already attains ARI~$\approx1.0$, leaving little headroom to separate ($\rho=0.17$). The label-free score is thus a sound, if imperfect, basis for selection, consistent with the limitation noted in Section~\ref{sec:discussion}. More strikingly, although AutoDSC never observes the number of clusters, the incumbent's mean per-window cluster count matches the ground truth almost exactly ($10.2$ vs.\ $10$ on PenDigits, $5.0$ vs.\ $5$ on Sudden), addressing the long-standing problem of choosing $k$ online.
+\textbf{Label-free selection is sound.} AutoDSC selects the incumbent each window with a label-free internal criterion, so its value hinges on that criterion tracking the unobserved external quality. On a real (PenDigits) and a drifting synthetic (Sudden) stream we bucket each window into terciles of the incumbent's internal multi-CVI score and measure the mean external ARI per bucket (Figure~\ref{fig:supplementary}a). On PenDigits, ARI rises monotonically with the internal score, from $0.33$ in the lowest tercile to $0.48$ in the highest (Spearman $\rho=0.43$); on Sudden nearly every window already attains ARI~$\approx1.0$, leaving little headroom to separate ($\rho=0.17$). The label-free score is thus a sound, if imperfect, basis for selection, consistent with the limitation noted in Section~\ref{sec:discussion}. More strikingly, although AutoDSC never observes the number of clusters, the incumbent's mean per-window cluster count matches the ground truth almost exactly ($10.2$ vs.\ $10$ on PenDigits, $5.0$ vs.\ $5$ on Sudden), addressing the long-standing problem of choosing $k$ online.
 
-\textbf{The search overhead is negligible.} Decomposing AutoDSC's per-window wall-clock into base-clusterer training/prediction, multi-CVI scoring, and the PGSSO search itself (Table~\ref{tab:supplementary}) reveals three well-separated tiers: training the $K$ population members dominates ($\approx1.0$--$1.3$\,s/window), multi-CVI scoring is an order of magnitude smaller ($\approx0.1$\,s), and the AutoML search machinery is three orders smaller still ($\approx1$\,ms, under $0.1\%$ of the total). The price of automation is thus dwarfed by the clustering it automates, explaining AutoDSC's competitive throughput against the offline optimization of OACE.
+\textbf{The search overhead is negligible.} Decomposing AutoDSC's per-window wall-clock into base-clusterer training/prediction, multi-CVI scoring, and the PGSSO search itself (Figure~\ref{fig:supplementary}b) reveals three well-separated tiers: training the $K$ population members dominates ($\approx1.0$--$1.3$\,s/window), multi-CVI scoring is an order of magnitude smaller ($\approx0.1$\,s), and the AutoML search machinery is three orders smaller still ($\approx1$\,ms, under $0.1\%$ of the total). The price of automation is thus dwarfed by the clustering it automates, explaining AutoDSC's competitive throughput against the offline optimization of OACE.
 
 \textbf{Quality is stable across dimensionality.} On a controlled five-cluster blob stream with feature dimensionality growing from $5$ to $80$ (Figure~\ref{fig:dimscaling}), clustering quality stays high and even improves slightly (ARI $0.91\rightarrow0.97$) while throughput degrades only gracefully ($620\rightarrow376$ instances/s), with no curse-of-dimensionality collapse, indicating that AutoDSC's search remains effective as dimensionality increases.
 
-\begin{table}[t]
+\begin{figure}[t]
 \centering
-\caption{Supplementary Analyses on PenDigits and Sudden. \textmd{Mean over 10 seeds; AutoDSC never observes labels or the cluster count $k$ during the stream.}}
-\label{tab:supplementary}
-\begin{tabular}{l c c}
-\hline
-\textbf{Measure} & \textbf{PenDigits} & \textbf{Sudden} \\
-\hline
-\multicolumn{3}{l}{\textit{Label-free selection validity}} \\
-Spearman $\rho$(internal score, ARI) & 0.43 & 0.17 \\
-Predicted clusters (mean) & 10.2 & 5.0 \\
-True cluster count $k$ & 10 & 5 \\
-\hline
-\multicolumn{3}{l}{\textit{Per-window runtime (ms)}} \\
-Train + predict & 1039 & 1324 \\
-Multi-CVI scoring & 122 & 94 \\
-PGSSO search & 0.96 & 0.89 \\
-PGSSO search share (\%) & 0.08 & 0.06 \\
-\hline
-\end{tabular}
-\end{table}
+\begin{minipage}{\linewidth}\centering
+    \includegraphics[width=0.7\linewidth]{images/charts/overhead/legend.pdf}
+\end{minipage}\\[2pt]
+\subfloat[Label-free selection validity]{\includegraphics[width=0.49\linewidth]{images/charts/validity/selection.pdf}}\hfill
+\subfloat[Per-window runtime breakdown]{\includegraphics[width=0.49\linewidth]{images/charts/overhead/overhead.pdf}}
+\caption{Supplementary Analyses on PenDigits and Sudden. \textmd{Mean over 10 seeds; AutoDSC never observes labels or the cluster count $k$. (a)~External ARI rises with the incumbent's internal multi-CVI score (Spearman $\rho$ shown), so label-free selection is sound. (b)~Per-window runtime (log scale): the PGSSO search is three orders of magnitude below base-clusterer training, i.e.\ negligible.}}
+\label{fig:supplementary}
+\end{figure}
 
 \begin{figure}[t]
 \centering
