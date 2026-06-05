@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex paper"] 1780695980.66762 "paper.aux" "paper.bbl" "paper" 1780695981.24658 0
+["bibtex paper"] 1780696303.10783 "paper.aux" "paper.bbl" "paper" 1780696303.67722 0
   "./IEEEtran.bst" 1779679185.16891 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
   "./references.bib" 1780607549.68045 25310 7f3f95337ea64dec223b60979fb236fe ""
-  "paper.aux" 1780695981.1245 16085 20a9c222b9fc43e0541c05ddddea88fa "pdflatex"
+  "paper.aux" 1780696303.55442 16085 dd937caf62e0765b64dd2fd23ad80c03 "pdflatex"
   (generated)
   "paper.bbl"
   "paper.blg"
   (rewritten before read)
-["pdflatex"] 1780695980.69859 "paper.tex" "paper.pdf" "paper" 1780695981.24675 0
+["pdflatex"] 1780696303.13628 "paper.tex" "paper.pdf" "paper" 1780696303.67738 0
   "/usr/local/texlive/2025basic/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1136768653 960 379cc0019370a9e0208a0a3f949f847a ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/courier/pcrr8r.tfm" 1136768653 1292 bd42be2f344128bff6d35d98474adfe3 ""
@@ -154,10 +154,10 @@
   "images/charts/sensitivity/window_size.pdf" 1780093572.42204 14113 b450cd44a2b5644e89d3edeab19d73e2 ""
   "images/charts/validity/selection.pdf" 1780690753.7306 21890 1338a61336be8123b1caf2f2903a5485 ""
   "images/diagrams/AutoDSC_Diagram.png" 1779680420.20453 1089824 9259ced684fbfb0759f1d0494a2f1d82 ""
-  "paper.aux" 1780695981.1245 16085 20a9c222b9fc43e0541c05ddddea88fa "pdflatex"
-  "paper.bbl" 1780695980.6963 11748 01bea4c79b279fe22f97a92361bb194e "bibtex paper"
-  "paper.out" 1780695981.12551 2815 917b96e464783f375462a12ec47e7881 "pdflatex"
-  "paper.tex" 1780695972.58997 55374 fcc44e2cabac6454488839a951972dcf ""
+  "paper.aux" 1780696303.55442 16085 dd937caf62e0765b64dd2fd23ad80c03 "pdflatex"
+  "paper.bbl" 1780696303.13383 11748 01bea4c79b279fe22f97a92361bb194e "bibtex paper"
+  "paper.out" 1780696303.55559 2815 917b96e464783f375462a12ec47e7881 "pdflatex"
+  "paper.tex" 1780696296.26926 55472 47c2be8fc2a8783ae3d0d783c2c95dcf ""
   (generated)
   "paper.aux"
   "paper.log"
