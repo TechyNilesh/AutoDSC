@@ -38,27 +38,23 @@
 \citation{TrederTschechlov2023ML2DAC}
 \citation{ElShawi2025TPEAutoClust}
 \citation{daSilva2024PoAC}
-\citation{carnein2020confstream}
-\citation{el2023onlineautoclust}
-\citation{wang2024mostream}
-\citation{wang2023sesame}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Automated Machine Learning}{2}{subsection.2.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {III}Problem Formulation}{2}{section.3}\protected@file@percent }
 \newlabel{sec:problem}{{III}{2}{Problem Formulation}{section.3}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {IV}Automated Data Stream Clustering}{2}{section.4}\protected@file@percent }
 \newlabel{sec:methodology}{{IV}{2}{Automated Data Stream Clustering}{section.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Computational Complexity}{3}{subsection.4.1}\protected@file@percent }
 \citation{gijsbers2024amlb}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Computational Complexity}{3}{subsection.4.1}\protected@file@percent }
+\citation{souza2020challenges}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Overview of AutoDSC. Each window the population of clustering configurations is evaluated by the multi-objective criterion, the incumbent is re-selected, and PGSSO proposes new configurations from the recency-weighted elite archive under an adaptive exploration rate.}}{4}{figure.1}\protected@file@percent }
 \newlabel{fig:framework_overview}{{1}{4}{Overview of AutoDSC. Each window the population of clustering configurations is evaluated by the multi-objective criterion, the incumbent is re-selected, and PGSSO proposes new configurations from the recency-weighted elite archive under an adaptive exploration rate}{figure.1}{}}
 \@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces AutoDSC}}{4}{algocf.1}\protected@file@percent }
 \newlabel{alg:autodsc}{{1}{4}{Computational Complexity}{algocf.1}{}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces PGSSO}}{4}{algocf.2}\protected@file@percent }
-\newlabel{alg:pgsso}{{2}{4}{Computational Complexity}{algocf.2}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {V}Experimental Setup}{4}{section.5}\protected@file@percent }
 \newlabel{sec:setup}{{V}{4}{Experimental Setup}{section.5}{}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces PGSSO}}{4}{algocf.2}\protected@file@percent }
+\newlabel{alg:pgsso}{{2}{4}{Computational Complexity}{algocf.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Datasets}{4}{subsection.5.1}\protected@file@percent }
-\citation{souza2020challenges}
 \citation{dua2019uci}
 \citation{dua2019uci}
 \citation{dua2019uci}
@@ -79,14 +75,14 @@
 \@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Summary of Datasets. \textmd  {Five real-world and five synthetic streams spanning a range of sizes, dimensionalities, and cluster counts.}}}{5}{table.1}\protected@file@percent }
 \newlabel{tab:dataset_summary}{{I}{5}{Summary of Datasets. \textmd {Five real-world and five synthetic streams spanning a range of sizes, dimensionalities, and cluster counts.}}{table.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Evaluation Protocol}{5}{subsection.5.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Specification of our evaluation platform.}}{5}{table.2}\protected@file@percent }
+\newlabel{tab:platform}{{II}{5}{Specification of our evaluation platform}{table.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Baseline Methods}{5}{subsection.5.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}Implementation and Configuration}{5}{subsection.5.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {VI}Results}{5}{section.6}\protected@file@percent }
-\newlabel{sec:results}{{VI}{5}{Results}{section.6}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Specification of our evaluation platform.}}{6}{table.2}\protected@file@percent }
-\newlabel{tab:platform}{{II}{6}{Specification of our evaluation platform}{table.2}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Search Space Configuration. \textmd  {Per-algorithm hyperparameter types and ranges searched by AutoDSC and the AutoML baselines.}}}{6}{table.3}\protected@file@percent }
 \newlabel{tab:hyperparameters}{{III}{6}{Search Space Configuration. \textmd {Per-algorithm hyperparameter types and ranges searched by AutoDSC and the AutoML baselines.}}{table.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Results}{6}{section.6}\protected@file@percent }
+\newlabel{sec:results}{{VI}{6}{Results}{section.6}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces Clustering Quality Across Datasets. \textmd  {ARI and CMM ($\uparrow $ higher is better) over 10 seeds; per-dataset cells report mean$\pm $std and the Mean Score row reports the mean across datasets. Best per metric per row in \textbf  {bold}, second best \underline  {underlined}.}}}{7}{table.4}\protected@file@percent }
 \newlabel{tab:performance_comparison_highlighted}{{IV}{7}{Clustering Quality Across Datasets. \textmd {ARI and CMM ($\uparrow $ higher is better) over 10 seeds; per-dataset cells report mean$\pm $std and the Mean Score row reports the mean across datasets. Best per metric per row in \textbf {bold}, second best \underline {underlined}.}}{table.4}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Prequential Clustering Quality Across Stream Stages. Results for all methods on a real (PenDigits) and a synthetic drifting (Expanding) stream; AutoDSC is drawn thick.}}{7}{figure.2}\protected@file@percent }
@@ -99,6 +95,8 @@
 \newlabel{fig:recovery}{{3}{7}{Drift Behaviour on Two Synthetic Streams. Per-window ARI (seed-averaged); AutoDSC sustains the highest quality and recovers under both an abrupt event (a) and continuous drift (b), with the y-axes zoomed to the post-warm-up range}{figure.3}{}}
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {\emph {Merge-Split} (abrupt)}}}{7}{subfigure.3.1}\protected@file@percent }
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {\emph {Expanding} (continuous)}}}{7}{subfigure.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Supplementary Analyses}{7}{subsection.6.1}\protected@file@percent }
+\newlabel{sec:supplementary}{{\mbox  {VI-A}}{7}{Supplementary Analyses}{subsection.6.1}{}}
 \newlabel{fig:cd_ari}{{4a}{7}{Subfigure 4a}{subfigure.4.1}{}}
 \newlabel{sub@fig:cd_ari}{{(a)}{a}{Subfigure 4a\relax }{subfigure.4.1}{}}
 \newlabel{fig:cd_cmm}{{4b}{7}{Subfigure 4b}{subfigure.4.2}{}}
@@ -107,8 +105,7 @@
 \newlabel{fig:asc_rand_index_cd_comparison}{{4}{7}{Critical Difference Diagrams for ARI and CMM. Ranks from the Friedman test with the Nemenyi post-hoc procedure ($\alpha =0.05$); methods connected by a bar are not significantly different}{figure.4}{}}
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {ARI}}}{7}{subfigure.4.1}\protected@file@percent }
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {CMM}}}{7}{subfigure.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Supplementary Analyses}{7}{subsection.6.1}\protected@file@percent }
-\newlabel{sec:supplementary}{{\mbox  {VI-A}}{7}{Supplementary Analyses}{subsection.6.1}{}}
+\citation{Tschechlov2021AutoML4Clust,Liu2021AutoCluster,ElShawi2021cSmartML,TrederTschechlov2023ML2DAC,ElShawi2025TPEAutoClust,daSilva2024PoAC}
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Throughput--Memory Trade-off. Mean over all datasets on log--log axes; the shaded region marks the favorable high-throughput, low-memory area, where AutoDSC ($\star $) sits.}}{8}{figure.5}\protected@file@percent }
 \newlabel{fig:efficiency}{{5}{8}{Throughput--Memory Trade-off. Mean over all datasets on log--log axes; the shaded region marks the favorable high-throughput, low-memory area, where AutoDSC ($\star $) sits}{figure.5}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Leave-One-Out Ablation on Real-world Streams. ARI and CMM of each variant relative to the full AutoDSC (dashed line $=1.0$).}}{8}{figure.6}\protected@file@percent }
@@ -121,9 +118,25 @@
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Per-window runtime breakdown}}}{8}{subfigure.8.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}Sensitivity Analysis}{8}{subsection.6.2}\protected@file@percent }
 \newlabel{sec:sensitivity}{{\mbox  {VI-B}}{8}{Sensitivity Analysis}{subsection.6.2}{}}
+\citation{celik2023online,pmlr-v256-verma24a,pmlr-v139-wu21d,verma2025auto-reg}
+\citation{carnein2020confstream}
+\citation{el2023onlineautoclust}
+\citation{wang2024mostream}
+\citation{wang2023sesame}
 \citation{arbelaitz2013extensive,liu2010understanding}
-\citation{hinder2020towards}
 \citation{bahri2021data}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Dimensionality Scalability of AutoDSC. \textmd  {Controlled five-cluster blob stream (mean over 10 seeds, shaded $\pm $std); clustering quality (ARI) stays stable while throughput degrades only gracefully as the feature count grows.}}}{9}{figure.9}\protected@file@percent }
+\newlabel{fig:dimscaling}{{9}{9}{Dimensionality Scalability of AutoDSC. \textmd {Controlled five-cluster blob stream (mean over 10 seeds, shaded $\pm $std); clustering quality (ARI) stays stable while throughput degrades only gracefully as the feature count grows.}}{figure.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Sensitivity to Window Size and Population Size. Averaged over all datasets.}}{9}{figure.10}\protected@file@percent }
+\newlabel{fig:sensitivity_study}{{10}{9}{Sensitivity to Window Size and Population Size. Averaged over all datasets}{figure.10}{}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Window Size}}}{9}{subfigure.10.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Population Size}}}{9}{subfigure.10.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Related Work}{9}{section.7}\protected@file@percent }
+\newlabel{sec:relatedwork}{{VII}{9}{Related Work}{section.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Discussion and Limitations}{9}{section.8}\protected@file@percent }
+\newlabel{sec:discussion}{{VIII}{9}{Discussion and Limitations}{section.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IX}Conclusion and Future Work}{9}{section.9}\protected@file@percent }
+\newlabel{sec:conclusion_and_future}{{IX}{9}{Conclusion and Future Work}{section.9}{}}
 \bibstyle{IEEEtran}
 \bibdata{references}
 \bibcite{hutter2019automated}{1}
@@ -132,17 +145,6 @@
 \bibcite{yang2022iot}{4}
 \bibcite{celik2023online}{5}
 \bibcite{pmlr-v256-verma24a}{6}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Dimensionality Scalability of AutoDSC. \textmd  {Controlled five-cluster blob stream (mean over 10 seeds, shaded $\pm $std); clustering quality (ARI) stays stable while throughput degrades only gracefully as the feature count grows.}}}{9}{figure.9}\protected@file@percent }
-\newlabel{fig:dimscaling}{{9}{9}{Dimensionality Scalability of AutoDSC. \textmd {Controlled five-cluster blob stream (mean over 10 seeds, shaded $\pm $std); clustering quality (ARI) stays stable while throughput degrades only gracefully as the feature count grows.}}{figure.9}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Sensitivity to Window Size and Population Size. Averaged over all datasets.}}{9}{figure.10}\protected@file@percent }
-\newlabel{fig:sensitivity_study}{{10}{9}{Sensitivity to Window Size and Population Size. Averaged over all datasets}{figure.10}{}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Window Size}}}{9}{subfigure.10.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Population Size}}}{9}{subfigure.10.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {VII}Discussion and Limitations}{9}{section.7}\protected@file@percent }
-\newlabel{sec:discussion}{{VII}{9}{Discussion and Limitations}{section.7}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {VIII}Conclusion and Future Work}{9}{section.8}\protected@file@percent }
-\newlabel{sec:conclusion_and_future}{{VIII}{9}{Conclusion and Future Work}{section.8}{}}
-\@writefile{toc}{\contentsline {section}{References}{9}{section*.1}\protected@file@percent }
 \bibcite{pmlr-v139-wu21d}{7}
 \bibcite{verma2025auto-reg}{8}
 \bibcite{carnein2020confstream}{9}
@@ -167,14 +169,14 @@
 \bibcite{TrederTschechlov2023ML2DAC}{28}
 \bibcite{ElShawi2025TPEAutoClust}{29}
 \bibcite{daSilva2024PoAC}{30}
-\bibcite{wang2023sesame}{31}
-\bibcite{gijsbers2024amlb}{32}
-\bibcite{souza2020challenges}{33}
-\bibcite{dua2019uci}{34}
-\bibcite{duarte2004vehicle}{35}
-\bibcite{bifet2010moa}{36}
-\bibcite{rand1971objective}{37}
-\bibcite{demvsar2006statistical}{38}
-\bibcite{bergstra2012random}{39}
-\bibcite{hinder2020towards}{40}
+\bibcite{gijsbers2024amlb}{31}
+\bibcite{souza2020challenges}{32}
+\bibcite{dua2019uci}{33}
+\bibcite{duarte2004vehicle}{34}
+\bibcite{bifet2010moa}{35}
+\bibcite{rand1971objective}{36}
+\bibcite{demvsar2006statistical}{37}
+\bibcite{bergstra2012random}{38}
+\bibcite{wang2023sesame}{39}
+\@writefile{toc}{\contentsline {section}{References}{10}{section*.1}\protected@file@percent }
 \gdef \@abspage@last{10}
