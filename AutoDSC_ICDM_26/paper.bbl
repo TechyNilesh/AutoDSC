@@ -21,24 +21,6 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
-\bibitem{hutter2019automated}
-F.~Hutter, L.~Kotthoff, and J.~Vanschoren, \emph{Automated machine learning:
-  methods, systems, challenges}.\hskip 1em plus 0.5em minus 0.4em\relax
-  Springer Nature, 2019.
-
-\bibitem{poulakis2024survey}
-Y.~Poulakis, C.~Doulkeridis, and D.~Kyriazis, ``A survey on automl methods and
-  systems for clustering,'' \emph{ACM Transactions on Knowledge Discovery from
-  Data}, vol.~18, no.~5, pp. 1--30, 2024.
-
-\bibitem{bifet2018machine}
-\BIBentryALTinterwordspacing
-A.~Bifet, R.~Gavaldà, G.~Holmes, and B.~Pfahringer, \emph{Machine Learning for
-  Data Streams with Practical Examples in MOA}.\hskip 1em plus 0.5em minus
-  0.4em\relax MIT Press, 2018. [Online]. Available:
-  \url{https://moa.cms.waikato.ac.nz/book/}
-\BIBentrySTDinterwordspacing
-
 \bibitem{yang2022iot}
 \BIBentryALTinterwordspacing
 L.~Yang and A.~Shami, ``Iot data analytics in dynamic environments: From an
@@ -47,83 +29,10 @@ L.~Yang and A.~Shami, ``Iot data analytics in dynamic environments: From an
   \url{https://www.sciencedirect.com/science/article/pii/S0952197622003803}
 \BIBentrySTDinterwordspacing
 
-\bibitem{celik2023online}
-B.~Celik, P.~Singh, and J.~Vanschoren, ``Online automl: An adaptive automl
-  framework for online learning,'' \emph{Machine Learning}, vol. 112, no.~6,
-  pp. 1897--1921, 2023.
-
-\bibitem{pmlr-v256-verma24a}
-\BIBentryALTinterwordspacing
-N.~Verma, A.~Bifet, B.~Pfahringer, and M.~Bahri, ``Asml: A scalable and
-  efficient automl solution for data streams,'' in \emph{Proceedings of the
-  Third International Conference on Automated Machine Learning}, ser.
-  Proceedings of Machine Learning Research, K.~Eggensperger, R.~Garnett,
-  J.~Vanschoren, M.~Lindauer, and J.~R. Gardner, Eds., vol. 256.\hskip 1em plus
-  0.5em minus 0.4em\relax PMLR, 09--12 Sep 2024, pp. 11/1--26. [Online].
-  Available: \url{https://proceedings.mlr.press/v256/verma24a.html}
-\BIBentrySTDinterwordspacing
-
-\bibitem{pmlr-v139-wu21d}
-\BIBentryALTinterwordspacing
-Q.~Wu, C.~Wang, J.~Langford, P.~Mineiro, and M.~Rossi, ``Chacha for online
-  automl,'' in \emph{Proceedings of the 38th International Conference on
-  Machine Learning}, ser. Proceedings of Machine Learning Research, M.~Meila
-  and T.~Zhang, Eds., vol. 139.\hskip 1em plus 0.5em minus 0.4em\relax PMLR,
-  18--24 Jul 2021, pp. 11\,263--11\,273. [Online]. Available:
-  \url{https://proceedings.mlr.press/v139/wu21d.html}
-\BIBentrySTDinterwordspacing
-
-\bibitem{verma2025auto-reg}
-N.~Verma, A.~Bifet, B.~Pfahringer, and M.~Bahri, ``Auto-reg: A dynamic automl
-  framework for streaming regression,'' in \emph{Pacific-Asia Conference on
-  Knowledge Discovery and Data Mining}.\hskip 1em plus 0.5em minus 0.4em\relax
-  Springer, 2025, pp. 245--256.
-
-\bibitem{carnein2020confstream}
-M.~Carnein, H.~Trautmann, A.~Bifet, and B.~Pfahringer, ``confstream: Automated
-  algorithm selection and configuration of stream clustering algorithms,'' in
-  \emph{International conference on learning and intelligent
-  optimization}.\hskip 1em plus 0.5em minus 0.4em\relax Springer, 2020, pp.
-  80--95.
-
-\bibitem{el2023onlineautoclust}
-R.~El~Shawi and D.~Rozgonjuk, ``Onlineautoclust: A framework for online
-  automated clustering,'' in \emph{Proceedings of the 32nd ACM International
-  Conference on Information and Knowledge Management}, 2023, pp. 3870--3874.
-
-\bibitem{wang2024mostream}
-Z.~Wang, X.~Wang, and S.~Zhang, ``{MOStream}: A modular and self-optimizing
-  data stream clustering algorithm,'' in \emph{2024 IEEE International
-  Conference on Data Mining (ICDM)}, 2024, pp. 500--509.
-
 \bibitem{bahri2021data}
 M.~Bahri, A.~Bifet, J.~Gama, H.~M. Gomes, and S.~Maniu, ``Data stream analysis:
   Foundations, major tasks and tools,'' \emph{Wiley Interdisciplinary Reviews:
   Data Mining and Knowledge Discovery}, vol.~11, no.~3, p. e1405, 2021.
-
-\bibitem{hubert1985comparing}
-L.~Hubert and P.~Arabie, ``Comparing partitions,'' \emph{Journal of
-  Classification}, vol.~2, no.~1, pp. 193--218, 1985.
-
-\bibitem{kremer2011cmm}
-\BIBentryALTinterwordspacing
-H.~Kremer, P.~Kranen, T.~Jansen, T.~Seidl, A.~Bifet, G.~Holmes, and
-  B.~Pfahringer, ``An effective evaluation measure for clustering on evolving
-  data streams,'' in \emph{Proceedings of the 17th ACM SIGKDD International
-  Conference on Knowledge Discovery and Data Mining}, ser. KDD '11.\hskip 1em
-  plus 0.5em minus 0.4em\relax New York, NY, USA: Association for Computing
-  Machinery, 2011, pp. 868--876. [Online]. Available:
-  \url{https://doi.org/10.1145/2020408.2020555}
-\BIBentrySTDinterwordspacing
-
-\bibitem{aggarwal2013data}
-C.~C. Aggarwal, ``Data streams: models and algorithms,'' \emph{Springer Science
-  \& Business Media}, 2013.
-
-\bibitem{zhang1996birch}
-T.~Zhang, R.~Ramakrishnan, and M.~Livny, ``{BIRCH}: An efficient data
-  clustering method for very large databases,'' \emph{SIGMOD Rec.}, vol.~25,
-  no.~2, pp. 103--114, 1996.
 
 \bibitem{aggarwal2003framework}
 C.~C. Aggarwal, S.~Y. Philip, J.~Han, and J.~Wang, ``A framework for clustering
@@ -146,18 +55,67 @@ M.~Hahsler and M.~Bolaños, ``Clustering data streams based on shared density
   \url{https://ieeexplore.ieee.org/document/7425260}
 \BIBentrySTDinterwordspacing
 
+\bibitem{montiel2021river}
+J.~Montiel, M.~Halford, S.~M. Mastelini, G.~Bolmier, R.~Sourty, R.~Vaysse,
+  A.~Zouitine, H.~M. Gomes, J.~Read, T.~Abdessalem \emph{et~al.}, ``River:
+  machine learning for streaming data in python,'' \emph{Journal of Machine
+  Learning Research}, vol.~22, no. 110, pp. 1--8, 2021.
+
+\bibitem{carnein2020confstream}
+M.~Carnein, H.~Trautmann, A.~Bifet, and B.~Pfahringer, ``confstream: Automated
+  algorithm selection and configuration of stream clustering algorithms,'' in
+  \emph{International conference on learning and intelligent
+  optimization}.\hskip 1em plus 0.5em minus 0.4em\relax Springer, 2020, pp.
+  80--95.
+
+\bibitem{el2023onlineautoclust}
+R.~El~Shawi and D.~Rozgonjuk, ``Onlineautoclust: A framework for online
+  automated clustering,'' in \emph{Proceedings of the 32nd ACM International
+  Conference on Information and Knowledge Management}, 2023, pp. 3870--3874.
+
+\bibitem{wang2024mostream}
+Z.~Wang, X.~Wang, and S.~Zhang, ``{MOStream}: A modular and self-optimizing
+  data stream clustering algorithm,'' in \emph{2024 IEEE International
+  Conference on Data Mining (ICDM)}, 2024, pp. 500--509.
+
+\bibitem{hubert1985comparing}
+L.~Hubert and P.~Arabie, ``Comparing partitions,'' \emph{Journal of
+  Classification}, vol.~2, no.~1, pp. 193--218, 1985.
+
+\bibitem{kremer2011cmm}
+\BIBentryALTinterwordspacing
+H.~Kremer, P.~Kranen, T.~Jansen, T.~Seidl, A.~Bifet, G.~Holmes, and
+  B.~Pfahringer, ``An effective evaluation measure for clustering on evolving
+  data streams,'' in \emph{Proceedings of the 17th ACM SIGKDD International
+  Conference on Knowledge Discovery and Data Mining}, ser. KDD '11.\hskip 1em
+  plus 0.5em minus 0.4em\relax New York, NY, USA: Association for Computing
+  Machinery, 2011, pp. 868--876. [Online]. Available:
+  \url{https://doi.org/10.1145/2020408.2020555}
+\BIBentrySTDinterwordspacing
+
+\bibitem{bifet2018machine}
+\BIBentryALTinterwordspacing
+A.~Bifet, R.~Gavaldà, G.~Holmes, and B.~Pfahringer, \emph{Machine Learning for
+  Data Streams with Practical Examples in MOA}.\hskip 1em plus 0.5em minus
+  0.4em\relax MIT Press, 2018. [Online]. Available:
+  \url{https://moa.cms.waikato.ac.nz/book/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{aggarwal2013data}
+C.~C. Aggarwal, ``Data streams: models and algorithms,'' \emph{Springer Science
+  \& Business Media}, 2013.
+
+\bibitem{zhang1996birch}
+T.~Zhang, R.~Ramakrishnan, and M.~Livny, ``{BIRCH}: An efficient data
+  clustering method for very large databases,'' \emph{SIGMOD Rec.}, vol.~25,
+  no.~2, pp. 103--114, 1996.
+
 \bibitem{Sculley2010}
 \BIBentryALTinterwordspacing
 D.~Sculley, ``Web-scale k-means clustering,'' in \emph{WWW 2010, Raleigh, North
   Carolina, USA}, 2010. [Online]. Available:
   \url{http://code.google.com/p/sofia-ml}
 \BIBentrySTDinterwordspacing
-
-\bibitem{montiel2021river}
-J.~Montiel, M.~Halford, S.~M. Mastelini, G.~Bolmier, R.~Sourty, R.~Vaysse,
-  A.~Zouitine, H.~M. Gomes, J.~Read, T.~Abdessalem \emph{et~al.}, ``River:
-  machine learning for streaming data in python,'' \emph{Journal of Machine
-  Learning Research}, vol.~22, no. 110, pp. 1--8, 2021.
 
 \bibitem{OCallaghan2002}
 \BIBentryALTinterwordspacing
@@ -177,6 +135,11 @@ O.~Arbelaitz, I.~Gurrutxaga, J.~Muguerza, J.~M. P{\'e}rez, and I.~Perona, ``An
 Y.~Liu, Z.~Li, H.~Xiong, X.~Gao, and J.~Wu, ``Understanding of internal
   clustering validation measures,'' in \emph{2010 IEEE International Conference
   on Data Mining}, 2010, pp. 911--916.
+
+\bibitem{hutter2019automated}
+F.~Hutter, L.~Kotthoff, and J.~Vanschoren, \emph{Automated machine learning:
+  methods, systems, challenges}.\hskip 1em plus 0.5em minus 0.4em\relax
+  Springer Nature, 2019.
 
 \bibitem{gijsbers2024amlb}
 P.~Gijsbers, M.~L. Bueno, S.~Coors, E.~LeDell, S.~Poirier, J.~Thomas,
@@ -254,6 +217,38 @@ R.~ElShawi and S.~Sakr, ``Tpe-autoclust: A tree-based pipline ensemble
 M.~C. da~Silva, G.~M. Tavares, E.~Medvet, and S.~B. Junior, ``Problem-oriented
   automl in clustering,'' \emph{arXiv preprint arXiv:2409.16218}, 2024,
   arXiv:2409.16218.
+
+\bibitem{celik2023online}
+B.~Celik, P.~Singh, and J.~Vanschoren, ``Online automl: An adaptive automl
+  framework for online learning,'' \emph{Machine Learning}, vol. 112, no.~6,
+  pp. 1897--1921, 2023.
+
+\bibitem{pmlr-v256-verma24a}
+\BIBentryALTinterwordspacing
+N.~Verma, A.~Bifet, B.~Pfahringer, and M.~Bahri, ``Asml: A scalable and
+  efficient automl solution for data streams,'' in \emph{Proceedings of the
+  Third International Conference on Automated Machine Learning}, ser.
+  Proceedings of Machine Learning Research, K.~Eggensperger, R.~Garnett,
+  J.~Vanschoren, M.~Lindauer, and J.~R. Gardner, Eds., vol. 256.\hskip 1em plus
+  0.5em minus 0.4em\relax PMLR, 09--12 Sep 2024, pp. 11/1--26. [Online].
+  Available: \url{https://proceedings.mlr.press/v256/verma24a.html}
+\BIBentrySTDinterwordspacing
+
+\bibitem{pmlr-v139-wu21d}
+\BIBentryALTinterwordspacing
+Q.~Wu, C.~Wang, J.~Langford, P.~Mineiro, and M.~Rossi, ``Chacha for online
+  automl,'' in \emph{Proceedings of the 38th International Conference on
+  Machine Learning}, ser. Proceedings of Machine Learning Research, M.~Meila
+  and T.~Zhang, Eds., vol. 139.\hskip 1em plus 0.5em minus 0.4em\relax PMLR,
+  18--24 Jul 2021, pp. 11\,263--11\,273. [Online]. Available:
+  \url{https://proceedings.mlr.press/v139/wu21d.html}
+\BIBentrySTDinterwordspacing
+
+\bibitem{verma2025auto-reg}
+N.~Verma, A.~Bifet, B.~Pfahringer, and M.~Bahri, ``Auto-reg: A dynamic automl
+  framework for streaming regression,'' in \emph{Pacific-Asia Conference on
+  Knowledge Discovery and Data Mining}.\hskip 1em plus 0.5em minus 0.4em\relax
+  Springer, 2025, pp. 245--256.
 
 \bibitem{wang2023sesame}
 X.~Wang, Z.~Wang, Z.~Wu, S.~Zhang, X.~Shi, and L.~Lu, ``Data stream clustering:
