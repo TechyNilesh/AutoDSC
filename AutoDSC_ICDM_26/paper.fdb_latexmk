@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex paper"] 1780617136.54041 "paper.aux" "paper.bbl" "paper" 1780617137.10603 0
+["bibtex paper"] 1780617825.4759 "paper.aux" "paper.bbl" "paper" 1780617826.10315 0
   "./IEEEtran.bst" 1779679185.16891 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
   "./references.bib" 1780607549.68045 25310 7f3f95337ea64dec223b60979fb236fe ""
-  "paper.aux" 1780617136.98551 15074 afb66627f14a01a787d150ee771336b4 "pdflatex"
+  "paper.aux" 1780617825.97203 15133 a6bf30160cfb73b141a25c0a2c59779f "pdflatex"
   (generated)
   "paper.bbl"
   "paper.blg"
   (rewritten before read)
-["pdflatex"] 1780617136.56923 "paper.tex" "paper.pdf" "paper" 1780617137.10617 0
+["pdflatex"] 1780617825.50784 "paper.tex" "paper.pdf" "paper" 1780617826.1033 0
   "/usr/local/texlive/2025basic/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1136768653 960 379cc0019370a9e0208a0a3f949f847a ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/courier/pcrr8r.tfm" 1136768653 1292 bd42be2f344128bff6d35d98474adfe3 ""
@@ -156,10 +156,10 @@
   "images/charts/sensitivity/population_size.pdf" 1780093572.42176 14634 2d83a7cd705722ed050c642df6695c26 ""
   "images/charts/sensitivity/window_size.pdf" 1780093572.42204 14113 b450cd44a2b5644e89d3edeab19d73e2 ""
   "images/diagrams/AutoDSC_Diagram.png" 1779680420.20453 1089824 9259ced684fbfb0759f1d0494a2f1d82 ""
-  "paper.aux" 1780617136.98551 15074 afb66627f14a01a787d150ee771336b4 "pdflatex"
-  "paper.bbl" 1780617136.56684 11810 fb35b26ae9cf84965687504b95e6b487 "bibtex paper"
-  "paper.out" 1780617136.98674 2718 b9fed4bd5578b29e3af2ac6544b6c03f "pdflatex"
-  "paper.tex" 1780617126.87436 56373 f3e9b12ac8940a57f094f8ee9d3a7a84 ""
+  "paper.aux" 1780617825.97203 15133 a6bf30160cfb73b141a25c0a2c59779f "pdflatex"
+  "paper.bbl" 1780617825.50522 12053 97d0f4e576320d46db53142f7de3d465 "bibtex paper"
+  "paper.out" 1780617825.97329 2718 b9fed4bd5578b29e3af2ac6544b6c03f "pdflatex"
+  "paper.tex" 1780617817.57284 56440 7901440190495656aa51c8d4143abb5c ""
   (generated)
   "paper.aux"
   "paper.log"

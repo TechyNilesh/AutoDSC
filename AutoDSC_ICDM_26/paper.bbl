@@ -219,6 +219,11 @@ X.~Wang, Z.~Wang, Z.~Wu, S.~Zhang, X.~Shi, and L.~Lu, ``Data stream clustering:
   An in-depth empirical study,'' \emph{Proc. ACM Manag. Data}, vol.~1, no.~2,
   2023.
 
+\bibitem{gijsbers2024amlb}
+P.~Gijsbers, M.~L. Bueno, S.~Coors, E.~LeDell, S.~Poirier, J.~Thomas,
+  B.~Bischl, and J.~Vanschoren, ``Amlb: an automl benchmark,'' \emph{Journal of
+  Machine Learning Research}, vol.~25, no. 101, pp. 1--65, 2024.
+
 \bibitem{souza2020challenges}
 V.~M. Souza, D.~M. dos Reis, A.~G. Maletzke, and G.~E. Batista, ``Challenges in
   benchmarking stream learning algorithms with real-world data,'' \emph{Data

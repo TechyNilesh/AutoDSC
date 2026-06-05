@@ -239,7 +239,7 @@ $\mathcal{C}_{\text{new}} \gets \emptyset$\;
 \end{algorithm}
 
 \section{Experimental Setup}\label{sec:setup}
-Our experimental design follows rigorous evaluation protocols to ensure reproducible and statistically valid results.\footnote{Datasets and code: \url{https://anonymous.4open.science/r/AutoDSC}}
+Following standard AutoML benchmarking practice~\cite{gijsbers2024amlb}, our experimental design uses rigorous, reproducible evaluation protocols to ensure statistically valid results.\footnote{Datasets and code: \url{https://anonymous.4open.science/r/AutoDSC}}
 
 \subsection{Datasets}
 We evaluate on 10 datasets comprising 5 real-world and 5 synthetic streams with varying sizes, dimensionalities, and cluster counts, as summarized in Table~\ref{tab:dataset_summary}. Datasets were selected to (i) cover the real-world streams most frequently used in prior stream-clustering work, spanning a wide range of sizes (11k--101k instances), dimensionalities (9--100 attributes), and cluster counts (3--12), and (ii) probe specific drift mechanisms in isolation through controlled synthetic generators.
