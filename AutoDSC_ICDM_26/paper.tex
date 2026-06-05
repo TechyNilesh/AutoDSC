@@ -467,7 +467,7 @@ Finally, AutoDSC adaptively reshapes its population of candidate algorithms as t
 
 \textbf{The search overhead is negligible.} Decomposing AutoDSC's per-window wall-clock into base-clusterer training/prediction, multi-CVI scoring, and the PGSSO search itself (Table~\ref{tab:supplementary}) reveals three well-separated tiers: training the $K$ population members dominates ($\approx1.0$--$1.3$\,s/window), multi-CVI scoring is an order of magnitude smaller ($\approx0.1$\,s), and the AutoML search machinery is three orders smaller still ($\approx1$\,ms, under $0.1\%$ of the total). The price of automation is thus dwarfed by the clustering it automates, explaining AutoDSC's competitive throughput against the offline optimization of OACE.
 
-\textbf{Quality is stable across dimensionality.} On a controlled five-cluster blob stream with feature dimensionality growing from $5$ to $80$ (Table~\ref{tab:dimscaling}), clustering quality stays high and even improves slightly (ARI $0.91\rightarrow0.97$) while throughput degrades only gracefully ($620\rightarrow376$ instances/s), with no curse-of-dimensionality collapse, indicating that AutoDSC's search remains effective as dimensionality increases.
+\textbf{Quality is stable across dimensionality.} On a controlled five-cluster blob stream with feature dimensionality growing from $5$ to $80$ (Figure~\ref{fig:dimscaling}), clustering quality stays high and even improves slightly (ARI $0.91\rightarrow0.97$) while throughput degrades only gracefully ($620\rightarrow376$ instances/s), with no curse-of-dimensionality collapse, indicating that AutoDSC's search remains effective as dimensionality increases.
 
 \begin{table}[t]
 \centering
@@ -491,21 +491,12 @@ PGSSO search share (\%) & 0.08 & 0.06 \\
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
+\begin{figure}[t]
 \centering
-\caption{Dimensionality Scalability of AutoDSC. \textmd{Controlled five-cluster blob stream (mean over 10 seeds); quality stays stable while throughput degrades only gracefully as the feature count grows.}}
-\label{tab:dimscaling}
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{l c c c c c}
-\hline
-\textbf{Dimensionality} & 5 & 10 & 20 & 40 & 80 \\
-\hline
-ARI $\uparrow$ & 0.910 & 0.944 & 0.958 & 0.963 & 0.974 \\
-Throughput (instances/s) $\uparrow$ & 620 & 686 & 601 & 509 & 376 \\
-\hline
-\end{tabular}%
-}
-\end{table}
+\includegraphics[width=0.92\linewidth]{images/charts/dimscaling/dim_sweep.pdf}
+\caption{Dimensionality Scalability of AutoDSC. \textmd{Controlled five-cluster blob stream (mean over 10 seeds, shaded $\pm$std); clustering quality (ARI) stays stable while throughput degrades only gracefully as the feature count grows.}}
+\label{fig:dimscaling}
+\end{figure}
 
 \subsection{Sensitivity Analysis}\label{sec:sensitivity}
 
