@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex paper"] 1780697801.98236 "paper.aux" "paper.bbl" "paper" 1780697802.60756 0
+["bibtex paper"] 1780697801.98236 "paper.aux" "paper.bbl" "paper" 1780698129.41479 0
   "./IEEEtran.bst" 1779679185.16891 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
   "./references.bib" 1780607549.68045 25310 7f3f95337ea64dec223b60979fb236fe ""
-  "paper.aux" 1780697802.46244 16086 a0ef6e5d0ba6a405bf0dce7013bffba5 "pdflatex"
+  "paper.aux" 1780698129.27845 16086 a0ef6e5d0ba6a405bf0dce7013bffba5 "pdflatex"
   (generated)
   "paper.bbl"
   "paper.blg"
   (rewritten before read)
-["pdflatex"] 1780697802.01324 "paper.tex" "paper.pdf" "paper" 1780697802.60775 0
+["pdflatex"] 1780698128.79363 "paper.tex" "paper.pdf" "paper" 1780698129.415 0
   "/usr/local/texlive/2025basic/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1136768653 960 379cc0019370a9e0208a0a3f949f847a ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/courier/pcrr8r.tfm" 1136768653 1292 bd42be2f344128bff6d35d98474adfe3 ""
@@ -158,10 +158,10 @@
   "images/charts/sensitivity/window_size.pdf" 1780093572.42204 14113 b450cd44a2b5644e89d3edeab19d73e2 ""
   "images/charts/validity/selection.pdf" 1780690753.7306 21890 1338a61336be8123b1caf2f2903a5485 ""
   "images/diagrams/AutoDSC_Diagram.png" 1779680420.20453 1089824 9259ced684fbfb0759f1d0494a2f1d82 ""
-  "paper.aux" 1780697802.46244 16086 a0ef6e5d0ba6a405bf0dce7013bffba5 "pdflatex"
+  "paper.aux" 1780698129.27845 16086 a0ef6e5d0ba6a405bf0dce7013bffba5 "pdflatex"
   "paper.bbl" 1780697802.01073 11748 01bea4c79b279fe22f97a92361bb194e "bibtex paper"
-  "paper.out" 1780697802.46449 2815 917b96e464783f375462a12ec47e7881 "pdflatex"
-  "paper.tex" 1780697788.50499 56034 7b71ec3264be05f0808b095a29a2958c ""
+  "paper.out" 1780698129.27969 2815 917b96e464783f375462a12ec47e7881 "pdflatex"
+  "paper.tex" 1780698117.45017 56071 ac3803b6fbc23ab6dbd77248a59bc8ac ""
   (generated)
   "paper.aux"
   "paper.log"
