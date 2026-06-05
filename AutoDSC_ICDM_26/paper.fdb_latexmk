@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex paper"] 1780694913.03482 "paper.aux" "paper.bbl" "paper" 1780694913.58517 0
+["bibtex paper"] 1780695148.47074 "paper.aux" "paper.bbl" "paper" 1780695149.17596 0
   "./IEEEtran.bst" 1779679185.16891 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
   "./references.bib" 1780607549.68045 25310 7f3f95337ea64dec223b60979fb236fe ""
-  "paper.aux" 1780694913.46445 16085 d17eb2ece91efe26ae02af04bbfeefe4 "pdflatex"
+  "paper.aux" 1780695149.03937 16085 dd937caf62e0765b64dd2fd23ad80c03 "pdflatex"
   (generated)
   "paper.bbl"
   "paper.blg"
   (rewritten before read)
-["pdflatex"] 1780694913.06118 "paper.tex" "paper.pdf" "paper" 1780694913.5853 0
+["pdflatex"] 1780695148.51489 "paper.tex" "paper.pdf" "paper" 1780695149.17625 0
   "/usr/local/texlive/2025basic/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1136768653 960 379cc0019370a9e0208a0a3f949f847a ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/courier/pcrr8r.tfm" 1136768653 1292 bd42be2f344128bff6d35d98474adfe3 ""
@@ -154,10 +154,10 @@
   "images/charts/sensitivity/window_size.pdf" 1780093572.42204 14113 b450cd44a2b5644e89d3edeab19d73e2 ""
   "images/charts/validity/selection.pdf" 1780690753.7306 21890 1338a61336be8123b1caf2f2903a5485 ""
   "images/diagrams/AutoDSC_Diagram.png" 1779680420.20453 1089824 9259ced684fbfb0759f1d0494a2f1d82 ""
-  "paper.aux" 1780694913.46445 16085 d17eb2ece91efe26ae02af04bbfeefe4 "pdflatex"
-  "paper.bbl" 1780694913.05901 11748 01bea4c79b279fe22f97a92361bb194e "bibtex paper"
-  "paper.out" 1780694913.46567 2815 917b96e464783f375462a12ec47e7881 "pdflatex"
-  "paper.tex" 1780694902.44108 55652 0ee111de14e586c85e8babd84aeda754 ""
+  "paper.aux" 1780695149.03937 16085 dd937caf62e0765b64dd2fd23ad80c03 "pdflatex"
+  "paper.bbl" 1780695148.51203 11748 01bea4c79b279fe22f97a92361bb194e "bibtex paper"
+  "paper.out" 1780695149.04061 2815 917b96e464783f375462a12ec47e7881 "pdflatex"
+  "paper.tex" 1780695138.12642 55570 09e32eccaf992cac3a0a348699f2d2db ""
   (generated)
   "paper.aux"
   "paper.log"
