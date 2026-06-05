@@ -68,7 +68,7 @@ In this paper, we introduce \textbf{AutoDSC} (Automated Data Stream Clustering),
 
 \item AutoDSC scores each configuration with a normalised multi-objective criterion combining three complementary internal cluster-validity indices, yielding robust selection where the single-metric criteria of prior systems fail.
 
-\item Across ten real and synthetic streams, AutoDSC attains the best mean rank on both the Adjusted Rand Index (ARI)~\cite{hubert1985comparing} and CMM~\cite{kremer2011cmm} and the highest mean ARI among all methods, while being the most computationally efficient of the AutoML stream clusterers.
+\item We provide a comprehensive empirical evaluation across ten real-world and synthetic streams, including statistical significance testing, ablation, sensitivity, search-overhead decomposition, and dimensionality-scalability analyses, demonstrating that AutoDSC consistently ranks first in clustering quality and is the most computationally efficient of the AutoML stream clusterers.
 \end{itemize}
 
 The rest of the paper is organised as follows. Section~\ref{sec:background} introduces the background of data stream clustering and AutoML. Section~\ref{sec:problem} formalises the problem. Section~\ref{sec:methodology} presents the AutoDSC framework. Section~\ref{sec:setup} describes the experimental setup. Section~\ref{sec:results} presents empirical evaluation and analysis. Section~\ref{sec:relatedwork} reviews prior work, and Section~\ref{sec:conclusion_and_future} concludes the paper.
@@ -85,7 +85,7 @@ Classical stream clustering algorithms meet these requirements and fall into a f
 
 \subsection{Automated Machine Learning}
 
-Automated Machine Learning removes the manual burden of algorithm selection and hyperparameter optimisation, formalised as the CASH problem~\cite{hutter2019automated}. It is mature for batch supervised learning, whereas clustering lacks a universally applicable objective and streaming imposes single-pass, bounded-memory, and drifting constraints, so existing automated systems address at most one of these (surveyed in Section~\ref{sec:relatedwork}). AutoDSC casts stream clustering as an online joint algorithm--hyperparameter search, which we formalise next.
+Automated Machine Learning removes the manual burden of algorithm selection and hyperparameter optimisation, formalised as the CASH problem~\cite{thornton2013autoweka,feurer2015autosklearn,hutter2019automated}. It is mature for batch supervised learning, whereas clustering lacks a universally applicable objective and streaming imposes single-pass, bounded-memory, and drifting constraints, so existing automated systems address at most one of these (surveyed in Section~\ref{sec:relatedwork}). AutoDSC casts stream clustering as an online joint algorithm--hyperparameter search, which we formalise next.
 
 \section{Problem Formulation}\label{sec:problem}
 
@@ -116,6 +116,8 @@ When the window fills, AutoDSC evaluates clustering quality using three normalis
 \mu_t(\theta) = \frac{1}{3}[\text{NSC} + \text{NDBI} + \text{NCHI}]
 \end{equation}
 
+Equal weights avoid dataset-specific tuning and are consistent with the finding that no single CVI dominates across cluster shapes and densities~\cite{arbelaitz2013extensive,liu2010understanding}.
+
 AutoDSC adjusts exploration based on the change in the best score between consecutive windows, $\Delta\mu_t = \mu_t(\theta^*_t) - \mu_{t-1}(\theta^*_{t-1})$. The exploration rate then adapts as:
 
 \begin{equation}
@@ -145,7 +147,7 @@ Elite-guided sampling first draws an algorithm with probability equal to its fre
 \phi_j \sim \mathcal{N}(m_j, \sigma_j^2)
 \end{equation}
 
-where the mean $m_j$ and variance $\sigma_j^2$ are computed over the elites that use the selected algorithm.
+where the mean $m_j$ and variance $\sigma_j^2$ are computed over the elites that use the selected algorithm. Samples outside a hyperparameter's defined bounds are clipped to the boundary. The elite-distribution sampling is related to Estimation of Distribution Algorithms and CMA-ES~\cite{hansen2001cmaes}, adapted here for the non-stationary streaming setting.
 
 When the population exceeds size $K$, it is pruned by a \emph{farthest-first} rule: keep the incumbent and the top-scoring configurations, then greedily add whichever remaining configuration is most distant from those already kept. The distance between two configurations is $1$ if their algorithms differ and the mean normalised per-hyperparameter distance otherwise, preserving diversity without a fixed acceptance threshold.
 
@@ -193,8 +195,8 @@ $\mu_{-1}(\theta^*_{-1}) \gets -\infty$\;
 \label{alg:pgsso}
 \KwIn{Current configurations with scores $\{(\theta_i, s_i)\}$; exploration rate $\alpha \in [0,1]$; parameter space $\Theta$}
 \KwOut{New configuration set $\mathcal{C}_{\text{new}}$}
-$\mathcal{E} \gets \textsc{UpdateElitePopulation}(\{(\theta_i, s_i)\}, e_{\max})$\;
-$\mathcal{E} \gets \textsc{UpdateParameterDistributions}(\mathcal{E})$\;
+$\mathcal{E} \gets \textsc{UpdateElitePopulation}(\{(\theta_i, s_i)\}, e_{\max})$\; \tcp*{recency-weighted ranking, see \S\ref{sec:methodology}}
+$\mathcal{E} \gets \textsc{UpdateParameterDistributions}(\mathcal{E})$\; \tcp*{fit $\mathcal{N}(m_j,\sigma_j^2)$ per algorithm, see \S\ref{sec:methodology}}
 $\mathcal{C}_{\text{new}} \gets \emptyset$\;
 \For{$j \gets 1$ \KwTo $n_{\text{gen}}$}{
     $u \gets \text{Uniform}(0,1)$\;
@@ -253,7 +255,7 @@ The five real-world streams are public benchmarks with natural class structure a
 \item \textbf{KDD99}~\cite{dua2019uci}: network-connection records from the KDD Cup 1999 intrusion-detection task, labelled as normal traffic or one of several attack types.
 \item \textbf{PenDigits}~\cite{dua2019uci}: pen-trajectory features of handwritten digits, with one cluster per digit $0$--$9$.
 \item \textbf{Shuttle}~\cite{dua2019uci}: NASA Space Shuttle radiator sensor readings (Statlog), with highly imbalanced operational-state classes.
-\item \textbf{Vehicle}~\cite{duarte2004vehicle}: high-dimensional acoustic and seismic features from a distributed wireless sensor network, labelled by vehicle type.
+\item \textbf{Vehicle}~\cite{duarte2004vehicle}: high-dimensional acoustic and seismic features from a distributed wireless sensor network, labelled by vehicle type (note: distinct from the unrelated UCI Vehicle Silhouettes dataset).
 \end{itemize}
 
 The five synthetic streams are produced by our reproducible generators (released with the code) and let us control the drift mechanism while holding dimensionality and cluster count fixed. Four are five-cluster Gaussian-blob streams in $[0,1]^5$ that differ only in the injected drift, and one is a MOA-style RandomRBF stream~\cite{bifet2010moa}.
@@ -273,7 +275,7 @@ We compare AutoDSC against five baselines spanning three categories. (i) \emph{A
 \subsection{Implementation and Configuration}
 Unless otherwise stated, AutoDSC uses its default configuration of population size $K=10$ and window size $w=1000$, with the exploration rate adapting automatically from an initial value of $0.5$ (Section~\ref{sec:sensitivity} analyses sensitivity to $K$ and $w$). The AutoML baselines search over the same algorithm portfolio and hyperparameter ranges specified in Table~\ref{tab:hyperparameters}, where the window-dependent ranges (\texttt{time\_window} and \texttt{chunk\_size}) are listed for the default window size $w=1000$; the single fixed algorithms use their library defaults. To ensure a fair comparison, all AutoML baselines receive the same window size and per-window evaluation budget as AutoDSC, so differences reflect the search and selection strategy rather than the compute allotment; other baseline-specific parameters remain as reported in their original papers.
 
-All experiments were conducted on the server detailed in Table~\ref{tab:platform}, using parallelization across cores for efficiency. All clustering algorithms were implemented with the River online-learning library~\cite{montiel2021river}.
+All experiments were conducted on the server detailed in Table~\ref{tab:platform}, using parallelisation across cores to run the ten independent seeds concurrently; all methods process the stream single-threaded within each run, so throughput comparisons are fair. All clustering algorithms were implemented with the River online-learning library~\cite{montiel2021river}.
 
 \begin{table}[t]
 \centering
@@ -420,7 +422,7 @@ Figure~\ref{fig:recovery} isolates AutoDSC's behaviour under drift on two synthe
 \label{fig:recovery}
 \end{figure}
 
-To assess these performance gains statistically, the Critical Difference (CD) diagrams in Figure~\ref{fig:asc_rand_index_cd_comparison} rank all methods using the Friedman test with the Nemenyi post-hoc procedure ($\alpha = 0.05$, CD$=2.38$). AutoDSC attains the best (lowest) mean rank on both ARI ($1.40$) and CMM ($2.20$), ahead of every baseline. On ARI, AutoDSC is significantly better than RandomSearch, MOStream, and the Default(Best) baseline; the rank gap to the strongest AutoML competitors (ConfStream and OACE, both at rank $3.60$) is $2.20$, just within the critical difference of $2.38$, so with only ten datasets these are not separated by a statistically significant margin. AutoDSC nonetheless ranks first on both metrics.
+To assess these performance gains statistically, the Critical Difference (CD) diagrams in Figure~\ref{fig:asc_rand_index_cd_comparison} rank all methods using the Friedman test with the Nemenyi post-hoc procedure ($\alpha = 0.05$, CD$=2.38$). AutoDSC attains the best (lowest) mean rank on both ARI ($1.40$) and CMM ($2.20$), ahead of every baseline. On ARI, AutoDSC is significantly better than RandomSearch, MOStream, and the Default(Best) baseline; the rank gap to the strongest AutoML competitors (ConfStream and OACE, both at rank $3.60$) is $2.20$, just within the critical difference of $2.38$, so with only ten datasets these are not separated by a statistically significant margin. On CMM, AutoDSC (rank $2.20$) is significantly better than MOStream and Default(Best), whose ranks fall beyond the CD boundary; the gap to ConfStream and OACE is within the CD, consistent with the ARI result. AutoDSC nonetheless ranks first on both metrics.
 
 \begin{figure}[t]
 \centering
@@ -439,7 +441,7 @@ Beyond clustering quality, AutoDSC remains practical in throughput and memory. A
 \label{fig:efficiency}
 \end{figure}
 
-To quantify the contribution of each component, we ran a leave-one-out ablation over all real-world datasets ($\times10$ seeds), disabling one mechanism at a time, namely recency-weighted elite ranking, the adaptive exploration rate, the multi-objective (3-CVI) score, and diversity-preserving pruning. (Replacing the guided PGSSO search by random configuration generation is already covered by the RandomSearch baseline.) Figure~\ref{fig:ablation_study} reports each variant's score relative to the full model. On these comparatively stable real-world streams the effects are small and metric-dependent: removing recency weighting causes the largest ARI drop ($\sim$1.7\%), while removing the multi-objective CVI score lowers CMM by $\sim$1.2\% but barely affects ARI, indicating that the two components matter on complementary metrics; diversity pruning gives a small consistent gain, and the adaptive exploration rate has a negligible standalone effect here, consistent with its role being to accelerate recovery under the stronger drift of the synthetic streams (Figure~\ref{fig:recovery}). The full configuration is the most balanced across both metrics, supporting the integrated design.
+To quantify the contribution of each component, we ran a leave-one-out ablation across datasets ($\times10$ seeds), disabling one mechanism at a time, namely recency-weighted elite ranking, the adaptive exploration rate, the multi-objective (3-CVI) score, and diversity-preserving pruning. (Replacing the guided PGSSO search by random configuration generation is already covered by the RandomSearch baseline.) Figure~\ref{fig:ablation_study} reports each variant's score relative to the full model. On these comparatively stable real-world streams the effects are small and metric-dependent: removing recency weighting causes the largest ARI drop ($\sim$1.7\%), while removing the multi-objective CVI score lowers CMM by $\sim$1.2\% but barely affects ARI, indicating that the two components matter on complementary metrics; diversity pruning gives a small consistent gain, and the adaptive exploration rate has a negligible standalone effect here, consistent with its role being to accelerate recovery under the stronger drift of the synthetic streams (Figure~\ref{fig:recovery}). The full configuration is the most balanced across both metrics, supporting the integrated design.
 
 \begin{figure}[t]
     \centering
@@ -451,7 +453,7 @@ To quantify the contribution of each component, we ran a leave-one-out ablation 
     \label{fig:ablation_study}
 \end{figure}
 
-Finally, AutoDSC adaptively reshapes its population of candidate algorithms as the stream evolves. Figure~\ref{fig:model_selection_evolution} shows the algorithm composition of the population across stream windows on the Insects dataset, chosen as a representative real-world stream with pronounced concept drift, where each cell is the base algorithm occupying a population slot at that window. AutoDSC continuously maintains a diverse mix and shifts the composition between CluStream, DenStream, DBSTREAM, and StreamKMeans as the active concept changes, rather than committing to a single algorithm.
+Finally, AutoDSC adaptively reshapes its population of candidate algorithms as the stream evolves. Figure~\ref{fig:model_selection_evolution} shows the algorithm composition of the population across stream windows on the Insects dataset, chosen as a representative real-world stream: it is the longest real stream (52,848 instances) and exhibits pronounced concept drift as species-label distributions shift with ambient temperature, where each cell is the base algorithm occupying a population slot at that window. AutoDSC continuously maintains a diverse mix and shifts the composition between CluStream, DenStream, DBSTREAM, and StreamKMeans as the active concept changes, rather than committing to a single algorithm.
 
 \begin{figure}[t]
     \centering

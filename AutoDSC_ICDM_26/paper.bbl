@@ -78,21 +78,6 @@ Z.~Wang, X.~Wang, and S.~Zhang, ``{MOStream}: A modular and self-optimizing
   data stream clustering algorithm,'' in \emph{2024 IEEE International
   Conference on Data Mining (ICDM)}, 2024, pp. 500--509.
 
-\bibitem{hubert1985comparing}
-L.~Hubert and P.~Arabie, ``Comparing partitions,'' \emph{Journal of
-  Classification}, vol.~2, no.~1, pp. 193--218, 1985.
-
-\bibitem{kremer2011cmm}
-\BIBentryALTinterwordspacing
-H.~Kremer, P.~Kranen, T.~Jansen, T.~Seidl, A.~Bifet, G.~Holmes, and
-  B.~Pfahringer, ``An effective evaluation measure for clustering on evolving
-  data streams,'' in \emph{Proceedings of the 17th ACM SIGKDD International
-  Conference on Knowledge Discovery and Data Mining}, ser. KDD '11.\hskip 1em
-  plus 0.5em minus 0.4em\relax New York, NY, USA: Association for Computing
-  Machinery, 2011, pp. 868--876. [Online]. Available:
-  \url{https://doi.org/10.1145/2020408.2020555}
-\BIBentrySTDinterwordspacing
-
 \bibitem{bifet2018machine}
 \BIBentryALTinterwordspacing
 A.~Bifet, R.~Gavaldà, G.~Holmes, and B.~Pfahringer, \emph{Machine Learning for
@@ -136,10 +121,37 @@ Y.~Liu, Z.~Li, H.~Xiong, X.~Gao, and J.~Wu, ``Understanding of internal
   clustering validation measures,'' in \emph{2010 IEEE International Conference
   on Data Mining}, 2010, pp. 911--916.
 
+\bibitem{kremer2011cmm}
+\BIBentryALTinterwordspacing
+H.~Kremer, P.~Kranen, T.~Jansen, T.~Seidl, A.~Bifet, G.~Holmes, and
+  B.~Pfahringer, ``An effective evaluation measure for clustering on evolving
+  data streams,'' in \emph{Proceedings of the 17th ACM SIGKDD International
+  Conference on Knowledge Discovery and Data Mining}, ser. KDD '11.\hskip 1em
+  plus 0.5em minus 0.4em\relax New York, NY, USA: Association for Computing
+  Machinery, 2011, pp. 868--876. [Online]. Available:
+  \url{https://doi.org/10.1145/2020408.2020555}
+\BIBentrySTDinterwordspacing
+
+\bibitem{thornton2013autoweka}
+C.~Thornton, F.~Hutter, H.~H. Hoos, and K.~Leyton-Brown, ``{Auto-WEKA}:
+  Combined selection and hyperparameter optimization of classification
+  algorithms,'' in \emph{Proceedings of the 19th ACM SIGKDD International
+  Conference on Knowledge Discovery and Data Mining}, 2013, pp. 847--855.
+
+\bibitem{feurer2015autosklearn}
+M.~Feurer, A.~Klein, K.~Eggensperger, J.~Springenberg, M.~Blum, and F.~Hutter,
+  ``Efficient and robust automated machine learning,'' in \emph{Advances in
+  Neural Information Processing Systems}, vol.~28, 2015, pp. 2962--2970.
+
 \bibitem{hutter2019automated}
 F.~Hutter, L.~Kotthoff, and J.~Vanschoren, \emph{Automated machine learning:
   methods, systems, challenges}.\hskip 1em plus 0.5em minus 0.4em\relax
   Springer Nature, 2019.
+
+\bibitem{hansen2001cmaes}
+N.~Hansen and A.~Ostermeier, ``Completely derandomized self-adaptation in
+  evolution strategies,'' \emph{Evolutionary Computation}, vol.~9, no.~2, pp.
+  159--195, 2001.
 
 \bibitem{gijsbers2024amlb}
 P.~Gijsbers, M.~L. Bueno, S.~Coors, E.~LeDell, S.~Poirier, J.~Thomas,
@@ -166,6 +178,10 @@ M.~Duarte and Y.~H. Hu, ``Vehicle classification in distributed sensor
 A.~Bifet, G.~Holmes, R.~Kirkby, and B.~Pfahringer, ``Moa: Massive online
   analysis,'' \emph{The Journal of Machine Learning Research}, vol.~11, pp.
   1601--1604, 2010.
+
+\bibitem{hubert1985comparing}
+L.~Hubert and P.~Arabie, ``Comparing partitions,'' \emph{Journal of
+  Classification}, vol.~2, no.~1, pp. 193--218, 1985.
 
 \bibitem{rand1971objective}
 W.~M. Rand, ``Objective criteria for the evaluation of clustering methods,''

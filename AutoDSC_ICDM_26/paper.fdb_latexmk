@@ -1,15 +1,16 @@
 # Fdb version 4
-["bibtex paper"] 1780699348.53182 "paper.aux" "paper.bbl" "paper" 1780699349.08067 0
+["bibtex paper"] 1780700143.63364 "paper.aux" "paper.bbl" "paper" 1780700144.21084 0
   "./IEEEtran.bst" 1779679185.16891 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
-  "./references.bib" 1780607549.68045 25310 7f3f95337ea64dec223b60979fb236fe ""
-  "paper.aux" 1780699348.9589 15942 300d6f92583a9531e0a60bd26e87b266 "pdflatex"
+  "./references.bib" 1780700021.01316 26461 5379636385bb4a0b1b44f17671c8625f ""
+  "paper.aux" 1780700144.0853 16113 8ddfdca2fd6bafb6191b2147c192b63b "pdflatex"
   (generated)
   "paper.bbl"
   "paper.blg"
   (rewritten before read)
-["pdflatex"] 1780699348.55957 "paper.tex" "paper.pdf" "paper" 1780699349.08081 0
+["pdflatex"] 1780700143.66036 "paper.tex" "paper.pdf" "paper" 1780700144.21098 0
   "/usr/local/texlive/2025basic/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1136768653 960 379cc0019370a9e0208a0a3f949f847a ""
+  "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/courier/pcrr8c.tfm" 1136768653 1268 8bd405dc5751cfed76cb6fb2db78cb50 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/courier/pcrr8r.tfm" 1136768653 1292 bd42be2f344128bff6d35d98474adfe3 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm" 1136768653 2172 fd0c924230362ff848a33632ed45dc23 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/times/ptmb8r.tfm" 1136768653 4524 6bce29db5bc272ba5f332261583fee9c ""
@@ -59,6 +60,7 @@
   "/usr/local/texlive/2025basic/texmf-dist/fonts/type1/urw/times/utmr8a.pfb" 1136849748 46026 6dab18b61c907687b520c72847215a68 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/type1/urw/times/utmri8a.pfb" 1136849748 45458 a3faba884469519614ca56ba5f6b1de1 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/vf/adobe/courier/pcrr7t.vf" 1136768653 1344 6ff472164bf9de0fb2e864b28ac156d9 ""
+  "/usr/local/texlive/2025basic/texmf-dist/fonts/vf/adobe/courier/pcrr8c.vf" 1136768653 3552 6a7911d0b338a7c32cbfc3a9e985ccca ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/vf/adobe/times/ptmb7t.vf" 1136768653 1372 788387fea833ef5963f4c5bffe33eb89 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/vf/adobe/times/ptmbc7t.vf" 1136768653 1948 09614867cfee727c370daa115b7f3542 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/vf/adobe/times/ptmbi7t.vf" 1136768653 1384 6ac0f8b839230f5d9389287365b243c0 ""
@@ -122,6 +124,7 @@
   "/usr/local/texlive/2025basic/texmf-dist/tex/latex/multirow/multirow.sty" 1731446765 6696 886c9f3087d0b973ed2c19aa79cb3023 ""
   "/usr/local/texlive/2025basic/texmf-dist/tex/latex/psnfss/ot1pcr.fd" 1137110629 985 1ed784d7bfe47179f3550d2303b073f8 ""
   "/usr/local/texlive/2025basic/texmf-dist/tex/latex/psnfss/ot1ptm.fd" 1137110629 961 15056f4a61917ceed3a44e4ac11fcc52 ""
+  "/usr/local/texlive/2025basic/texmf-dist/tex/latex/psnfss/ts1pcr.fd" 1137110629 643 92c451bb86386a4e36a174603ddb5a13 ""
   "/usr/local/texlive/2025basic/texmf-dist/tex/latex/refcount/refcount.sty" 1576624809 9878 9e94e8fa600d95f9c7731bb21dfb67a4 ""
   "/usr/local/texlive/2025basic/texmf-dist/tex/latex/relsize/relsize.sty" 1369619135 15542 c4cc3164fe24f2f2fbb06eb71b1da4c4 ""
   "/usr/local/texlive/2025basic/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty" 1657483315 9714 ba3194bd52c8499b3f1e3eb91d409670 ""
@@ -158,10 +161,10 @@
   "images/charts/sensitivity/window_size.pdf" 1780093572.42204 14113 b450cd44a2b5644e89d3edeab19d73e2 ""
   "images/charts/validity/selection.pdf" 1780690753.7306 21890 1338a61336be8123b1caf2f2903a5485 ""
   "images/diagrams/AutoDSC_Diagram.png" 1779680420.20453 1089824 9259ced684fbfb0759f1d0494a2f1d82 ""
-  "paper.aux" 1780699348.9589 15942 300d6f92583a9531e0a60bd26e87b266 "pdflatex"
-  "paper.bbl" 1780699348.55646 11518 a54be1f991da5527cbdde1b70ffb694e "bibtex paper"
-  "paper.out" 1780699348.95995 2815 917b96e464783f375462a12ec47e7881 "pdflatex"
-  "paper.tex" 1780699340.13645 55543 74a5a2d7207870a7d058cb015d1b0b6e ""
+  "paper.aux" 1780700144.0853 16113 8ddfdca2fd6bafb6191b2147c192b63b "pdflatex"
+  "paper.bbl" 1780700143.6583 12299 f823c0e87f9d59e0c2baa7c5d206363e "bibtex paper"
+  "paper.out" 1780700144.0863 2815 917b96e464783f375462a12ec47e7881 "pdflatex"
+  "paper.tex" 1780700135.8432 56786 712272a79dbbcf75719b651fb79f38b6 ""
   (generated)
   "paper.aux"
   "paper.log"
