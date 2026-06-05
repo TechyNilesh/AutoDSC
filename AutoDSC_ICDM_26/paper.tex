@@ -87,21 +87,13 @@ For stream clustering specifically, ConfStream~\cite{carnein2020confstream}, OAC
 
 \section{Problem Formulation}\label{sec:problem}
 
-A data stream is an unbounded sequence $\mathcal{S} = \{x_1, x_2, \ldots, x_t, \ldots\}$ in which each instance $x_t \in \mathbb{R}^d$ arrives one at a time and must be processed in a single pass under bounded memory. We consume the stream in consecutive windows of fixed size $w$, writing $W$ for the window currently being processed, and the data-generating distribution may change from one window to the next (concept drift), so the best way to cluster the data is itself time-varying. Given a window $W$, a clustering algorithm groups its points by similarity without access to labels. Centroid-based methods, for instance, summarize each group by a representative and seek a set $C$ of centroids that minimizes the average distance to the nearest centroid,
-\begin{equation}
-\mathrm{cost}(C, W) = \frac{1}{|W|}\sum_{x \in W} \min_{c \in C} d(x, c),
-\end{equation}
-where $d$ is a distance function, while density- and micro-cluster-based methods optimize related criteria. No single algorithm or objective suits all data, so the appropriate choice varies across datasets and, under drift, across time. Because ground-truth labels are unavailable online, the quality of a clustering produced on $W$ must be judged by an internal cluster-validity score $q(\cdot) \in [0,1]$ (higher is better) computed from the data and the assignments alone, whereas external indices such as ARI and CMM use labels and are reserved for offline evaluation (Section~\ref{sec:setup}).
+A data stream is an unbounded sequence $\mathcal{S} = \{x_1, x_2, \ldots, x_t, \ldots\}$ in which each instance $x_t \in \mathbb{R}^d$ arrives one at a time and must be processed in a single pass under bounded memory. We consume the stream in consecutive windows of fixed size $w$, writing $W$ for the window currently being processed, and the data-generating distribution may change from one window to the next (concept drift), so the best way to cluster the data is itself time-varying. Given a window $W$, a clustering algorithm groups its points by similarity without access to labels. Centroid-based methods, for instance, seek centroids that minimize the average distance from each point to its nearest centroid, while density- and micro-cluster-based methods optimize related criteria. No single algorithm or objective suits all data, so the appropriate choice varies across datasets and, under drift, across time. Because ground-truth labels are unavailable online, the quality of a clustering produced on $W$ must be judged by an internal cluster-validity score $q(\cdot) \in [0,1]$ (higher is better) computed from the data and the assignments alone, whereas external indices such as ARI and CMM use labels and are reserved for offline evaluation (Section~\ref{sec:setup}).
 
 Let $\mathcal{A}$ be a portfolio of stream-clustering algorithms and $\Theta = \bigcup_{a \in \mathcal{A}} (\{a\} \times \Phi_a)$ the joint space of configurations $\theta = (a, \phi)$ that pair an algorithm $a$ with hyperparameters $\phi \in \Phi_a$. Running $\theta$ on the current window yields a clustering with label-free quality $q(\theta; W)$. The CASH problem for a stream is to track, at every window, the configuration
 \begin{equation}
 \theta^\star = \arg\max_{\theta \in \Theta}\; q(\theta; W),
 \end{equation}
-using only the data seen so far and bounded memory. As the distribution drifts, $\theta^\star_t$ changes over time, so a solver cannot commit to one configuration; its goal is to minimize the \emph{dynamic regret} against the per-window optimum,
-\begin{equation}
-R_T = \sum_{t=1}^{T} \big[\, q(\theta^\star_t; W_t) - q(\theta_t; W_t)\,\big],
-\end{equation}
-which, under bounded distribution drift (a variation budget), is the appropriate objective for non-stationary selection~\cite{besbes2014stochastic}. AutoDSC approximates this online optimum with a population-guided search and a label-free multi-objective instantiation of $q$, described next.
+using only the data seen so far and bounded memory. As the distribution drifts, $\theta^\star$ changes over time, so a solver must continually re-evaluate and re-select configurations rather than commit to one. AutoDSC approximates this online optimum with a population-guided search and a label-free multi-objective instantiation of $q$, described next.
 
 \section{Automated Data Stream Clustering}\label{sec:methodology}
 
@@ -114,13 +106,7 @@ We introduce Automated Data Stream Clustering (AutoDSC), a novel AutoML framewor
     \label{fig:framework_overview}
 \end{figure*}
 
-To solve the online CASH problem of Section~\ref{sec:problem}, AutoDSC maintains a configuration population $\mathcal{A}_t \subseteq \Theta$ of clustering algorithms with different hyperparameter settings, fills the current window $W_t$ as instances arrive, and serves real-time predictions from the best-performing (incumbent) configuration. As each new data point arrives, the system performs incremental updates across all configurations:
-
-\begin{equation}
-\forall \theta_i \in \mathcal{A}_t: \quad M_i^{(t)} = \text{LearnOne}(M_i^{(t-1)}, x_t)
-\end{equation}
-
-where $M_i^{(t)}$ represents the model state of configuration $\theta_i$ at time $t$. When the window reaches capacity, the framework initiates evaluation and optimization operations.
+To solve the online CASH problem of Section~\ref{sec:problem}, AutoDSC maintains a configuration population $\mathcal{A}_t \subseteq \Theta$ of clustering algorithms with different hyperparameter settings, fills the current window $W_t$ as instances arrive, and serves real-time predictions from the best-performing (incumbent) configuration. As each new data point arrives, every configuration in the population updates incrementally on it with a single \textsc{LearnOne} step, retaining the per-point cluster assignment for later scoring. When the window reaches capacity, the framework initiates evaluation and optimization.
 
 When the window fills, AutoDSC evaluates clustering quality using three normalized clustering validation indices, namely the Normalized Silhouette Coefficient $\text{NSC} = (1+\text{SC})/2$, the Normalized Davies-Bouldin Index $\text{NDBI} = 1-\tanh(\text{DBI})$, and the Normalized Calinski-Harabasz Index $\text{NCHI} = \tanh(\log(1+\text{CHI})/10)$, ensuring all metrics are bounded to $[0,1]$ where higher values indicate better clustering quality. Each configuration is scored on the entire window (the per-point cluster assignments produced during \textsc{LearnOne} are retained for this purpose), so no sub-sampling is required. The expected clustering quality for configuration $\theta$ at time $t$ is:
 
@@ -128,11 +114,7 @@ When the window fills, AutoDSC evaluates clustering quality using three normaliz
 \mu_t(\theta) = \frac{1}{3}[\text{NSC} + \text{NDBI} + \text{NCHI}]
 \end{equation}
 
-AutoDSC dynamically adjusts exploration behavior based on performance improvement trends. The exploration rate $\alpha_t$ adapts based on relative improvement:
-
-\begin{equation}
-\Delta \mu_t = \mu_t(\theta^*_t) - \mu_{t-1}(\theta^*_{t-1})
-\end{equation}
+AutoDSC adjusts exploration based on the change in the best score between consecutive windows, $\Delta\mu_t = \mu_t(\theta^*_t) - \mu_{t-1}(\theta^*_{t-1})$. The exploration rate then adapts as:
 
 \begin{equation}
 \alpha_{t+1} = \begin{cases}
@@ -144,7 +126,7 @@ AutoDSC dynamically adjusts exploration behavior based on performance improvemen
 
 where $r_t = \Delta\mu_t / |\mu_{t-1}(\theta^*_{t-1})|$ is the relative improvement and $\beta_t$ is the resulting step, capped at $\gamma = 0.5$ for stability. This parameter-free mechanism decreases exploration when performance improves (favoring exploitation) and increases it when performance stagnates or drops, as happens under concept drift, encouraging broader search to recover.
 
-The framework employs \textbf{PGSSO} (Algorithm~\ref{alg:pgsso}) to jointly optimize algorithm selection and hyperparameter tuning. PGSSO maintains an elite archive $\mathcal{E}_t = \{(\theta_i, s_i)\}_{i=1}^{e}$ where each configuration $\theta_i = (a_i, \phi_i)$ pairs an algorithm choice with its hyperparameters and $s_i = \mu_t(\theta_i)$ is its score. To remain responsive to drift, elites are ranked by a \emph{recency-weighted} score $s_i / (1 + g - g_i)$, where $g$ is the current generation and $g_i$ the generation at which $\theta_i$ was last scored; stale high-scoring configurations are thus down-weighted in favor of recently effective ones. By tracking which algorithm-hyperparameter combinations perform best, PGSSO naturally learns both which algorithms suit current data characteristics and their optimal settings. The elite population encodes this joint preference, where frequently appearing algorithms indicate superior algorithmic choices, while their parameter distributions reveal effective settings. PGSSO adaptively balances exploration and exploitation through dynamic rate $\alpha_t$, computing statistical distributions over both algorithm selections (via frequencies) and their parameters (via means $m_j$ and variances $\sigma_j^2$), which together guide sampling of new promising algorithm-hyperparameter configurations.
+The framework employs \textbf{PGSSO} (Algorithm~\ref{alg:pgsso}) to jointly optimize algorithm selection and hyperparameter tuning. PGSSO maintains an elite archive $\mathcal{E}_t = \{(\theta_i, s_i)\}_{i=1}^{e}$ where each configuration $\theta_i = (a_i, \phi_i)$ pairs an algorithm choice with its hyperparameters and $s_i = \mu_t(\theta_i)$ is its score. To remain responsive to drift, elites are ranked by a \emph{recency-weighted} score $s_i/(1+\Delta_i)$, where $\Delta_i$ is the number of windows since $\theta_i$ was last scored, so stale high-scoring configurations are down-weighted in favor of recently effective ones. By tracking which algorithm-hyperparameter combinations perform best, PGSSO naturally learns both which algorithms suit current data characteristics and their optimal settings. The elite population encodes this joint preference, where frequently appearing algorithms indicate superior algorithmic choices, while their parameter distributions reveal effective settings. PGSSO adaptively balances exploration and exploitation through dynamic rate $\alpha_t$, computing statistical distributions over both algorithm selections (via frequencies) and their parameters (via means $m_j$ and variances $\sigma_j^2$), which together guide sampling of new promising algorithm-hyperparameter configurations.
 
 PGSSO generates new configurations through probabilistic sampling:
 
@@ -155,49 +137,23 @@ PGSSO generates new configurations through probabilistic sampling:
 \end{cases}
 \end{equation}
 
-Elite-guided sampling first selects an algorithm based on elite frequencies, then samples its hyperparameters from learned distributions. Algorithm selection uses:
+Elite-guided sampling first draws an algorithm with probability equal to its frequency in the elite archive, then samples that algorithm's numerical hyperparameters from a Gaussian fitted to the elites using it:
 
 \begin{equation}
-P(a = a_k) = \frac{\sum_{(\theta,s) \in \mathcal{E}_t} \mathbf{I}[a = a_k]}{|\mathcal{E}_t|}
+\phi_j \sim \mathcal{N}(m_j, \sigma_j^2)
 \end{equation}
 
-where $a_k \in \mathcal{A}$ represents available algorithms. Given selected algorithm $a_k$, numerical hyperparameters use Gaussian distributions from elite configurations of that algorithm:
+where the mean $m_j$ and variance $\sigma_j^2$ are computed over the elites that use the selected algorithm. Categorical hyperparameters use the same frequency-based sampling.
 
-\begin{equation}
-\phi_j \sim \mathcal{N}(m_j, \sigma_j^2) \text{ where } m_j = \frac{1}{|\mathcal{E}_t^{a_k}|}\sum_{(\theta,s) \in \mathcal{E}_t^{a_k}} \phi_j
-\end{equation}
+When the population exceeds size $K$, it is pruned by a \emph{farthest-first} rule: keep the incumbent and the top-scoring configurations, then greedily add whichever remaining configuration is most distant from those already kept. The distance between two configurations is $1$ if their algorithms differ and the mean normalized per-hyperparameter distance otherwise, preserving diversity without a fixed acceptance threshold.
 
-and $\mathcal{E}_t^{a_k} = \{(\theta,s) \in \mathcal{E}_t : a = a_k\}$ contains elite configurations using algorithm $a_k$. Categorical hyperparameters similarly use frequency-based sampling within algorithm-specific elites.
-
-Population diversity is maintained by computing configuration distances:
-
-\begin{equation}
-d(\theta_1, \theta_2) = \begin{cases}
-1.0 & \text{if algorithms differ} \\
-\frac{1}{|\mathcal{P}|} \sum_{p \in \mathcal{P}} d_p(\theta_1[p], \theta_2[p]) & \text{otherwise}
-\end{cases}
-\end{equation}
-
-where $\mathcal{P}$ represents common parameters and $d_p$ computes normalized parameter-specific distances. When the population exceeds size $K$, it is pruned by first retaining the incumbent and top-scoring configurations and then greedily adding the remaining configuration that is \emph{farthest} (by $d$) from those already kept, a farthest-first selection that preserves diversity without requiring a fixed acceptance threshold.
-
-Throughout the process, AutoDSC emits a clustering for each instance using the incumbent configuration:
-\begin{equation}
-\theta^*_t = \arg\max_{\theta_i \in \mathcal{A}_t} \mu_t(\theta_i)
-\end{equation}
+Throughout, AutoDSC emits a clustering for each instance using the incumbent $\theta^*_t$, the highest-scoring configuration in the current population.
 
 All remaining constants are held fixed across every experiment. The exploration rate is clipped to $[0.1, 1.0]$ with a per-step cap $\gamma = 0.5$, the elite archive holds $e_{\max} = \lfloor K/2 \rfloor$ configurations, and each window PGSSO proposes $n_{\text{gen}} = \max(3, \lfloor K/4 \rfloor)$ new candidates (three at the default $K=10$) that replace the lowest-ranked members so the population size stays at $K$. The Calinski--Harabasz score is rescaled by a fixed factor of $10$ to bound NCHI to $[0,1]$. The sensitivity study (Section~\ref{sec:sensitivity}) varies only $K$ and $w$ and holds all other constants at these defaults.
 
-\subsection{Complexity and Recovery Guarantee}
+\subsection{Computational Complexity}
 
 The framework's computational complexity scales efficiently with population size and window parameters. Per-instance processing requires $O(K \cdot C)$ operations where $K = |\mathcal{A}_t|$ and $C$ denotes average algorithm complexity. Window-end evaluation involves $O(K \cdot w \cdot d)$ operations to score each configuration on the full window. Total per-window complexity is $O(K \cdot w \cdot d + K^2)$, where $K^2$ accounts for diversity-based population management. Crucially, $K$ is fixed, so per-point cost does not grow with stream length. Space complexity is $O((K + e_{\max}) \cdot p + w \cdot d)$, where $p$ is the number of parameters stored per configuration.
-
-We further give a worst-case guarantee that the exploration floor and recency weighting together prevent permanent lock-in under drift.
-
-\smallskip\noindent\textbf{Proposition 1 (No lock-in; bounded recovery).}\ \emph{Assume a finite (discretized) configuration space $\Theta$, an exploration rate $\alpha_t \ge \alpha_{\min} > 0$ with uniform-random proposals over $\Theta$, and that the recency-weighted score ranks a freshly scored configuration above any stale incumbent of lower current quality. After any window in which the optimum $\theta^\star_t$ changes, PGSSO re-discovers the new optimum within $|\Theta|/\alpha_{\min}$ windows in expectation, independent of stream length. Hence if $\theta^\star_t$ changes at $S$ of the $T$ windows, the dynamic regret obeys $R_T \le S\,|\Theta|/\alpha_{\min}$, which is sublinear in $T$ whenever $S = o(T)$.}
-
-\smallskip\noindent\textit{Proof sketch.} Each window proposes a uniform-random configuration with probability at least $\alpha_t \ge \alpha_{\min}$, so any fixed target is proposed with probability at least $\alpha_{\min}/|\Theta|$ per window; its first-hit time is geometric with mean at most $|\Theta|/\alpha_{\min}$. Once scored, recency weighting ranks it above the stale incumbent, so it becomes the incumbent. Between change points the incumbent is optimal and contributes zero regret, while each change contributes at most $q_{\max}\le 1$ per window of recovery. $\square$
-
-\smallskip\noindent This is a distribution-free \emph{coverage} guarantee rather than an optimality bound; for continuous hyperparameters $|\Theta|$ is replaced by an $\varepsilon$-covering number. It formally motivates AutoDSC's two design choices: the exploration floor prevents permanent lock-in under drift, and recency weighting lets a rediscovered optimum displace a stale incumbent.
 
 \begin{algorithm}[t]
 \caption{AutoDSC}
@@ -213,7 +169,7 @@ $\mu_{-1}(\theta^*_{-1}) \gets -\infty$\;
     $W_t \gets W_{t-1} \cup \{x_t\}$\;
     \ForEach{$\theta_i \in \mathcal{A}_t$}{
         $\ell_{i,t} \gets \textsc{PredictOne}(M_i, x_t)$ \tcp*{store assignment}
-        $M_i^{(t)} \gets \textsc{LearnOne}(M_i^{(t-1)}, x_t)$\;
+        $M_i \gets \textsc{LearnOne}(M_i, x_t)$\;
     }
     \If{$|W_t| = w$}{
         \ForEach{$\theta_i \in \mathcal{A}_t$}{
