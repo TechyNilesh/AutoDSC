@@ -78,6 +78,11 @@ Z.~Wang, X.~Wang, and S.~Zhang, ``{MOStream}: A modular and self-optimizing
   data stream clustering algorithm,'' in \emph{2024 IEEE International
   Conference on Data Mining (ICDM)}, 2024, pp. 500--509.
 
+\bibitem{hutter2019automated}
+F.~Hutter, L.~Kotthoff, and J.~Vanschoren, \emph{Automated machine learning:
+  methods, systems, challenges}.\hskip 1em plus 0.5em minus 0.4em\relax
+  Springer Nature, 2019.
+
 \bibitem{bifet2018machine}
 \BIBentryALTinterwordspacing
 A.~Bifet, R.~Gavaldà, G.~Holmes, and B.~Pfahringer, \emph{Machine Learning for
@@ -90,11 +95,6 @@ A.~Bifet, R.~Gavaldà, G.~Holmes, and B.~Pfahringer, \emph{Machine Learning for
 C.~C. Aggarwal, ``Data streams: models and algorithms,'' \emph{Springer Science
   \& Business Media}, 2013.
 
-\bibitem{zhang1996birch}
-T.~Zhang, R.~Ramakrishnan, and M.~Livny, ``{BIRCH}: An efficient data
-  clustering method for very large databases,'' \emph{SIGMOD Rec.}, vol.~25,
-  no.~2, pp. 103--114, 1996.
-
 \bibitem{Sculley2010}
 \BIBentryALTinterwordspacing
 D.~Sculley, ``Web-scale k-means clustering,'' in \emph{WWW 2010, Raleigh, North
@@ -102,24 +102,28 @@ D.~Sculley, ``Web-scale k-means clustering,'' in \emph{WWW 2010, Raleigh, North
   \url{http://code.google.com/p/sofia-ml}
 \BIBentrySTDinterwordspacing
 
-\bibitem{OCallaghan2002}
-\BIBentryALTinterwordspacing
-L.~O'Callaghan, N.~Mishra, A.~Meyerson, S.~Guha, and R.~Motwani,
-  ``Streaming-data algorithms for high-quality clustering,'' in
-  \emph{Proceedings of the 18th International Conference on Data Engineering
-  (ICDE'02)}, 2002. [Online]. Available:
-  \url{http://www-db.stanford.edu/~loc/icde02.ps}
-\BIBentrySTDinterwordspacing
+\bibitem{rousseeuw1987silhouettes}
+P.~J. Rousseeuw, ``Silhouettes: A graphical aid to the interpretation and
+  validation of cluster analysis,'' \emph{Journal of Computational and Applied
+  Mathematics}, vol.~20, pp. 53--65, 1987.
 
-\bibitem{arbelaitz2013extensive}
-O.~Arbelaitz, I.~Gurrutxaga, J.~Muguerza, J.~M. P{\'e}rez, and I.~Perona, ``An
-  extensive comparative study of cluster validity indices,'' \emph{Pattern
-  recognition}, vol.~46, no.~1, pp. 243--256, 2013.
+\bibitem{davies1979cluster}
+D.~L. Davies and D.~W. Bouldin, ``A cluster separation measure,'' \emph{IEEE
+  Transactions on Pattern Analysis and Machine Intelligence}, vol.~1, no.~2,
+  pp. 224--227, 1979.
 
-\bibitem{liu2010understanding}
-Y.~Liu, Z.~Li, H.~Xiong, X.~Gao, and J.~Wu, ``Understanding of internal
-  clustering validation measures,'' in \emph{2010 IEEE International Conference
-  on Data Mining}, 2010, pp. 911--916.
+\bibitem{calinski1974dendrite}
+T.~Cali{\'n}ski and J.~Harabasz, ``A dendrite method for cluster analysis,''
+  \emph{Communications in Statistics}, vol.~3, no.~1, pp. 1--27, 1974.
+
+\bibitem{hubert1985comparing}
+L.~Hubert and P.~Arabie, ``Comparing partitions,'' \emph{Journal of
+  Classification}, vol.~2, no.~1, pp. 193--218, 1985.
+
+\bibitem{rand1971objective}
+W.~M. Rand, ``Objective criteria for the evaluation of clustering methods,''
+  \emph{Journal of the American Statistical association}, vol.~66, no. 336, pp.
+  846--850, 1971.
 
 \bibitem{kremer2011cmm}
 \BIBentryALTinterwordspacing
@@ -143,20 +147,97 @@ M.~Feurer, A.~Klein, K.~Eggensperger, J.~Springenberg, M.~Blum, and F.~Hutter,
   ``Efficient and robust automated machine learning,'' in \emph{Advances in
   Neural Information Processing Systems}, vol.~28, 2015, pp. 2962--2970.
 
-\bibitem{hutter2019automated}
-F.~Hutter, L.~Kotthoff, and J.~Vanschoren, \emph{Automated machine learning:
-  methods, systems, challenges}.\hskip 1em plus 0.5em minus 0.4em\relax
-  Springer Nature, 2019.
+\bibitem{bergstra2012random}
+J.~Bergstra and Y.~Bengio, ``Random search for hyper-parameter optimization,''
+  \emph{The journal of machine learning research}, vol.~13, no.~1, pp.
+  281--305, 2012.
 
 \bibitem{hansen2001cmaes}
 N.~Hansen and A.~Ostermeier, ``Completely derandomized self-adaptation in
   evolution strategies,'' \emph{Evolutionary Computation}, vol.~9, no.~2, pp.
   159--195, 2001.
 
-\bibitem{gijsbers2024amlb}
-P.~Gijsbers, M.~L. Bueno, S.~Coors, E.~LeDell, S.~Poirier, J.~Thomas,
-  B.~Bischl, and J.~Vanschoren, ``Amlb: an automl benchmark,'' \emph{Journal of
-  Machine Learning Research}, vol.~25, no. 101, pp. 1--65, 2024.
+\bibitem{Tschechlov2021AutoML4Clust}
+D.~Tschechlov, M.~Fritz, and H.~Schwarz, ``Automl4clust: Efficient automl for
+  clustering analyses,'' in \emph{Proceedings of the 24th International
+  Conference on Extending Database Technology (EDBT)}.\hskip 1em plus 0.5em
+  minus 0.4em\relax OpenProceedings.org, 2021, pp. 343--348.
+
+\bibitem{TrederTschechlov2023ML2DAC}
+\BIBentryALTinterwordspacing
+D.~Treder-Tschechlov, M.~Fritz, H.~Schwarz, and B.~Mitschang, ``Ml2dac:
+  Meta-learning to democratize automl for clustering analysis,'' \emph{Proc.
+  ACM Manag. Data}, vol.~1, no.~2, Jun. 2023. [Online]. Available:
+  \url{https://doi.org/10.1145/3589289}
+\BIBentrySTDinterwordspacing
+
+\bibitem{ElShawi2021cSmartML}
+R.~ElShawi, H.~Lekunze, and S.~Sakr, ``csmartml: A meta learning-based
+  framework for automated selection and hyperparameter tuning for clustering,''
+  in \emph{2021 IEEE International Conference on Big Data (Big Data)}.\hskip
+  1em plus 0.5em minus 0.4em\relax IEEE, 2021, pp. 1119--1126.
+
+\bibitem{ElShawi2025TPEAutoClust}
+R.~ElShawi and S.~Sakr, ``Tpe-autoclust: A tree-based pipline ensemble
+  framework for automated clustering,'' in \emph{2022 IEEE International
+  Conference on Data Mining Workshops (ICDMW)}, 2022, pp. 1144--1153.
+
+\bibitem{pmlr-v139-wu21d}
+\BIBentryALTinterwordspacing
+Q.~Wu, C.~Wang, J.~Langford, P.~Mineiro, and M.~Rossi, ``Chacha for online
+  automl,'' in \emph{Proceedings of the 38th International Conference on
+  Machine Learning}, ser. Proceedings of Machine Learning Research, M.~Meila
+  and T.~Zhang, Eds., vol. 139.\hskip 1em plus 0.5em minus 0.4em\relax PMLR,
+  18--24 Jul 2021, pp. 11\,263--11\,273. [Online]. Available:
+  \url{https://proceedings.mlr.press/v139/wu21d.html}
+\BIBentrySTDinterwordspacing
+
+\bibitem{celik2023online}
+B.~Celik, P.~Singh, and J.~Vanschoren, ``Online automl: An adaptive automl
+  framework for online learning,'' \emph{Machine Learning}, vol. 112, no.~6,
+  pp. 1897--1921, 2023.
+
+\bibitem{pmlr-v256-verma24a}
+\BIBentryALTinterwordspacing
+N.~Verma, A.~Bifet, B.~Pfahringer, and M.~Bahri, ``Asml: A scalable and
+  efficient automl solution for data streams,'' in \emph{Proceedings of the
+  Third International Conference on Automated Machine Learning}, ser.
+  Proceedings of Machine Learning Research, K.~Eggensperger, R.~Garnett,
+  J.~Vanschoren, M.~Lindauer, and J.~R. Gardner, Eds., vol. 256.\hskip 1em plus
+  0.5em minus 0.4em\relax PMLR, 09--12 Sep 2024, pp. 11/1--26. [Online].
+  Available: \url{https://proceedings.mlr.press/v256/verma24a.html}
+\BIBentrySTDinterwordspacing
+
+\bibitem{verma2025auto-reg}
+------, ``Auto-reg: A dynamic automl framework for streaming regression,'' in
+  \emph{Pacific-Asia Conference on Knowledge Discovery and Data Mining}.\hskip
+  1em plus 0.5em minus 0.4em\relax Springer, 2025, pp. 245--256.
+
+\bibitem{Liu2021AutoCluster}
+Y.~Liu, S.~Li, and W.~Tian, ``Autocluster: Meta-learning based ensemble method
+  for automated unsupervised clustering,'' in \emph{Advances in Knowledge
+  Discovery and Data Mining (PAKDD 2021)}.\hskip 1em plus 0.5em minus
+  0.4em\relax Springer, 2021, pp. 246--258.
+
+\bibitem{daSilva2024PoAC}
+M.~C. da~Silva, G.~M. Tavares, E.~Medvet, and S.~B. Junior, ``Problem-oriented
+  automl in clustering,'' \emph{arXiv preprint arXiv:2409.16218}, 2024,
+  arXiv:2409.16218.
+
+\bibitem{wang2023sesame}
+X.~Wang, Z.~Wang, Z.~Wu, S.~Zhang, X.~Shi, and L.~Lu, ``Data stream clustering:
+  An in-depth empirical study,'' \emph{Proc. ACM Manag. Data}, vol.~1, no.~2,
+  2023.
+
+\bibitem{arbelaitz2013extensive}
+O.~Arbelaitz, I.~Gurrutxaga, J.~Muguerza, J.~M. P{\'e}rez, and I.~Perona, ``An
+  extensive comparative study of cluster validity indices,'' \emph{Pattern
+  recognition}, vol.~46, no.~1, pp. 243--256, 2013.
+
+\bibitem{liu2010understanding}
+Y.~Liu, Z.~Li, H.~Xiong, X.~Gao, and J.~Wu, ``Understanding of internal
+  clustering validation measures,'' in \emph{2010 IEEE International Conference
+  on Data Mining}, 2010, pp. 911--916.
 
 \bibitem{souza2020challenges}
 V.~M. Souza, D.~M. dos Reis, A.~G. Maletzke, and G.~E. Batista, ``Challenges in
@@ -179,96 +260,38 @@ A.~Bifet, G.~Holmes, R.~Kirkby, and B.~Pfahringer, ``Moa: Massive online
   analysis,'' \emph{The Journal of Machine Learning Research}, vol.~11, pp.
   1601--1604, 2010.
 
-\bibitem{hubert1985comparing}
-L.~Hubert and P.~Arabie, ``Comparing partitions,'' \emph{Journal of
-  Classification}, vol.~2, no.~1, pp. 193--218, 1985.
-
-\bibitem{rand1971objective}
-W.~M. Rand, ``Objective criteria for the evaluation of clustering methods,''
-  \emph{Journal of the American Statistical association}, vol.~66, no. 336, pp.
-  846--850, 1971.
-
 \bibitem{demvsar2006statistical}
 J.~Dem{\v{s}}ar, ``Statistical comparisons of classifiers over multiple data
   sets,'' \emph{Journal of Machine learning research}, vol.~7, no. Jan, pp.
   1--30, 2006.
 
-\bibitem{bergstra2012random}
-J.~Bergstra and Y.~Bengio, ``Random search for hyper-parameter optimization,''
-  \emph{The journal of machine learning research}, vol.~13, no.~1, pp.
-  281--305, 2012.
+\bibitem{gijsbers2024amlb}
+P.~Gijsbers, M.~L. Bueno, S.~Coors, E.~LeDell, S.~Poirier, J.~Thomas,
+  B.~Bischl, and J.~Vanschoren, ``Amlb: an automl benchmark,'' \emph{Journal of
+  Machine Learning Research}, vol.~25, no. 101, pp. 1--65, 2024.
 
-\bibitem{Tschechlov2021AutoML4Clust}
-D.~Tschechlov, M.~Fritz, and H.~Schwarz, ``Automl4clust: Efficient automl for
-  clustering analyses,'' in \emph{Proceedings of the 24th International
-  Conference on Extending Database Technology (EDBT)}.\hskip 1em plus 0.5em
-  minus 0.4em\relax OpenProceedings.org, 2021, pp. 343--348.
+\bibitem{muhlenbein1996eda}
+H.~M{\"u}hlenbein and G.~Paa{\ss}, ``From recombination of genes to the
+  estimation of distributions {I}. {B}inary parameters,'' in \emph{Proceedings
+  of the 4th International Conference on Parallel Problem Solving from Nature
+  (PPSN IV)}, ser. Lecture Notes in Computer Science, vol. 1141.\hskip 1em plus
+  0.5em minus 0.4em\relax Springer, 1996, pp. 178--187.
 
-\bibitem{Liu2021AutoCluster}
-Y.~Liu, S.~Li, and W.~Tian, ``Autocluster: Meta-learning based ensemble method
-  for automated unsupervised clustering,'' in \emph{Advances in Knowledge
-  Discovery and Data Mining (PAKDD 2021)}.\hskip 1em plus 0.5em minus
-  0.4em\relax Springer, 2021, pp. 246--258.
+\bibitem{branke1999memory}
+J.~Branke, ``Memory enhanced evolutionary algorithms for changing optimization
+  problems,'' in \emph{Proceedings of the 1999 {IEEE} Congress on Evolutionary
+  Computation ({CEC})}, vol.~3.\hskip 1em plus 0.5em minus 0.4em\relax IEEE,
+  1999, pp. 1875--1882.
 
-\bibitem{ElShawi2021cSmartML}
-R.~ElShawi, H.~Lekunze, and S.~Sakr, ``csmartml: A meta learning-based
-  framework for automated selection and hyperparameter tuning for clustering,''
-  in \emph{2021 IEEE International Conference on Big Data (Big Data)}.\hskip
-  1em plus 0.5em minus 0.4em\relax IEEE, 2021, pp. 1119--1126.
+\bibitem{jin2005evolutionary}
+Y.~Jin and J.~Branke, ``Evolutionary optimization in uncertain
+  environments---{A} survey,'' \emph{{IEEE} Transactions on Evolutionary
+  Computation}, vol.~9, no.~3, pp. 303--317, 2005.
 
-\bibitem{TrederTschechlov2023ML2DAC}
-\BIBentryALTinterwordspacing
-D.~Treder-Tschechlov, M.~Fritz, H.~Schwarz, and B.~Mitschang, ``Ml2dac:
-  Meta-learning to democratize automl for clustering analysis,'' \emph{Proc.
-  ACM Manag. Data}, vol.~1, no.~2, Jun. 2023. [Online]. Available:
-  \url{https://doi.org/10.1145/3589289}
-\BIBentrySTDinterwordspacing
-
-\bibitem{ElShawi2025TPEAutoClust}
-R.~ElShawi and S.~Sakr, ``Tpe-autoclust: A tree-based pipline ensemble
-  framework for automated clustering,'' in \emph{2022 IEEE International
-  Conference on Data Mining Workshops (ICDMW)}, 2022, pp. 1144--1153.
-
-\bibitem{daSilva2024PoAC}
-M.~C. da~Silva, G.~M. Tavares, E.~Medvet, and S.~B. Junior, ``Problem-oriented
-  automl in clustering,'' \emph{arXiv preprint arXiv:2409.16218}, 2024,
-  arXiv:2409.16218.
-
-\bibitem{celik2023online}
-B.~Celik, P.~Singh, and J.~Vanschoren, ``Online automl: An adaptive automl
-  framework for online learning,'' \emph{Machine Learning}, vol. 112, no.~6,
-  pp. 1897--1921, 2023.
-
-\bibitem{pmlr-v256-verma24a}
-\BIBentryALTinterwordspacing
-N.~Verma, A.~Bifet, B.~Pfahringer, and M.~Bahri, ``Asml: A scalable and
-  efficient automl solution for data streams,'' in \emph{Proceedings of the
-  Third International Conference on Automated Machine Learning}, ser.
-  Proceedings of Machine Learning Research, K.~Eggensperger, R.~Garnett,
-  J.~Vanschoren, M.~Lindauer, and J.~R. Gardner, Eds., vol. 256.\hskip 1em plus
-  0.5em minus 0.4em\relax PMLR, 09--12 Sep 2024, pp. 11/1--26. [Online].
-  Available: \url{https://proceedings.mlr.press/v256/verma24a.html}
-\BIBentrySTDinterwordspacing
-
-\bibitem{pmlr-v139-wu21d}
-\BIBentryALTinterwordspacing
-Q.~Wu, C.~Wang, J.~Langford, P.~Mineiro, and M.~Rossi, ``Chacha for online
-  automl,'' in \emph{Proceedings of the 38th International Conference on
-  Machine Learning}, ser. Proceedings of Machine Learning Research, M.~Meila
-  and T.~Zhang, Eds., vol. 139.\hskip 1em plus 0.5em minus 0.4em\relax PMLR,
-  18--24 Jul 2021, pp. 11\,263--11\,273. [Online]. Available:
-  \url{https://proceedings.mlr.press/v139/wu21d.html}
-\BIBentrySTDinterwordspacing
-
-\bibitem{verma2025auto-reg}
-N.~Verma, A.~Bifet, B.~Pfahringer, and M.~Bahri, ``Auto-reg: A dynamic automl
-  framework for streaming regression,'' in \emph{Pacific-Asia Conference on
-  Knowledge Discovery and Data Mining}.\hskip 1em plus 0.5em minus 0.4em\relax
-  Springer, 2025, pp. 245--256.
-
-\bibitem{wang2023sesame}
-X.~Wang, Z.~Wang, Z.~Wu, S.~Zhang, X.~Shi, and L.~Lu, ``Data stream clustering:
-  An in-depth empirical study,'' \emph{Proc. ACM Manag. Data}, vol.~1, no.~2,
-  2023.
+\bibitem{droste2002analysis}
+S.~Droste, ``Analysis of the {(1+1)} {EA} for a dynamically changing
+  {OneMax}-variant,'' in \emph{Proceedings of the 2002 {IEEE} Congress on
+  Evolutionary Computation ({CEC})}, vol.~1.\hskip 1em plus 0.5em minus
+  0.4em\relax IEEE, 2002, pp. 55--60.
 
 \end{thebibliography}

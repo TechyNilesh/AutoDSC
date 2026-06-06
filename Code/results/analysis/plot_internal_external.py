@@ -47,14 +47,13 @@ def _spearman(a, b):
 
 
 def _frame(ax):
-    """MOStream-style: full box frame + light horizontal dashed gridlines."""
     ax.set_facecolor('white')
     ax.figure.patch.set_facecolor('white')
-    for s in ax.spines.values():
-        s.set_visible(True)
-        s.set_linewidth(1.2)
-    ax.set_axisbelow(True)
-    ax.yaxis.grid(True, linestyle='--', color='0.7', linewidth=0.8, alpha=0.9)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_linewidth(1.2)
+    ax.spines['bottom'].set_linewidth(1.2)
+    ax.yaxis.grid(False)
     ax.xaxis.grid(False)
     ax.tick_params(labelsize=12)
     S.bold_ticks(ax)
@@ -87,18 +86,13 @@ def selection_panel(data):
         name, color, hatch = PANEL[ds]
         ax.bar(x + (j - (nb - 1) / 2) * width, means, width, yerr=sems,
                color=color, hatch=hatch, error_kw=ERR_KW, label=name, **BAR_KW)
-    # annotate Spearman rho per dataset
-    for i, ds in enumerate(dsets):
-        rows = data[ds]['rows']
-        rho = _spearman([r['composite'] for r in rows], [r['ari'] for r in rows])
-        ax.text(0.03, 0.97 - 0.085 * i, fr'{PANEL[ds][0]}: $\rho$={rho:.2f}',
-                transform=ax.transAxes, ha='left', va='top', fontsize=11,
-                fontweight='bold', color=PANEL[ds][1])
     ax.set_xticks(x)
     ax.set_xticklabels(buckets, fontsize=12, fontweight='bold')
     ax.set_xlabel('Internal multi-CVI score (tercile)', fontsize=13.5, fontweight='bold')
     ax.set_ylabel(r'External ARI $\uparrow$', fontsize=14, fontweight='bold')
-    ax.set_ylim(0, 1.12)
+    ax.set_ylim(0, 1.18)
+    ax.legend(loc='upper center', ncol=len(dsets), fontsize=10, frameon=False,
+              bbox_to_anchor=(0.5, 1.0), prop={'weight': 'bold', 'size': 10})
     _frame(ax)
     plt.tight_layout()
     S.save_fig(fig, 'validity', 'selection')

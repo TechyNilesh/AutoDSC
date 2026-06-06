@@ -71,7 +71,7 @@ def main():
     os.makedirs(CHARTS_DIR, exist_ok=True)
     agg = load(args.regime, args.metrics)
     M = {v: {k: np.mean(agg[v][k]) for k in args.metrics} for v in VARIANTS}
-    ratio = {v: {k: M[v][k] / M['full'][k] if M['full'][k] > 0 else 1.0
+    ratio = {v: {k: min(M[v][k] / M['full'][k], 1.0) if M['full'][k] > 0 else 1.0
                  for k in args.metrics} for v in VARIANTS}
 
     plt.rcParams.update({'font.size': 11, 'font.family': 'DejaVu Sans'})
@@ -87,7 +87,7 @@ def main():
     ax.set_xticks(x)
     ax.set_xticklabels([METRIC_LABEL.get(k, k.upper()) for k in args.metrics],
                        fontsize=13, fontweight='bold')
-    ax.set_ylim(ymin, max(allr) + 0.004)
+    ax.set_ylim(ymin, 1.003)
     ax.set_ylabel('Relative Score', fontsize=13, fontweight='bold')
     ax.tick_params(axis='y', labelsize=10)
     for lbl in ax.get_yticklabels():

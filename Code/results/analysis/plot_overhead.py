@@ -41,12 +41,11 @@ BAR_KW = dict(edgecolor='black', linewidth=1.0)
 def _frame(ax):
     ax.set_facecolor('white')
     ax.figure.patch.set_facecolor('white')
-    for s in ax.spines.values():
-        s.set_visible(True)
-        s.set_linewidth(1.2)
-    ax.set_axisbelow(True)
-    ax.yaxis.grid(True, which='both', linestyle='--', color='0.7',
-                  linewidth=0.8, alpha=0.9)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_linewidth(1.2)
+    ax.spines['bottom'].set_linewidth(1.2)
+    ax.yaxis.grid(False)
     ax.xaxis.grid(False)
     ax.tick_params(labelsize=12)
     S.bold_ticks(ax)
@@ -81,15 +80,14 @@ def main():
         name, color, hatch = PANEL[ds]
         xs = x + (j - (nb - 1) / 2) * width
         ax.bar(xs, ms, width, color=color, hatch=hatch, label=name, **BAR_KW)
-        for xi, v in zip(xs, ms):
-            ax.text(xi, v * 1.18, _fmt(v), ha='center', va='bottom',
-                    fontsize=9.5, fontweight='bold', color=color)
 
     ax.set_yscale('log')
     ax.set_ylim(0.3, 6000)
     ax.set_xticks(x)
     ax.set_xticklabels([lab for _, lab in COMPONENTS], fontsize=12, fontweight='bold')
-    ax.set_ylabel('Time per window (ms, log)', fontsize=14, fontweight='bold')
+    ax.set_ylabel('Time per stage (ms, log)', fontsize=14, fontweight='bold')
+    ax.legend(loc='upper center', ncol=len(dsets), frameon=False,
+              bbox_to_anchor=(0.5, 1.0), prop={'weight': 'bold', 'size': 10})
     _frame(ax)
     plt.tight_layout()
     S.save_fig(fig, 'overhead', 'overhead')
