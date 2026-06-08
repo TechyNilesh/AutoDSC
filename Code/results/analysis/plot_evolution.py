@@ -62,7 +62,12 @@ def main():
     xedges = np.concatenate([[0.0], cum_inst]) / 1000.0
 
     cmap = ListedColormap(COLORS)
-    plt.rcParams.update({'font.size': 13, 'font.family': 'DejaVu Sans'})
+    plt.rcParams.update({
+        'font.size': 13,
+        'font.family': 'DejaVu Sans',
+        'pdf.fonttype': 42,
+        'ps.fonttype': 42,
+    })
     fig, ax = plt.subplots(figsize=(9.5, 3.6))
     ax.pcolormesh(xedges, np.arange(maxrows + 1), M,
                   cmap=cmap, vmin=0, vmax=len(ALGOS) - 1,

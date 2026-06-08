@@ -83,7 +83,12 @@ METRIC_LABEL = {'ari': 'ARI', 'cmm': 'CMM', 'nmi': 'NMI', 'purity': 'Purity'}
 # Style helpers
 # ----------------------------------------------------------------------------
 def set_rc():
-    plt.rcParams.update({'font.size': 13, 'font.family': 'DejaVu Sans'})
+    plt.rcParams.update({
+        'font.size': 13,
+        'font.family': 'DejaVu Sans',
+        'pdf.fonttype': 42,
+        'ps.fonttype': 42,
+    })
 
 def bold_ticks(ax):
     for lbl in ax.get_xticklabels() + ax.get_yticklabels():

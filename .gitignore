@@ -15,3 +15,6 @@ __pycache__/
 
 # Archived (rejected) paper — kept local, not tracked
 archive/
+
+# Datasets — large files, not tracked
+Code/datasets/archive/

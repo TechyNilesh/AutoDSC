@@ -257,7 +257,7 @@ class AutoDSC:
         # per-window wall-clock is spent. Used only by offline analysis scripts.
         self.trace = {
             'window_idx': [], 'composite': [], 'silhouette': [], 'calinski': [],
-            'davies': [], 'pred_k': [],
+            'davies': [], 'pred_k': [], 'alpha': [],
         }
         self.timing = {'learn': 0.0, 'score': 0.0, 'search': 0.0}
 
@@ -542,6 +542,7 @@ class AutoDSC:
             self.trace['davies'].append(float(cvi.davies))
             preds = [e['preds'].get(id(incumbent)) for e in self.window_buffer]
             self.trace['pred_k'].append(len({p for p in preds if p is not None and p >= 0}))
+            self.trace['alpha'].append(float(self.optimizer.exploration_rate))
         except Exception:
             pass
 

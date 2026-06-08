@@ -74,7 +74,12 @@ def main():
     ratio = {v: {k: min(M[v][k] / M['full'][k], 1.0) if M['full'][k] > 0 else 1.0
                  for k in args.metrics} for v in VARIANTS}
 
-    plt.rcParams.update({'font.size': 11, 'font.family': 'DejaVu Sans'})
+    plt.rcParams.update({
+        'font.size': 11,
+        'font.family': 'DejaVu Sans',
+        'pdf.fonttype': 42,
+        'ps.fonttype': 42,
+    })
     x = np.arange(len(args.metrics)); w = 0.16
     fig, ax = plt.subplots(figsize=(7.0, 3.2))
     allr = [ratio[v][k] for v in VARIANTS for k in args.metrics]
