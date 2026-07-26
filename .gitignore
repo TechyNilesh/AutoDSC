@@ -16,11 +16,12 @@ __pycache__/
 # Archived (rejected) paper — kept local, not tracked
 archive/
 
-# Paper sources — kept local, not tracked (this repo is code only)
+# Paper sources & agent notes — kept local, not tracked (this repo is code only)
 AutoDSC_ICDM_26/
 arXiv-2007.10781v1/
 arXiv-2309.04799v2/
 tmp/
+CLAUDE.md
 
 # Datasets — large files, not tracked
 datasets/archive/
