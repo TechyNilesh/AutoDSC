@@ -3,9 +3,9 @@
 This file is the **single source of truth** for how methods and datasets are
 named, colored, ordered, and grouped across **every** artifact in this project:
 the paper (`AutoDSC_ICDM_26/paper.tex`), all tables, and all charts
-(`Code/results/analysis/`). When adding or editing any figure/table/text, use
+(`results/analysis/`). When adding or editing any figure/table/text, use
 these exact names, colors, markers, and ordering. The machine-readable version
-lives in `Code/results/analysis/style.py` — import it; do not hard-code.
+lives in `results/analysis/style.py` — import it; do not hard-code.
 
 ---
 
@@ -69,7 +69,7 @@ Quality: **ARI** (primary, chance-adjusted) and **CMM** (stream-aware). Both
 - Palette: Okabe-Ito colorblind-safe (above). AutoDSC always vermilion-red + thick.
 - One marker per method (above), consistent everywhere.
 - No top/right spines; no chart title (caption carries the description).
-- Vector PDF + 300-dpi PNG output to `Code/results/analysis/charts/`.
+- Vector PDF + 300-dpi PNG output to `results/analysis/charts/`.
 - Legends: bold, single row on top where they fit.
 
 ## Rule
