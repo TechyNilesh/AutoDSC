@@ -274,13 +274,16 @@ python -c "import stream_clustering; print('Rust implementation loaded!')"
 
 ## Citation
 
-If you use this code in your research, please cite our paper:
+This work is currently under double-blind review. Author information is withheld
+until the review process concludes; please cite the anonymised entry below and
+check back for the updated reference after publication.
 
 ```bibtex
-@inproceedings{verma2026autodsc,
-  title={AutoDSC: Automated Algorithm Selection and Tuning for Non-Stationary Data Stream Clustering},
-  author={Anonymous},
-  year={2026},
-  note={Under review}
+@inproceedings{autodsc2026,
+  title     = {AutoDSC: Automated Algorithm Selection and Tuning for
+               Non-Stationary Data Stream Clustering},
+  author    = {Anonymous},
+  booktitle = {Under review},
+  year      = {2026}
 }
 ```
