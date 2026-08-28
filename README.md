@@ -63,13 +63,16 @@ AutoDSC/
 │           ├── cmm.py
 │           ├── metrics.py
 │           └── purityscore.py
-├── results/                       # Experiment results (JSON) and analysis
-│   ├── benchmark/                # Main benchmark runs
-│   ├── ablation/                 # Ablation runs
-│   ├── sensitivity/              # Sensitivity-analysis runs
+├── results/                       # Experiment results and analysis
+│   ├── benchmark/                # Main benchmark runs      (JSON, not tracked)
+│   ├── ablation/                 # Ablation runs            (JSON, not tracked)
+│   ├── sensitivity/              # Sensitivity-analysis runs (JSON, not tracked)
 │   └── analysis/
 │       ├── plot_*.py             # Chart scripts
+│       ├── run_extra_analysis.py # Builds the extra/ intermediate JSON
+│       ├── make_supp_table.py    # Supplementary tables
 │       ├── style.py              # Canonical colors, markers, method order
+│       ├── extra/                # Intermediate JSON        (not tracked)
 │       └── charts/               # Generated PDF/PNG figures
 │           ├── ablation/
 │           ├── alpha/
@@ -275,21 +278,55 @@ python -c "import stream_clustering; print('Rust implementation loaded!')"
 
 ## Output and Results
 
-- Raw run results (JSON): `results/benchmark/`, `results/ablation/`, `results/sensitivity/`
-  — **not tracked in git** (large); regenerate them with the runners above
-- Chart scripts: `results/analysis/plot_*.py` (shared style in `results/analysis/style.py`)
-- Charts: `results/analysis/charts/` (vector PDF + 300-dpi PNG)
-  - `benchmark/` — main ARI/CMM comparison charts
-  - `cd/` — critical difference diagrams
-  - `ablation/` — ablation study visualisations
-  - `sensitivity/` — sensitivity analysis plots
-  - `efficiency/` — throughput/latency/memory charts
-  - `overhead/` — AutoML search overhead
-  - `evolution/` — population evolution over time
-  - `recovery/` — drift recovery charts
-  - `alpha/` — adaptive exploration-rate traces
-  - `dimscaling/` — scaling with dimensionality
-  - `validity/` — internal vs. external validity agreement
+### What is tracked in this repository
+
+Only code and the generated figures are version-controlled. **No JSON is tracked** —
+every result file is reproducible from the runners above, so the repository stays
+small and the numbers stay verifiable by re-running rather than by trusting a blob.
+
+| Path | Contents | Tracked |
+| ---- | -------- | ------- |
+| `results/analysis/plot_*.py`, `style.py` | Chart scripts and the canonical colour/marker/order definitions | Yes |
+| `results/analysis/charts/` | Generated figures (vector PDF + 300-dpi PNG) | Yes |
+| `results/benchmark/`, `results/ablation/`, `results/sensitivity/` | Raw per-run metrics, one JSON per method × dataset × seed | No |
+| `results/analysis/*.json`, `results/analysis/extra/` | Intermediate analysis data (alpha traces, evolution capture, dimensionality sweep, overhead, validity) | No |
+
+### Regenerating the results
+
+```bash
+# 1. Raw benchmark / ablation / sensitivity runs -> results/{benchmark,ablation,sensitivity}/
+python experiments/run_scripts.py --mode all
+python experiments/run_autodsc_ablation.py --dataset real_insects --ablation no_recency
+python experiments/run_sensitivity_analysis.py --mode full --dataset real_insects
+
+# 2. Intermediate analysis data -> results/analysis/{,extra/}*.json
+python experiments/run_alpha_trace.py
+python results/analysis/run_extra_analysis.py
+
+# 3. Figures -> results/analysis/charts/
+python results/analysis/plot_benchmark_stages.py
+python results/analysis/plot_cd.py
+# ... and the remaining plot_*.py scripts
+```
+
+Step 1 is the expensive one — the full grid is 10 datasets x 10 seeds per method.
+Steps 2 and 3 are cheap once the raw JSON exists.
+
+### Chart directories
+
+| Directory | Contents |
+| --------- | -------- |
+| `benchmark/`   | Main ARI/CMM comparison charts |
+| `cd/`          | Critical difference diagrams |
+| `ablation/`    | Ablation study visualisations |
+| `sensitivity/` | Sensitivity analysis plots |
+| `efficiency/`  | Throughput / latency / memory charts |
+| `overhead/`    | AutoML search overhead |
+| `evolution/`   | Population evolution over time |
+| `recovery/`    | Drift recovery charts |
+| `alpha/`       | Adaptive exploration-rate traces |
+| `dimscaling/`  | Scaling with dimensionality |
+| `validity/`    | Internal vs. external validity agreement |
 
 ## Citation
 
