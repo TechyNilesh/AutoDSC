@@ -2,24 +2,33 @@
 
 This repository contains the implementation of **AutoDSC** (**Auto**mated **D**ata **S**tream **C**lustering), an AutoML framework that continuously searches the joint algorithm-and-hyperparameter space for real-time stream clustering.
 
-Data stream clustering must adapt to evolving distributions without ground-truth labels, so no single algorithm or hyperparameter configuration remains effective throughout a stream. AutoDSC addresses this by employing **Population-Guided Stochastic Search Optimisation (PGSSO)**, which combines a recency-weighted elite archive with adaptive exploration. A composite of three internal cluster-validity indices enables label-free configuration selection, while **DAWIDD** drift detection allows proactive response to distributional changes. Across five real-world and five synthetic streams, AutoDSC attains the best mean rank on both Adjusted Rand Index (ARI) and Cluster Mapping Measure (CMM) while remaining computationally competitive with stream-clustering AutoML baselines.
+**Repository:** <https://github.com/TechyNilesh/AutoDSC>
+
+Data stream clustering must adapt to evolving distributions without ground-truth labels, so no single algorithm or hyperparameter configuration remains effective throughout a stream. AutoDSC addresses this by employing **Population-Guided Stochastic Search Optimisation (PGSSO)**, which combines a recency-weighted elite archive with adaptive exploration. A composite of three internal cluster-validity indices (Silhouette, Davies–Bouldin, Calinski–Harabasz) enables label-free configuration selection. Adaptation is continuous and implicit: AutoDSC uses **no explicit drift detector** and never resets its population. Across five real-world and five synthetic streams, AutoDSC attains the best mean rank on both Adjusted Rand Index (ARI) and Cluster Mapping Measure (CMM) while remaining computationally competitive with stream-clustering AutoML baselines.
 
 ## Project Structure
 
 ```
 AutoDSC/
-├── algorithms/                    # Clustering algorithm implementations
-│   ├── AutoDSC/
-│   │   ├── AutoDSC.py            # Main AutoDSC framework
-│   │   ├── DAWIDD.py             # Drift detection algorithm
-│   │   └── svm_test.py           # SVM-based independence test for drift detection
-│   ├── ConfStream/
-│   │   └── ConfStream.py
-│   ├── OnlineAutoClust/
-│   │   └── OnlineAutoClust.py
-│   └── RandomSearchStream/
-│       └── RandomSearchStream.py
-├── datasets/                      # Benchmark datasets
+├── src/
+│   ├── autodsc/
+│   │   └── AutoDSC.py            # Main AutoDSC framework (AutoDSC + PGSSO)
+│   ├── baselines/                # Competitor implementations
+│   │   ├── ConfStream/ConfStream.py
+│   │   ├── OnlineAutoClust/OnlineAutoClust.py
+│   │   └── RandomSearchStream/RandomSearchStream.py
+│   └── stream_clustering/        # Fast Rust implementation
+│       ├── Cargo.toml
+│       ├── pyproject.toml
+│       └── src/
+│           ├── lib.rs
+│           ├── clustream.rs
+│           ├── dbstream.rs
+│           ├── denstream.rs
+│           ├── kmeans.rs
+│           ├── streamkmeans.rs
+│           └── ...
+├── datasets/                      # Benchmark datasets + synthetic generators
 │   ├── real_insects.csv
 │   ├── real_kdd99.csv
 │   ├── real_pendigits.csv
@@ -30,11 +39,13 @@ AutoDSC/
 │   ├── synth_blobs_merge_split.csv
 │   ├── synth_blobs_sudden.csv
 │   ├── synth_rbf_fast.csv
-│   └── ...
+│   ├── generate_synth_blobs.py
+│   └── generate_synth_rbf.py
 ├── experiments/                   # Experiment runners
-│   ├── run_ablation_study.py     # Ablation study experiments
 │   ├── run_scripts.py            # Main experiment runner
+│   ├── run_autodsc_ablation.py   # Ablation study runner
 │   ├── run_sensitivity_analysis.py
+│   ├── run_alpha_trace.py        # Exploration-rate trace
 │   └── scripts/                  # Individual algorithm runners
 │       ├── run_autodsc.py
 │       ├── run_clustream.py
@@ -42,37 +53,36 @@ AutoDSC/
 │       ├── run_dbstream.py
 │       ├── run_denstream.py
 │       ├── run_kmeans.py
+│       ├── run_mostream.py
 │       ├── run_onlineautoclust.py
 │       ├── run_randomsearch.py
 │       ├── run_streamkmeans.py
+│       ├── ablation/
+│       │   └── AutoDSC_ablation.py   # Leave-one-out AutoDSC variants
 │       └── utils/
+│           ├── cmm.py
+│           ├── metrics.py
 │           └── purityscore.py
-├── results/                       # Experiment results
-│   ├── analysis/
-│   │   ├── charts/               # Generated PDF/PNG figures
-│   │   │   ├── ablation/
-│   │   │   ├── benchmark/
-│   │   │   ├── cd/
-│   │   │   ├── dimscaling/
-│   │   │   ├── efficiency/
-│   │   │   ├── evolution/
-│   │   │   ├── overhead/
-│   │   │   ├── recovery/
-│   │   │   ├── sensitivity/
-│   │   │   └── validity/
-│   │   └── style.py              # Canonical colors, markers, method order
-│   └── tables/                   # Result tables (CSV)
-├── stream_clustering/             # Fast Rust implementation
-│   ├── Cargo.toml
-│   ├── pyproject.toml
-│   └── src/
-│       ├── lib.rs
-│       ├── clustream.rs
-│       ├── dbstream.rs
-│       ├── denstream.rs
-│       ├── kmeans.rs
-│       ├── streamkmeans.rs
-│       └── ...
+├── results/                       # Experiment results (JSON) and analysis
+│   ├── benchmark/                # Main benchmark runs
+│   ├── ablation/                 # Ablation runs
+│   ├── sensitivity/              # Sensitivity-analysis runs
+│   └── analysis/
+│       ├── plot_*.py             # Chart scripts
+│       ├── style.py              # Canonical colors, markers, method order
+│       └── charts/               # Generated PDF/PNG figures
+│           ├── ablation/
+│           ├── alpha/
+│           ├── benchmark/
+│           ├── cd/
+│           ├── dimscaling/
+│           ├── efficiency/
+│           ├── evolution/
+│           ├── overhead/
+│           ├── recovery/
+│           ├── sensitivity/
+│           └── validity/
+├── AutoDSC_ICDM_26/               # Camera-ready paper sources
 └── requirements.txt               # Python dependencies
 ```
 
@@ -89,7 +99,7 @@ AutoDSC/
 1. **Clone the repository:**
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/TechyNilesh/AutoDSC.git
    cd AutoDSC
    ```
 2. **Install Python dependencies:**
@@ -100,10 +110,10 @@ AutoDSC/
 3. **Compile Rust implementation (for faster performance):**
 
    ```bash
-   cd stream_clustering
+   cd src/stream_clustering
    pip install maturin
    maturin develop --release
-   cd ..
+   cd ../..
    ```
 
 ## Running Experiments
@@ -170,7 +180,7 @@ python experiments/run_scripts.py --mode random
 
 | Canonical name    | Group       | Description                                   |
 | ----------------- | ----------- | --------------------------------------------- |
-| **AutoDSC**       | AutoML      | Our framework (PGSSO + DAWIDD + validity index) |
+| **AutoDSC**       | AutoML      | Our framework (PGSSO + composite CVI, no drift detector) |
 | **ConfStream**    | AutoML      | Configuration-space stream AutoML             |
 | **OACE**          | AutoML      | OnlineAutoClust Ensemble                      |
 | **MOStream**      | Rule-based  | Multi-objective stream optimizer              |
@@ -210,30 +220,35 @@ python experiments/run_sensitivity_analysis.py --mode random --dataset real_inse
 
 ### Ablation Study
 
+Leave-one-out ablation of AutoDSC's key components. The variants are implemented
+as subclasses in `experiments/scripts/ablation/AutoDSC_ablation.py`, so
+`src/autodsc/AutoDSC.py` is never modified and every variant shares the same code
+path except for the single component under study.
+
 ```bash
-# Run ablation study for a specific component
-python experiments/run_ablation_study.py --dataset real_insects --ablation drift_detection
+# Run a single ablation variant on a dataset
+python experiments/run_autodsc_ablation.py --dataset real_insects --ablation no_recency
 
-# Run all ablations
-python experiments/run_ablation_study.py --dataset real_insects --ablation all
+# Sanity check: `full` must reproduce plain AutoDSC
+python experiments/run_autodsc_ablation.py --dataset real_insects --ablation full
 
-# Run full comparison (baseline + all ablations)
-python experiments/run_ablation_study.py --dataset real_insects --ablation full_comparison
-
-# Run on all datasets
-python experiments/run_ablation_study.py --ablation drift_detection --all_datasets
+# With custom AutoDSC settings
+python experiments/run_autodsc_ablation.py --dataset real_insects --ablation single_cvi \
+    --window_size 500 --population_size 15
 ```
 
-**Available ablation options:**
+**Available ablation variants:**
 
-| Ablation                      | Description                                         |
-| ----------------------------- | --------------------------------------------------- |
-| `drift_detection`             | Disable DAWIDD drift detection                      |
-| `elite_guidance`              | Disable PGSSO elite guidance (random sampling only) |
-| `adaptive_exploration_rate`   | Disable adaptive exploration rate (fixed rate)      |
-| `diversity_maintenance`       | Disable diversity maintenance in population         |
-| `all`                         | Run all ablations                                   |
-| `full_comparison`             | Run baseline + all ablations                        |
+| Variant         | Description                                                      |
+| --------------- | ---------------------------------------------------------------- |
+| `full`          | Complete AutoDSC (sanity check, identical to AutoDSC)            |
+| `no_recency`    | Raw-score elite ranking (drop recency weighting of the archive)  |
+| `no_adaptive`   | Fixed exploration rate (drop adaptive explore/exploit)           |
+| `single_cvi`    | Silhouette-only scoring (drop the three-CVI composite)           |
+| `no_diversity`  | Score-only top-N pruning (drop diversity-preserving pruning)     |
+
+Pure random search (no elite guidance) is intentionally not an ablation variant —
+it is already covered by the `RandomSearchStream` baseline.
 
 ## Metrics
 
@@ -250,10 +265,10 @@ For maximum performance, compile and use the Rust implementation:
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # Compile
-cd stream_clustering
+cd src/stream_clustering
 pip install maturin
 maturin develop --release
-cd ..
+cd ../..
 
 # Verify
 python -c "import stream_clustering; print('Rust implementation loaded!')"
@@ -261,29 +276,35 @@ python -c "import stream_clustering; print('Rust implementation loaded!')"
 
 ## Output and Results
 
-- Benchmark results: `results/analysis/`
+- Raw run results (JSON): `results/benchmark/`, `results/ablation/`, `results/sensitivity/`
+- Chart scripts: `results/analysis/plot_*.py` (shared style in `results/analysis/style.py`)
 - Charts: `results/analysis/charts/` (vector PDF + 300-dpi PNG)
   - `benchmark/` — main ARI/CMM comparison charts
-  - `ablation/` — ablation study visualizations
-  - `sensitivity/` — sensitivity analysis plots
   - `cd/` — critical difference diagrams
+  - `ablation/` — ablation study visualisations
+  - `sensitivity/` — sensitivity analysis plots
   - `efficiency/` — throughput/latency/memory charts
+  - `overhead/` — AutoML search overhead
   - `evolution/` — population evolution over time
   - `recovery/` — drift recovery charts
-- Tables: `results/tables/` — CSV result files
+  - `alpha/` — adaptive exploration-rate traces
+  - `dimscaling/` — scaling with dimensionality
+  - `validity/` — internal vs. external validity agreement
 
 ## Citation
 
-This work is currently under double-blind review. Author information is withheld
-until the review process concludes; please cite the anonymised entry below and
-check back for the updated reference after publication.
+This work has been accepted at the **IEEE International Conference on Data Mining
+(ICDM) 2026**. Please cite it as:
 
 ```bibtex
-@inproceedings{autodsc2026,
-  title     = {AutoDSC: Automated Algorithm Selection and Tuning for
+@inproceedings{verma2026autodsc,
+  title     = {{AutoDSC}: Automated Algorithm Selection and Tuning for
                Non-Stationary Data Stream Clustering},
-  author    = {Anonymous},
-  booktitle = {Under review},
-  year      = {2026}
+  author    = {Verma, Nilesh and Bifet, Albert and Pfahringer, Bernhard and Bahri, Maroua},
+  booktitle = {Proceedings of the 2026 IEEE International Conference on Data Mining (ICDM)},
+  publisher = {IEEE},
+  address   = {Shenyang, China},
+  year      = {2026},
+  url       = {https://github.com/TechyNilesh/AutoDSC}
 }
 ```
