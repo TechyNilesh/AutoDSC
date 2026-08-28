@@ -35,3 +35,6 @@ results/sensitivity/
 # and results/analysis/run_extra_analysis.py, not tracked
 results/analysis/*.json
 results/analysis/extra/
+# ...except evolution_capture.json: produced by a capture script that is not in
+# this repo, so it is the only copy of the input to plot_evolution.py
+!results/analysis/evolution_capture.json
