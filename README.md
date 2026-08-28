@@ -82,7 +82,6 @@ AutoDSC/
 │           ├── recovery/
 │           ├── sensitivity/
 │           └── validity/
-├── AutoDSC_ICDM_26/               # Camera-ready paper sources
 └── requirements.txt               # Python dependencies
 ```
 
@@ -277,6 +276,7 @@ python -c "import stream_clustering; print('Rust implementation loaded!')"
 ## Output and Results
 
 - Raw run results (JSON): `results/benchmark/`, `results/ablation/`, `results/sensitivity/`
+  — **not tracked in git** (large); regenerate them with the runners above
 - Chart scripts: `results/analysis/plot_*.py` (shared style in `results/analysis/style.py`)
 - Charts: `results/analysis/charts/` (vector PDF + 300-dpi PNG)
   - `benchmark/` — main ARI/CMM comparison charts
